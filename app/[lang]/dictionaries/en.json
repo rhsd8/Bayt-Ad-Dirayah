@@ -1,0 +1,346 @@
+{
+  "navigation": {
+    "dashboard": "Dashboard",
+    "courses": "Courses",
+    "materials": "Materials",
+    "progress": "Progress",
+    "notes": "Notes",
+    "quiz": "Quiz Center",
+    "flashcards": "Flashcards",
+    "community": "Community",
+    "admin": "Admin Panel",
+    "profile": "Profile",
+    "settings": "Settings",
+    "help": "Help",
+    "home": "Home",
+    "features": "Features",
+    "pricing": "Pricing"
+  },
+  "common": {
+    "welcome": "Welcome",
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "create": "Create",
+    "search": "Search",
+    "filter": "Filter",
+    "sort": "Sort",
+    "view": "View",
+    "download": "Download",
+    "upload": "Upload",
+    "share": "Share",
+    "copy": "Copy",
+    "print": "Print",
+    "export": "Export",
+    "import": "Import",
+    "refresh": "Refresh",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "submit": "Submit",
+    "confirm": "Confirm",
+    "close": "Close",
+    "open": "Open",
+    "show": "Show",
+    "hide": "Hide",
+    "expand": "Expand",
+    "collapse": "Collapse",
+    "select": "Select",
+    "deselect": "Deselect",
+    "clear": "Clear",
+    "reset": "Reset",
+    "apply": "Apply",
+    "remove": "Remove",
+    "add": "Add",
+    "update": "Update",
+    "language": "Language",
+    "getStarted": "Get Started",
+    "learnMore": "Learn More",
+    "signUp": "Sign Up",
+    "tryFree": "Try Free",
+    "contact": "Contact",
+    "about": "About",
+    "login": "Login",
+    "logout": "Logout",
+    "profile": "Profile",
+    "settings": "Settings"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "welcome_message": "Welcome back to your Arabic learning journey!",
+    "recent_activity": "Recent Activity",
+    "progress_overview": "Progress Overview",
+    "quick_actions": "Quick Actions",
+    "upcoming_lessons": "Upcoming Lessons",
+    "achievements": "Achievements",
+    "study_streak": "Study Streak",
+    "total_time": "Total Study Time",
+    "lessons_completed": "Lessons Completed",
+    "current_level": "Current Level"
+  },
+  "courses": {
+    "title": "Arabic Language Courses",
+    "description": "Master Arabic through structured learning materials",
+    "level": "Level",
+    "lessons": "Lessons",
+    "materials": "Materials",
+    "beginner": "Beginner",
+    "intermediate": "Intermediate",
+    "advanced": "Advanced",
+    "viewCourse": "View Course",
+    "noCourses": "No courses available",
+    "courseDetails": "Course Details",
+    "startCourse": "Start Course",
+    "continueCourse": "Continue Course",
+    "completed": "Completed",
+    "inProgress": "In Progress",
+    "notStarted": "Not Started"
+  },
+  "materials": {
+    "title": "Learning Materials",
+    "uploadMaterial": "Upload Material",
+    "fileName": "File Name",
+    "fileSize": "File Size",
+    "uploadDate": "Upload Date",
+    "actions": "Actions",
+    "viewPDF": "View PDF",
+    "downloadPDF": "Download PDF",
+    "deleteMaterial": "Delete Material",
+    "noMaterials": "No materials available",
+    "uploadSuccess": "Material uploaded successfully",
+    "deleteSuccess": "Material deleted successfully",
+    "searchMaterials": "Search materials...",
+    "selectFile": "Select PDF file",
+    "dragDrop": "Drag and drop PDF files here",
+    "uploadError": "Upload failed. Please try again."
+  },
+  "progress": {
+    "title": "Progress",
+    "overall_progress": "Overall Progress",
+    "course_progress": "Course Progress",
+    "skill_breakdown": "Skill Breakdown",
+    "time_spent": "Time Spent",
+    "achievements_earned": "Achievements Earned",
+    "streak_days": "Day Streak",
+    "lessons_completed": "Lessons Completed",
+    "quiz_scores": "Quiz Scores"
+  },
+  "quiz": {
+    "title": "Quiz Center",
+    "available_quizzes": "Available Quizzes",
+    "my_results": "My Results",
+    "leaderboard": "Leaderboard",
+    "start_quiz": "Start Quiz",
+    "questions": "questions",
+    "minutes": "minutes",
+    "attempts": "attempts",
+    "score": "Score",
+    "time_taken": "Time Taken",
+    "correct_answers": "Correct Answers"
+  },
+  "flashcards": {
+    "title": "Flashcards",
+    "study_session": "Study Session",
+    "browse_cards": "Browse Cards",
+    "statistics": "Statistics",
+    "due_cards": "Due Cards",
+    "total_cards": "Total Cards",
+    "accuracy": "Accuracy",
+    "reviews": "Reviews",
+    "show_answer": "Show Answer",
+    "correct": "Correct",
+    "incorrect": "Incorrect"
+  },
+  "community": {
+    "title": "Community Forum",
+    "all_posts": "All Posts",
+    "pinned": "Pinned",
+    "solved": "Solved",
+    "unanswered": "Unanswered",
+    "new_post": "New Post",
+    "categories": "Categories",
+    "recent_activity": "Recent Activity",
+    "top_contributors": "Top Contributors",
+    "forum_guidelines": "Forum Guidelines"
+  },
+  "notes": {
+    "title": "Notes",
+    "my_notes": "My Notes",
+    "shared_notes": "Shared Notes",
+    "create_note": "Create Note",
+    "edit_note": "Edit Note",
+    "delete_note": "Delete Note",
+    "search_notes": "Search Notes",
+    "tags": "Tags",
+    "last_modified": "Last Modified"
+  },
+  "profile": {
+    "title": "Profile",
+    "personal_info": "Personal Information",
+    "learning_preferences": "Learning Preferences",
+    "achievements": "Achievements",
+    "statistics": "Statistics",
+    "edit_profile": "Edit Profile",
+    "change_password": "Change Password",
+    "notification_settings": "Notification Settings"
+  },
+  "settings": {
+    "title": "Settings",
+    "general": "General",
+    "appearance": "Appearance",
+    "notifications": "Notifications",
+    "privacy": "Privacy",
+    "language": "Language",
+    "theme": "Theme",
+    "save_changes": "Save Changes"
+  },
+  "auth": {
+    "welcome": "Welcome to Arabic Learning Platform",
+    "loginTitle": "Sign In",
+    "email": "Email",
+    "password": "Password",
+    "loginButton": "Sign In",
+    "adminLogin": "Admin Login",
+    "studentLogin": "Student Login",
+    "invalidCredentials": "Invalid credentials",
+    "loginError": "Login failed. Please try again.",
+    "backToHome": "Back to Home"
+  },
+  "admin": {
+    "title": "Admin Dashboard",
+    "uploadMaterials": "Upload Materials",
+    "manageCourses": "Manage Courses",
+    "userManagement": "User Management",
+    "analytics": "Analytics",
+    "courseTitle": "Course Title",
+    "courseDescription": "Course Description",
+    "courseLevel": "Course Level",
+    "createCourse": "Create Course",
+    "editCourse": "Edit Course",
+    "deleteCourse": "Delete Course",
+    "totalStudents": "Total Students",
+    "totalCourses": "Total Courses",
+    "totalMaterials": "Total Materials",
+    "recentActivity": "Recent Activity"
+  },
+  "pdf": {
+    "viewer": "PDF Viewer",
+    "loading": "Loading PDF...",
+    "error": "Error loading PDF",
+    "page": "Page",
+    "of": "of",
+    "zoomIn": "Zoom In",
+    "zoomOut": "Zoom Out",
+    "fullscreen": "Fullscreen",
+    "download": "Download",
+    "fitWidth": "Fit Width",
+    "fitPage": "Fit Page",
+    "actualSize": "Actual Size"
+  },
+  "accessibility": {
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "switchLanguage": "Switch language",
+    "toggleTheme": "Toggle theme",
+    "searchButton": "Search",
+    "uploadButton": "Upload file",
+    "userMenu": "User menu",
+    "mainContent": "Main content",
+    "navigation": "Navigation"
+  },
+  "errors": {
+    "generic": "Something went wrong. Please try again.",
+    "networkError": "Network error. Please check your connection.",
+    "fileNotFound": "File not found.",
+    "accessDenied": "Access denied.",
+    "sessionExpired": "Session expired. Please log in again."
+  },
+  "landing": {
+    "hero": {
+      "title": "Master Arabic Language",
+      "subtitle": "with a professional learning platform",
+      "description": "Join thousands of students learning Arabic through our comprehensive interactive courses designed by native speakers and language experts.",
+      "cta": "Start Learning Today",
+      "watchDemo": "Watch Demo"
+    },
+    "features": {
+      "title": "Why Choose Our Platform?",
+      "subtitle": "Everything you need to master the Arabic language",
+      "items": [
+        {
+          "title": "Expert-Designed Courses",
+          "description": "Learn from native Arabic speakers and certified instructors with years of teaching experience."
+        },
+        {
+          "title": "Interactive Learning",
+          "description": "Engage with multimedia content, quizzes, and interactive exercises that make learning Arabic enjoyable."
+        },
+        {
+          "title": "Progress Tracking",
+          "description": "Monitor your learning journey with detailed analytics and personalized progress reports."
+        },
+        {
+          "title": "Flexible Schedule",
+          "description": "Learn at your own pace with 24/7 access to all course materials and resources."
+        },
+        {
+          "title": "Mobile-Friendly",
+          "description": "Access your courses anywhere, anytime with our responsive design that works on all devices."
+        },
+        {
+          "title": "Completion Certificate",
+          "description": "Earn recognized certificates upon course completion to showcase your Arabic language skills."
+        }
+      ]
+    },
+    "stats": {
+      "students": "Active Students",
+      "courses": "Available Courses",
+      "materials": "Learning Materials",
+      "satisfaction": "Student Satisfaction"
+    },
+    "testimonials": {
+      "title": "What Our Students Say",
+      "subtitle": "Real feedback from learners around the world",
+      "items": [
+        {
+          "name": "Sarah Johnson",
+          "role": "Business Professional",
+          "content": "This platform transformed my Arabic learning journey. The structured approach and native speaker audio made all the difference.",
+          "rating": 5
+        },
+        {
+          "name": "Ahmed Hassan",
+          "role": "University Student",
+          "content": "As someone who struggled with traditional methods, this interactive platform finally helped me understand Arabic grammar and pronunciation.",
+          "rating": 5
+        },
+        {
+          "name": "Maria Rodriguez",
+          "role": "Language Enthusiast",
+          "content": "The flexibility to learn at my own pace while having access to expert guidance is exactly what I needed. Highly recommended!",
+          "rating": 5
+        }
+      ]
+    },
+    "cta": {
+      "title": "Ready to Start Your Arabic Journey?",
+      "subtitle": "Join thousands of successful learners today",
+      "button": "Start Free Trial"
+    },
+    "footer": {
+      "description": "Professional Arabic language learning platform designed to help you master Arabic through interactive courses and expert guidance.",
+      "links": {
+        "product": "Product",
+        "company": "Company",
+        "support": "Support",
+        "legal": "Legal"
+      },
+      "copyright": "© 2024 Arabic Learning Platform. All rights reserved."
+    }
+  }
+}

@@ -1,0 +1,347 @@
+{
+  "common": {
+    "search": "Rechercher",
+    "upload": "Télécharger",
+    "download": "Télécharger",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "save": "Enregistrer",
+    "cancel": "Annuler",
+    "loading": "Chargement...",
+    "noResults": "Aucun résultat trouvé",
+    "language": "Langue",
+    "login": "Connexion",
+    "logout": "Déconnexion",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent",
+    "close": "Fermer",
+    "getStarted": "Commencer",
+    "learnMore": "En savoir plus",
+    "signUp": "S'inscrire",
+    "tryFree": "Essai gratuit",
+    "contact": "Contact",
+    "about": "À propos",
+    "welcome": "Bienvenue",
+    "error": "Erreur",
+    "success": "Succès",
+    "create": "Créer",
+    "filter": "Filtrer",
+    "sort": "Trier",
+    "view": "Voir",
+    "share": "Partager",
+    "copy": "Copier",
+    "print": "Imprimer",
+    "export": "Exporter",
+    "import": "Importer",
+    "refresh": "Actualiser",
+    "submit": "Soumettre",
+    "confirm": "Confirmer",
+    "open": "Ouvrir",
+    "show": "Afficher",
+    "hide": "Masquer",
+    "expand": "Développer",
+    "collapse": "Réduire",
+    "select": "Sélectionner",
+    "deselect": "Désélectionner",
+    "clear": "Effacer",
+    "reset": "Réinitialiser",
+    "apply": "Appliquer",
+    "remove": "Supprimer",
+    "add": "Ajouter",
+    "update": "Mettre à jour"
+  },
+  "navigation": {
+    "dashboard": "Tableau de bord",
+    "courses": "Cours",
+    "materials": "Matériaux",
+    "progress": "Progrès",
+    "notes": "Notes",
+    "quiz": "Centre de Quiz",
+    "flashcards": "Cartes mémoire",
+    "community": "Communauté",
+    "admin": "Panneau d'administration",
+    "home": "Accueil",
+    "features": "Fonctionnalités",
+    "pricing": "Tarifs",
+    "profile": "Profil",
+    "settings": "Paramètres",
+    "help": "Aide"
+  },
+  "dashboard": {
+    "title": "Tableau de bord",
+    "welcome_message": "Bienvenue dans votre parcours d'apprentissage de l'arabe !",
+    "recent_activity": "Activité récente",
+    "progress_overview": "Aperçu des progrès",
+    "quick_actions": "Actions rapides",
+    "upcoming_lessons": "Leçons à venir",
+    "achievements": "Réalisations",
+    "study_streak": "Série d'études",
+    "total_time": "Temps total d'étude",
+    "lessons_completed": "Leçons terminées",
+    "current_level": "Niveau actuel"
+  },
+  "progress": {
+    "title": "Progrès",
+    "overall_progress": "Progrès global",
+    "course_progress": "Progrès des cours",
+    "skill_breakdown": "Répartition des compétences",
+    "time_spent": "Temps passé",
+    "achievements_earned": "Réalisations obtenues",
+    "streak_days": "Jours de série",
+    "lessons_completed": "Leçons terminées",
+    "quiz_scores": "Scores des quiz"
+  },
+  "quiz": {
+    "title": "Centre de Quiz",
+    "available_quizzes": "Quiz disponibles",
+    "my_results": "Mes résultats",
+    "leaderboard": "Classement",
+    "start_quiz": "Commencer le quiz",
+    "questions": "questions",
+    "minutes": "minutes",
+    "attempts": "tentatives",
+    "score": "Score",
+    "time_taken": "Temps pris",
+    "correct_answers": "Réponses correctes"
+  },
+  "flashcards": {
+    "title": "Cartes mémoire",
+    "study_session": "Session d'étude",
+    "browse_cards": "Parcourir les cartes",
+    "statistics": "Statistiques",
+    "due_cards": "Cartes dues",
+    "total_cards": "Total des cartes",
+    "accuracy": "Précision",
+    "reviews": "Révisions",
+    "show_answer": "Afficher la réponse",
+    "correct": "Correct",
+    "incorrect": "Incorrect"
+  },
+  "community": {
+    "title": "Forum communautaire",
+    "all_posts": "Tous les posts",
+    "pinned": "Épinglé",
+    "solved": "Résolu",
+    "unanswered": "Sans réponse",
+    "new_post": "Nouveau post",
+    "categories": "Catégories",
+    "recent_activity": "Activité récente",
+    "top_contributors": "Meilleurs contributeurs",
+    "forum_guidelines": "Directives du forum"
+  },
+  "notes": {
+    "title": "Notes",
+    "my_notes": "Mes notes",
+    "shared_notes": "Notes partagées",
+    "create_note": "Créer une note",
+    "edit_note": "Modifier la note",
+    "delete_note": "Supprimer la note",
+    "search_notes": "Rechercher des notes",
+    "tags": "Étiquettes",
+    "last_modified": "Dernière modification"
+  },
+  "profile": {
+    "title": "Profil",
+    "personal_info": "Informations personnelles",
+    "learning_preferences": "Préférences d'apprentissage",
+    "achievements": "Réalisations",
+    "statistics": "Statistiques",
+    "edit_profile": "Modifier le profil",
+    "change_password": "Changer le mot de passe",
+    "notification_settings": "Paramètres de notification"
+  },
+  "settings": {
+    "title": "Paramètres",
+    "general": "Général",
+    "appearance": "Apparence",
+    "notifications": "Notifications",
+    "privacy": "Confidentialité",
+    "language": "Langue",
+    "theme": "Thème",
+    "save_changes": "Enregistrer les modifications"
+  },
+  "landing": {
+    "hero": {
+      "title": "Maîtrisez la langue arabe",
+      "subtitle": "avec une plateforme d'apprentissage professionnelle",
+      "description": "Rejoignez des milliers d'étudiants qui apprennent l'arabe grâce à nos cours interactifs complets conçus par des locuteurs natifs et des experts linguistiques.",
+      "cta": "Commencer à apprendre aujourd'hui",
+      "watchDemo": "Voir la démo"
+    },
+    "features": {
+      "title": "Pourquoi choisir notre plateforme ?",
+      "subtitle": "Tout ce dont vous avez besoin pour maîtriser la langue arabe",
+      "items": [
+        {
+          "title": "Cours conçus par des experts",
+          "description": "Apprenez auprès de locuteurs natifs arabes et d'instructeurs certifiés avec des années d'expérience d'enseignement."
+        },
+        {
+          "title": "Apprentissage interactif",
+          "description": "Engagez-vous avec du contenu multimédia, des quiz et des exercices interactifs qui rendent l'apprentissage de l'arabe agréable."
+        },
+        {
+          "title": "Suivi des progrès",
+          "description": "Surveillez votre parcours d'apprentissage avec des analyses détaillées et des rapports de progrès personnalisés."
+        },
+        {
+          "title": "Horaire flexible",
+          "description": "Apprenez à votre rythme avec un accès 24h/24 et 7j/7 à tous les supports de cours et ressources."
+        },
+        {
+          "title": "Compatible mobile",
+          "description": "Accédez à vos cours n'importe où, n'importe quand avec notre design responsive qui fonctionne sur tous les appareils."
+        },
+        {
+          "title": "Certificat d'achèvement",
+          "description": "Obtenez des certificats reconnus en complétant les cours pour mettre en valeur vos compétences en langue arabe."
+        }
+      ]
+    },
+    "stats": {
+      "students": "Étudiants actifs",
+      "courses": "Cours disponibles",
+      "materials": "Matériaux d'apprentissage",
+      "satisfaction": "Satisfaction des étudiants"
+    },
+    "testimonials": {
+      "title": "Ce que disent nos étudiants",
+      "subtitle": "Commentaires réels d'apprenants du monde entier",
+      "items": [
+        {
+          "name": "Sarah Johnson",
+          "role": "Professionnelle des affaires",
+          "content": "Cette plateforme a transformé mon parcours d'apprentissage de l'arabe. L'approche structurée et l'audio de locuteurs natifs ont fait toute la différence.",
+          "rating": 5
+        },
+        {
+          "name": "Ahmed Hassan",
+          "role": "Étudiant universitaire",
+          "content": "En tant que personne qui avait du mal avec les méthodes traditionnelles, cette plateforme interactive m'a enfin aidé à comprendre la grammaire et la prononciation arabes.",
+          "rating": 5
+        },
+        {
+          "name": "Maria Rodriguez",
+          "role": "Passionnée de langues",
+          "content": "La flexibilité d'apprendre à mon rythme tout en ayant accès aux conseils d'experts est exactement ce dont j'avais besoin. Hautement recommandé !",
+          "rating": 5
+        }
+      ]
+    },
+    "cta": {
+      "title": "Prêt à commencer votre voyage en arabe ?",
+      "subtitle": "Rejoignez des milliers d'apprenants qui réussissent aujourd'hui",
+      "button": "Commencer l'essai gratuit"
+    },
+    "footer": {
+      "description": "Plateforme professionnelle d'apprentissage de la langue arabe conçue pour vous aider à maîtriser l'arabe grâce à des cours interactifs et des conseils d'experts.",
+      "links": {
+        "product": "Produit",
+        "company": "Entreprise",
+        "support": "Support",
+        "legal": "Légal"
+      },
+      "copyright": "© 2024 Plateforme d'apprentissage de l'arabe. Tous droits réservés."
+    }
+  },
+  "auth": {
+    "welcome": "Bienvenue sur la plateforme d'apprentissage de l'arabe",
+    "loginTitle": "Se connecter",
+    "email": "Email",
+    "password": "Mot de passe",
+    "loginButton": "Se connecter",
+    "adminLogin": "Connexion Admin",
+    "studentLogin": "Connexion Étudiant",
+    "invalidCredentials": "Identifiants invalides",
+    "loginError": "Échec de la connexion. Veuillez réessayer.",
+    "backToHome": "Retour à l'accueil"
+  },
+  "courses": {
+    "title": "Cours de langue arabe",
+    "description": "Maîtrisez l'arabe grâce à des supports d'apprentissage structurés",
+    "level": "Niveau",
+    "lessons": "Leçons",
+    "materials": "Matériaux",
+    "beginner": "Débutant",
+    "intermediate": "Intermédiaire",
+    "advanced": "Avancé",
+    "viewCourse": "Voir le cours",
+    "noCourses": "Aucun cours disponible",
+    "courseDetails": "Détails du cours",
+    "startCourse": "Commencer le cours",
+    "continueCourse": "Continuer le cours",
+    "completed": "Terminé",
+    "inProgress": "En cours",
+    "notStarted": "Pas commencé"
+  },
+  "materials": {
+    "title": "Supports de cours",
+    "uploadMaterial": "Télécharger du matériel",
+    "fileName": "Nom du fichier",
+    "fileSize": "Taille du fichier",
+    "uploadDate": "Date de téléchargement",
+    "actions": "Actions",
+    "viewPDF": "Voir PDF",
+    "downloadPDF": "Télécharger PDF",
+    "deleteMaterial": "Supprimer le matériel",
+    "noMaterials": "Aucun matériel disponible",
+    "uploadSuccess": "Matériel téléchargé avec succès",
+    "deleteSuccess": "Matériel supprimé avec succès",
+    "searchMaterials": "Rechercher des matériaux...",
+    "selectFile": "Sélectionner un fichier PDF",
+    "dragDrop": "Glissez-déposez les fichiers PDF ici",
+    "uploadError": "Échec du téléchargement. Veuillez réessayer."
+  },
+  "admin": {
+    "title": "Tableau de bord administrateur",
+    "uploadMaterials": "Télécharger des matériaux",
+    "manageCourses": "Gérer les cours",
+    "userManagement": "Gestion des utilisateurs",
+    "analytics": "Analytique",
+    "courseTitle": "Titre du cours",
+    "courseDescription": "Description du cours",
+    "courseLevel": "Niveau du cours",
+    "createCourse": "Créer un cours",
+    "editCourse": "Modifier le cours",
+    "deleteCourse": "Supprimer le cours",
+    "totalStudents": "Total des étudiants",
+    "totalCourses": "Total des cours",
+    "totalMaterials": "Total des matériaux",
+    "recentActivity": "Activité récente"
+  },
+  "pdf": {
+    "viewer": "Visionneuse PDF",
+    "loading": "Chargement du PDF...",
+    "error": "Erreur lors du chargement du PDF",
+    "page": "Page",
+    "of": "de",
+    "zoomIn": "Agrandir",
+    "zoomOut": "Réduire",
+    "fullscreen": "Plein écran",
+    "download": "Télécharger",
+    "fitWidth": "Ajuster à la largeur",
+    "fitPage": "Ajuster à la page",
+    "actualSize": "Taille réelle"
+  },
+  "accessibility": {
+    "openMenu": "Ouvrir le menu",
+    "closeMenu": "Fermer le menu",
+    "switchLanguage": "Changer de langue",
+    "toggleTheme": "Basculer le thème",
+    "searchButton": "Rechercher",
+    "uploadButton": "Télécharger le fichier",
+    "userMenu": "Menu utilisateur",
+    "mainContent": "Contenu principal",
+    "navigation": "Navigation"
+  },
+  "errors": {
+    "generic": "Quelque chose s'est mal passé. Veuillez réessayer.",
+    "networkError": "Erreur réseau. Veuillez vérifier votre connexion.",
+    "fileNotFound": "Fichier non trouvé.",
+    "accessDenied": "Accès refusé.",
+    "sessionExpired": "Session expirée. Veuillez vous reconnecter."
+  }
+}
