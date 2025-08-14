@@ -4,6 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -215,44 +216,57 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Enhanced Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-xl">
-              <GraduationCap className="h-6 w-6 text-primary" />
+      <header className="sticky top-3 z-50 w-full px-10 py-7 bg-transparent">
+        <div className="container mx-auto">
+          <div className="flex h-20 items-center justify-between gap-6 rounded-full border border-border/40 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40 shadow-sm px-8 text-foreground">
+            <div className="flex items-center gap-6">
+              <Link href={`/${lang}`} className="flex items-center gap-2" aria-label="Bayt Ad Dirayah Home" title="Home">
+                <Image
+                  src="/logo-web-light.webp"
+                  alt="Bayt Ad Dirayah"
+                  width={130}
+                  height={30}
+                  className="h-10 w-auto align-middle translate-y-[2px] dark:hidden"
+                  priority
+                />
+                <Image
+                  src="/logo-web-dark.webp"
+                  alt="Bayt Ad Dirayah"
+                  width={130}
+                  height={30}
+                  className="h-10 w-auto align-middle translate-y-[2px] hidden dark:inline"
+                  priority
+                />
+              </Link>
             </div>
-            <div>
-              <h1 className="font-bold text-xl">Arabic Learning</h1>
-              <p className="text-xs text-muted-foreground hidden sm:block">Master Arabic Language</p>
+
+            <nav className="hidden md:flex items-center gap-6">
+              {navigation.map((item) => (
+                <button
+                  key={item.name}
+                  onClick={() => handleNavClick(item.href)}
+                  className="text-base md:text-lg font-semibold text-foreground/80 hover:text-foreground transition-colors"
+                  title={item.name}
+                >
+                  {item.name}
+                </button>
+              ))}
+            </nav>
+
+            <div className="flex items-center gap-5 text-foreground">
+              <ThemeToggle className="h-10 w-10" tooltip="Toggle theme" />
+              <LanguageSwitcher currentLang={lang} className="text-base md:text-lg font-semibold" tooltip="Switch language" />
+              <Button asChild variant="ghost" size="default" className="hidden sm:inline-flex text-foreground text-base md:text-lg font-semibold" title="Sign In">
+                <Link href={`/${lang}/login`} title="Sign In">
+                  <span className="hidden sm:inline">Sign In</span>
+                </Link>
+              </Button>
+              <Button asChild size="default" className="text-foreground text-base md:text-lg font-semibold" title="Get Started">
+                <Link href={`/${lang}/login`} title="Get Started">
+                  <span className="hidden sm:inline">Get Started</span>
+                </Link>
+              </Button>
             </div>
-          </div>
-
-          <nav className="hidden md:flex items-center gap-6">
-            {navigation.map((item) => (
-              <button
-                key={item.name}
-                onClick={() => handleNavClick(item.href)}
-                className="text-sm font-medium hover:text-primary transition-colors"
-              >
-                {item.name}
-              </button>
-            ))}
-          </nav>
-
-          <div className="flex items-center gap-2">
-            <ThemeToggle />
-            <LanguageSwitcher currentLang={lang} />
-            <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
-              <Link href={`/${lang}/contact`}>Contact</Link>
-            </Button>
-            <Button asChild variant="ghost" size="sm" className="hidden sm:inline-flex">
-              <Link href={`/${lang}/login`}>Sign In</Link>
-            </Button>
-            <Button asChild size="sm">
-              <Link href={`/${lang}/login`}>Start Learning</Link>
-            </Button>
-
-            {/* Mobile menu button */}
             <Button
               variant="ghost"
               size="icon"
@@ -267,13 +281,13 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
 
         {/* Mobile Navigation */}
         {mobileMenuOpen && (
-          <div className="md:hidden py-4 border-t border-border bg-background/95 backdrop-blur">
-            <div className="container mx-auto px-4 space-y-2">
+          <div className="md:hidden py-3 border-t border-border bg-background">
+            <div className="container mx-auto px-4 space-y-1.5">
               {navigation.map((item) => (
                 <button
                   key={item.name}
                   onClick={() => handleNavClick(item.href)}
-                  className="block w-full text-left px-3 py-2 text-muted-foreground hover:text-foreground hover:bg-muted rounded-md transition-colors"
+                  className="block w-full text-left px-3 py-2 text-foreground/80 hover:text-foreground hover:bg-muted rounded-md transition-colors"
                 >
                   {item.name}
                 </button>
@@ -288,16 +302,11 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
         )}
       </header>
 
-      {/* Enhanced Hero Section */}
+      {/* Hero Section (solid background, tighter spacing) */}
       <section
         id="home"
-        className="relative overflow-hidden bg-gradient-to-br from-primary/5 via-background to-secondary/5 py-20 lg:py-32"
+        className="relative bg-background py-10 lg:py-14"
       >
-        {/* Background decorations */}
-        <div className="absolute inset-0 overflow-hidden">
-          <div className="absolute -top-40 -right-40 w-80 h-80 bg-primary/10 rounded-full blur-3xl"></div>
-          <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-secondary/10 rounded-full blur-3xl"></div>
-        </div>
 
         <div className="container mx-auto px-4 relative">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
@@ -308,11 +317,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                   New: AI-Powered Learning Experience
                 </Badge>
                 <h1 className="text-4xl lg:text-6xl font-bold tracking-tight">
-                  Master{" "}
-                  <span className="text-primary bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">
-                    Arabic
-                  </span>{" "}
-                  with Confidence
+                  Master Arabic with Confidence
                 </h1>
                 <p className="text-xl text-muted-foreground leading-relaxed">
                   {safeDict.landing.hero?.subtitle ||
@@ -321,7 +326,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="gap-2 text-lg px-8">
+                <Button asChild size="lg" className="gap-2 text-lg px-30">
                   <Link href={`/${lang}/login`}>
                     <Play className="h-5 w-5" />
                     Start Learning Free
@@ -352,7 +357,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
 
             <div className={`${isRTL ? "lg:order-1" : ""}`}>
               <div className="relative">
-                <div className="relative bg-gradient-to-br from-primary/10 to-secondary/10 rounded-3xl p-8 backdrop-blur-sm border">
+                <div className="relative bg-background rounded-3xl p-8 border">
                   <div className="space-y-6">
                     {/* Mock lesson interface */}
                     <div className="bg-background rounded-2xl p-6 shadow-lg">
@@ -391,26 +396,20 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                   </div>
                 </div>
 
-                {/* Floating elements */}
-                <div className="absolute -top-4 -right-4 w-24 h-24 bg-yellow-100 dark:bg-yellow-900 rounded-full flex items-center justify-center">
-                  <Star className="h-8 w-8 text-yellow-600" />
-                </div>
-                <div className="absolute -bottom-4 -left-4 w-20 h-20 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center">
-                  <Target className="h-6 w-6 text-green-600" />
-                </div>
+                {/* Removed floating decorative elements for a clean solid background */}
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Enhanced Features Section */}
-      <section id="features" className="py-20 bg-muted/30">
+      {/* Features Section (solid background, tighter spacing) */}
+      <section id="features" className="py-14 bg-background">
         <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
+          <div className="text-center mb-10">
             <Badge className="mb-4">Features</Badge>
             <h2 className="text-3xl lg:text-4xl font-bold mb-4">
-              Everything You Need to <span className="text-primary">Master Arabic</span>
+              Everything You Need to Learn Master Arabic
             </h2>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Our comprehensive platform combines traditional learning methods with cutting-edge technology
@@ -423,14 +422,13 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
               return (
                 <Card
                   key={index}
-                  className="relative group hover:shadow-lg transition-all duration-300 border-0 bg-background/60 backdrop-blur-sm"
+                  className="relative group hover:shadow-lg transition-all duration-300 border bg-background"
                 >
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"></div>
                   <CardHeader className="relative">
                     <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                       <Icon className={`h-6 w-6 ${feature.color}`} />
                     </div>
-                    <CardTitle className="group-hover:text-primary transition-colors">{feature.title}</CardTitle>
+                    <CardTitle className="group-hover:text-foreground transition-colors">{feature.title}</CardTitle>
                   </CardHeader>
                   <CardContent className="relative">
                     <CardDescription className="text-base leading-relaxed">{feature.description}</CardDescription>
@@ -442,8 +440,8 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
         </div>
       </section>
 
-      {/* Enhanced Stats Section */}
-      <section className="py-20">
+      {/* Stats Section (tighter spacing) */}
+      <section className="py-14">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => {
@@ -453,7 +451,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                   <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                     <Icon className={`h-8 w-8 ${stat.color}`} />
                   </div>
-                  <div className="text-3xl lg:text-4xl font-bold mb-2 group-hover:text-primary transition-colors">
+                  <div className="text-3xl lg:text-4xl font-bold mb-2 group-hover:text-foreground transition-colors">
                     {stat.value}
                   </div>
                   <div className="text-muted-foreground font-medium">{stat.label}</div>
@@ -648,7 +646,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
               <Mail className="h-8 w-8 text-primary" />
             </div>
             <h2 className="text-3xl font-bold mb-4">
-              Stay Updated with <span className="text-primary">Learning Tips</span>
+              Stay Updated with Learning Tips
             </h2>
             <p className="text-muted-foreground mb-8 text-lg">
               Get weekly Arabic learning tips, cultural insights, and exclusive content delivered to your inbox

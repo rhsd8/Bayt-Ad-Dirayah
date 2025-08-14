@@ -520,7 +520,7 @@ export function Dashboard({ lang, dictionary }: DashboardProps) {
                           </div>
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center justify-between mb-1">
-                              <h4 className="font-medium truncate group-hover:text-primary transition-colors">
+                              <h4 className="font-medium truncate group-hover:text-foreground transition-colors">
                                 {activity.title}
                               </h4>
                               <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
@@ -605,7 +605,7 @@ export function Dashboard({ lang, dictionary }: DashboardProps) {
                         }`}
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-medium text-sm group-hover:text-primary transition-colors">
+                          <h4 className="font-medium text-sm group-hover:text-foreground transition-colors">
                             {lesson.title}
                           </h4>
                           <Badge className={getDifficultyColor(lesson.difficulty)} variant="secondary">
@@ -674,7 +674,7 @@ export function Dashboard({ lang, dictionary }: DashboardProps) {
                             {achievement.rarity}
                           </Badge>
                         </div>
-                        <h4 className="font-semibold mb-2 group-hover:text-primary transition-colors">
+                        <h4 className="font-semibold mb-2 group-hover:text-foreground transition-colors">
                           {achievement.title}
                         </h4>
                         <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{achievement.description}</p>

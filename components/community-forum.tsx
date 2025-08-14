@@ -477,7 +477,7 @@ const CategoryGrid = ({
                 <Icon className={`h-5 w-5 text-${category.color}-600`} />
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-medium text-sm group-hover:text-primary transition-colors">{category.name}</div>
+                <div className="font-medium text-sm group-hover:text-foreground transition-colors">{category.name}</div>
                 <div className="text-xs text-muted-foreground line-clamp-2 mb-1">{category.description}</div>
                 <div className="flex items-center gap-2 text-xs text-muted-foreground">
                   <span>{categoryPosts.length} posts</span>
@@ -564,7 +564,7 @@ const PostCard = ({
 
           {/* Content */}
           <div className="space-y-2" onClick={() => onViewPost(post)}>
-            <h3 className="text-lg font-semibold line-clamp-2 group-hover:text-primary transition-colors">
+            <h3 className="text-lg font-semibold line-clamp-2 group-hover:text-foreground transition-colors">
               {post.title}
             </h3>
             <p className="text-muted-foreground line-clamp-3 text-sm">{post.content}</p>

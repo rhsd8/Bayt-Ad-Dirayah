@@ -3,6 +3,8 @@
 import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
+import Link from "next/link"
+import Image from "next/image"
 import { useAuth } from "@/components/auth-provider"
 import { useLanguage } from "@/components/language-provider"
 import { AppSidebar } from "@/components/sidebar"
@@ -254,142 +256,154 @@ export function AppLayout({
         <AppSidebar lang={lang} dictionary={dictionary} />
         <SidebarInset>
           {/* Enhanced Header */}
-          <header className="sticky top-0 z-40 flex h-16 shrink-0 items-center gap-2 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4">
-            <div className="flex items-center gap-2 flex-1">
-              <SidebarTrigger className="-ml-1" />
-              <Separator orientation="vertical" className="mr-2 h-4" />
+          <header className="sticky top-3 z-40 px-10 py-7 bg-transparent">
+            <div className="flex h-20 items-center gap-6 w-full rounded-full border border-border/40 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40 shadow-sm">
+              <div className="flex items-center gap-6 flex-1 px-8">
+                <SidebarTrigger className="-ml-1" title="Toggle sidebar" />
+                <Separator orientation="vertical" className="mr-2 h-6" />
+                <Link href={`/${lang}`} className="flex items-center gap-2" aria-label="Bayt Ad Dirayah Home" title="Home">
+                  <Image
+                    src="/logo-web-light.webp"
+                    alt="Bayt Ad Dirayah"
+                    width={130}
+                    height={30}
+                    className="h-10 w-auto align-middle translate-y-[2px] dark:hidden"
+                    priority
+                  />
+                  <Image
+                    src="/logo-web-dark.webp"
+                    alt="Bayt Ad Dirayah"
+                    width={130}
+                    height={30}
+                    className="h-10 w-auto align-middle translate-y-[2px] hidden dark:inline"
+                    priority
+                  />
+                </Link>
+                <Separator orientation="vertical" className="mx-2 h-6" />
 
-              {/* Enhanced Breadcrumbs */}
-              <Breadcrumb>
-                <BreadcrumbList>
-                  <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href={`/${lang}/dashboard`}>{t("nav.dashboard", "Dashboard")}</BreadcrumbLink>
-                  </BreadcrumbItem>
-                  {breadcrumbs.map((crumb, index) => (
-                    <div key={index} className="flex items-center">
-                      <BreadcrumbSeparator className="hidden md:block" />
-                      <BreadcrumbItem>
-                        {crumb.href ? (
-                          <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
-                        ) : (
-                          <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
-                        )}
-                      </BreadcrumbItem>
-                    </div>
-                  ))}
-                </BreadcrumbList>
-              </Breadcrumb>
-            </div>
-
-            {/* Enhanced Search */}
-            <div className="flex items-center gap-2">
-              <div className="relative hidden md:block">
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={handleSearchToggle}
-                  className="h-8 w-8 p-0 transition-all duration-200 hover:bg-muted"
-                >
-                  <Search className="h-4 w-4 transition-transform duration-200" />
-                </Button>
-                <div className={`absolute right-0 top-0 z-50 transition-all duration-300 ease-in-out ${
-                  isSearchExpanded 
-                    ? "opacity-100 translate-x-0 scale-100" 
-                    : "opacity-0 translate-x-4 scale-95 pointer-events-none"
-                }`}>
-                  <form onSubmit={handleSearch}>
-                    <Input
-                      type="search"
-                      placeholder={t("search.placeholder", "Search courses, notes, discussions...")}
-                      value={searchQuery}
-                      onChange={handleSearchInputChange}
-                      className="pl-4 pr-10 w-64 bg-background border shadow-lg focus:ring-2 focus:ring-primary/20 transition-all"
-                      autoFocus
-                    />
-                  </form>
-                </div>
+                {/* Enhanced Breadcrumbs */}
+                <Breadcrumb>
+                  <BreadcrumbList>
+                    <BreadcrumbItem className="hidden md:block">
+                      <BreadcrumbLink href={`/${lang}/dashboard`}>{t("nav.dashboard", "Dashboard")}</BreadcrumbLink>
+                    </BreadcrumbItem>
+                    {breadcrumbs.map((crumb, index) => (
+                      <div key={index} className="flex items-center">
+                        <BreadcrumbSeparator className="hidden md:block" />
+                        <BreadcrumbItem>
+                          {crumb.href ? (
+                            <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
+                          ) : (
+                            <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                          )}
+                        </BreadcrumbItem>
+                      </div>
+                    ))}
+                  </BreadcrumbList>
+                </Breadcrumb>
               </div>
 
-              {/* Fullscreen Toggle */}
-              <Button variant="ghost" size="sm" onClick={toggleFullscreen} className="h-8 w-8 p-0 hidden lg:flex">
-                {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-              </Button>
-
-              {/* Enhanced Notifications */}
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="relative h-8 w-8 p-0">
-                    <Bell className="h-4 w-4" />
-                    {unreadCount > 0 && (
-                      <Badge
-                        variant="destructive"
-                        className="absolute -top-1 -right-1 h-5 w-5 p-0 text-xs flex items-center justify-center animate-pulse"
-                      >
-                        {unreadCount > 9 ? "9+" : unreadCount}
-                      </Badge>
-                    )}
+              {/* Enhanced Search */}
+              <div className="flex items-center gap-2 pr-3">
+                <div className="relative hidden md:block">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    onClick={handleSearchToggle}
+                    className="h-8 w-8 p-0 transition-all duration-200 hover:bg-muted"
+                  >
+                    <Search className="h-4 w-4 transition-transform duration-200" />
                   </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-80 p-0">
-                  <div className="flex items-center justify-between p-4 border-b">
-                    <h3 className="font-semibold">Notifications</h3>
-                    {unreadCount > 0 && (
-                      <Button variant="ghost" size="sm" onClick={markAllAsRead} className="text-xs">
-                        Mark all read
-                      </Button>
-                    )}
+                  <div className={`absolute right-0 top-0 z-50 transition-all duration-300 ease-in-out ${
+                    isSearchExpanded 
+                      ? "opacity-100 translate-x-0 scale-100" 
+                      : "opacity-0 translate-x-4 scale-95 pointer-events-none"
+                  }`}>
+                    <form onSubmit={handleSearch}>
+                      <Input
+                        type="search"
+                        placeholder={t("search.placeholder", "Search courses, notes, discussions...")}
+                        value={searchQuery}
+                        onChange={handleSearchInputChange}
+                        className="pl-4 pr-10 w-64 bg-background/80 border shadow-lg focus:ring-2 focus:ring-primary/20 transition-all"
+                        autoFocus
+                      />
+                    </form>
                   </div>
-                  <div className="max-h-96 overflow-y-auto">
-                    {notifications.length === 0 ? (
-                      <div className="p-8 text-center text-muted-foreground">
-                        <Bell className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                        <p>No notifications yet</p>
-                      </div>
-                    ) : (
-                      notifications.map((notification) => (
-                        <div
-                          key={notification.id}
-                          className={`p-4 border-b hover:bg-muted/50 transition-colors cursor-pointer ${
-                            !notification.read ? "bg-primary/5" : ""
-                          }`}
-                          onClick={() => markNotificationAsRead(notification.id)}
+                </div>
+
+                {/* Fullscreen Toggle */}
+                <Button variant="ghost" size="sm" onClick={toggleFullscreen} className="h-8 w-8 p-0 hidden lg:flex">
+                  {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
+                </Button>
+
+                {/* Enhanced Notifications */}
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" size="sm" className="relative h-8 w-8 p-0">
+                      <Bell className="h-4 w-4" />
+                      {unreadCount > 0 && (
+                        <Badge
+                          variant="destructive"
+                          className="absolute -top-1 -right-1 h-5 w-5 p-0 text-xs flex items-center justify-center animate-pulse"
                         >
-                          <div className="flex items-start gap-3">
-                            <div className="mt-0.5">{getNotificationIcon(notification.type)}</div>
-                            <div className="flex-1 min-w-0">
-                              <div className="flex items-center gap-2 mb-1">
-                                <h4 className="font-medium text-sm truncate">{notification.title}</h4>
-                                {!notification.read && (
-                                  <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
-                                )}
-                              </div>
-                              <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{notification.message}</p>
-                              <div className="flex items-center justify-between">
-                                <span className="text-xs text-muted-foreground">
-                                  {formatTimeAgo(notification.timestamp)}
-                                </span>
-                                {notification.action && (
-                                  <Button variant="ghost" size="sm" className="text-xs h-6">
-                                    {notification.action.label}
-                                  </Button>
-                                )}
+                          {unreadCount > 9 ? "9+" : unreadCount}
+                        </Badge>
+                      )}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-80 p-0">
+                    <div className="flex items-center justify-between p-4 border-b">
+                      <h3 className="font-semibold">Notifications</h3>
+                      {unreadCount > 0 && (
+                        <Button variant="ghost" size="sm" onClick={markAllAsRead} className="text-xs">
+                          Mark all read
+                        </Button>
+                      )}
+                    </div>
+                    <div className="max-h-96 overflow-y-auto">
+                      {notifications.length === 0 ? (
+                        <div className="p-8 text-center text-muted-foreground">
+                          <Bell className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                          <p>No notifications yet</p>
+                        </div>
+                      ) : (
+                        notifications.map((notification) => (
+                          <div
+                            key={notification.id}
+                            className={`p-4 border-b hover:bg-muted/50 transition-colors cursor-pointer ${
+                              !notification.read ? "bg-primary/5" : ""
+                            }`}
+                            onClick={() => markNotificationAsRead(notification.id)}
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className="mt-0.5">{getNotificationIcon(notification.type)}</div>
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <h4 className="font-medium text-sm truncate">{notification.title}</h4>
+                                  {!notification.read && (
+                                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
+                                  )}
+                                </div>
+                                <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{notification.message}</p>
+                                <div className="flex items-center justify-between">
+                                  <span className="text-xs text-muted-foreground">
+                                    {formatTimeAgo(notification.timestamp)}
+                                  </span>
+                                  {notification.action && (
+                                    <Button variant="ghost" size="sm" className="text-xs h-6">
+                                      {notification.action.label}
+                                    </Button>
+                                  )}
+                                </div>
                               </div>
                             </div>
                           </div>
-                        </div>
-                      ))
-                    )}
-                  </div>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              {/* Theme and Language Controls */}
-              <div className="flex items-center gap-1">
-                <ThemeToggle variant="compact" />
-                <LanguageSwitcher currentLang={lang} variant="compact" />
-              </div>
-
-              {/* Enhanced User Menu */}
+                        ))
+                      )}
+                    </div>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0">
@@ -477,6 +491,7 @@ export function AppLayout({
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
+            </div>
             </div>
           </header>
 

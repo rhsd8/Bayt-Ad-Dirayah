@@ -577,7 +577,7 @@ export function PDFViewerPage({ lang, materialId, dictionary }: PDFViewerPagePro
                       <div key={bookmark.id} className="flex items-center justify-between p-2 rounded-lg bg-muted/50">
                         <button
                           onClick={() => setCurrentPage(bookmark.page)}
-                          className="flex-1 text-left text-sm hover:text-primary"
+                          className="flex-1 text-left text-sm hover:text-foreground"
                         >
                           <div className="font-medium">{bookmark.title}</div>
                           <div className="text-xs text-muted-foreground">Page {bookmark.page}</div>

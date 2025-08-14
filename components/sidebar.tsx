@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
 import { Badge } from "@/components/ui/badge"
@@ -452,9 +453,17 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
 
     return (
       <SidebarGroup key={groupId}>
-        <Collapsible open={isExpanded} onOpenChange={() => toggleGroup(groupId)}>
+        <Collapsible
+          open={state === "collapsed" ? true : isExpanded}
+          onOpenChange={state === "collapsed" ? undefined : () => toggleGroup(groupId)}
+        >
           <SidebarGroupLabel asChild>
-            <CollapsibleTrigger className="group/collapsible w-full flex items-center justify-between hover:bg-muted/50 rounded-md p-2 transition-colors">
+            <CollapsibleTrigger
+              className={cn(
+                "group/collapsible w-full flex items-center justify-between hover:bg-muted/50 rounded-md p-2 transition-colors",
+                state === "collapsed" && "hidden"
+              )}
+            >
               <span className="text-sm font-medium">{groupLabel}</span>
               <ChevronRight className="h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-90" />
             </CollapsibleTrigger>
@@ -467,11 +476,14 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
                     <SidebarMenuButton asChild isActive={item.isActive} className="group relative">
                       <Link
                         href={item.href || "#"}
-                        className="flex items-center w-full px-2 py-1.5 rounded-lg transition-colors 
-                          hover:bg-muted group justify-between"
+                        className={cn(
+                          "flex items-center w-full rounded-lg transition-colors hover:bg-muted group",
+                          state === "collapsed" ? "justify-center px-0 py-2" : "justify-between px-2 py-1.5"
+                        )}
+                        title={item.title}
                       >
                         {/* Icon + Text (Left side) */}
-                        <div className="flex items-center gap-3 min-w-0">
+                        <div className={cn("flex items-center min-w-0", state === "collapsed" ? "gap-0" : "gap-3") }>
                           <div
                             className={cn(
                               "p-2 rounded-md transition-colors shrink-0 flex items-center justify-center",
@@ -480,11 +492,11 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
                           >
                             <item.icon className="h-5 w-5" />
                           </div>
-                          <span className="truncate font-semibold text-base text-primary">{item.title}</span>
+                          <span className={cn("truncate font-semibold text-base text-primary", state === "collapsed" && "hidden")}>{item.title}</span>
                         </div>
 
                         {/* New item indicator (Right side) */}
-                        {item.isNew && (
+                        {item.isNew && state !== "collapsed" && (
                           <div className="ml-3 w-2 h-2 bg-primary rounded-full animate-pulse"></div>
                         )}
                       </Link>
@@ -501,71 +513,145 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
 
   return (
     <Sidebar collapsible="icon" className="border-r">
-      <SidebarHeader className="border-b p-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-primary/10 rounded-xl">
-            <GraduationCap className="h-6 w-6 text-primary" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <h2 className="font-semibold text-lg truncate">Arabic Learning</h2>
-            <p className="text-xs text-muted-foreground truncate">Master Arabic Language</p>
-          </div>
-        </div>
+      <SidebarHeader className={cn("border-b", state === "collapsed" ? "p-2 overflow-hidden" : "p-4") }>
+        <Link
+          href={`/${lang}`}
+          className={cn(
+            "flex items-center gap-2",
+            state === "collapsed" ? "justify-center w-full gap-0" : undefined
+          )}
+          aria-label="Bayt Ad Dirayah Home"
+        >
+          {state === "collapsed" ? (
+            <Image
+              src={lang === "ar" ? "/logo-web-dark-ar.webp" : "/logo-web-light-en.webp"}
+              alt="Bayt Ad Dirayah"
+              width={140}
+              height={32}
+              className="h-auto w-auto max-h-6 max-w-[28px] object-contain"
+              priority
+            />
+          ) : (
+            <>
+              <Image
+                src="/logo-web-light.webp"
+                alt="Bayt Ad Dirayah"
+                width={140}
+                height={32}
+                className="h-8 w-auto dark:hidden shrink-0"
+                priority
+              />
+              <Image
+                src="/logo-web-dark.webp"
+                alt="Bayt Ad Dirayah"
+                width={140}
+                height={32}
+                className="h-8 w-auto hidden dark:inline shrink-0"
+                priority
+              />
+            </>
+          )}
+        </Link>
       </SidebarHeader>
 
-      <SidebarContent>
-        <ScrollArea className="flex-1">
-          {/* Main Navigation */}
-          <SidebarGroup>
-            <SidebarMenu>
-              {navigation.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={item.isActive}>
-                    <Link href={item.href || "#"} className="flex items-center gap-3">
-                      <div
-                        className={cn(
-                          "p-1.5 rounded-md transition-colors",
-                          item.isActive ? "bg-primary/10 text-primary" : "bg-muted/50 hover:bg-muted",
-                        )}
-                      >
-                        <item.icon
+      <SidebarContent className={cn(state === "collapsed" && "px-0")}>
+        <ScrollArea className={cn("flex-1", state === "collapsed" && "px-0") }>
+          {state === "collapsed" ? (
+            <>
+              {/* Quick 7 icons when collapsed */}
+              <SidebarGroup className="px-0">
+                <SidebarMenu className="px-0 w-[5rem] mx-auto">
+                  {[
+                    { title: t("nav.dashboard", "Dashboard"), href: `/${lang}/dashboard`, icon: Home, isActive: pathname === `/${lang}/dashboard` },
+                    { title: t("nav.courses", "Learning"), href: `/${lang}/courses`, icon: BookOpen, isActive: pathname.startsWith(`/${lang}/courses`) },
+                    { title: t("nav.learning_tools", "Learning Tools"), href: `/${lang}/quiz`, icon: Brain, isActive: pathname.startsWith(`/${lang}/quiz`) || pathname.startsWith(`/${lang}/flashcards`) },
+                    { title: t("nav.materials", "Resources"), href: `/${lang}/materials`, icon: Library, isActive: pathname.startsWith(`/${lang}/materials`) },
+                    { title: t("nav.study", "Study Tools"), href: `/${lang}/notes`, icon: FileText, isActive: pathname.startsWith(`/${lang}/notes`) || pathname.startsWith(`/${lang}/study`) },
+                    { title: t("nav.community", "Community"), href: `/${lang}/community`, icon: Users, isActive: pathname.startsWith(`/${lang}/community`) },
+                    { title: t("nav.progress", "Progress & Stats"), href: `/${lang}/analytics`, icon: BarChart3, isActive: pathname.startsWith(`/${lang}/analytics`) || pathname.startsWith(`/${lang}/progress`) },
+                  ].map((item) => (
+                    <SidebarMenuItem key={item.title} className={cn(state === "collapsed" && "px-0 w-[5rem] mx-auto") }>
+                      <SidebarMenuButton asChild isActive={item.isActive} className={cn(state === "collapsed" && "px-0 w-[5rem] mx-auto") }>
+                        <Link
+                          href={item.href}
+                          className={cn("grid w-[5rem] place-items-center px-0 py-4 mx-auto hover:bg-muted/30 rounded-lg transition-colors")}
+                          title={item.title}
+                        >
+                          <item.icon
+                            className={cn(
+                              "h-16 w-16 shrink-0 transition-colors",
+                              item.isActive ? "text-primary" : "text-foreground hover:text-foreground"
+                            )}
+                          />
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroup>
+            </>
+          ) : (
+            <>
+              {/* Main Navigation */}
+              <SidebarGroup>
+                <SidebarMenu>
+                  {navigation.map((item) => (
+                    <SidebarMenuItem key={item.title}>
+                      <SidebarMenuButton asChild isActive={item.isActive}>
+                        <Link
+                          href={item.href || "#"}
                           className={cn(
-                            "h-4 w-4",
-                            item.color || (item.isActive ? "text-primary" : "text-muted-foreground"),
+                            "flex items-center rounded-lg transition-colors hover:bg-muted",
+                            "gap-3 px-2 py-1.5"
                           )}
-                        />
-                      </div>
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroup>
+                          title={item.title}
+                        >
+                          <div
+                            className={cn(
+                              "p-1.5 rounded-md transition-colors",
+                              item.isActive ? "bg-primary/10 text-primary" : "bg-muted/50 hover:bg-muted",
+                            )}
+                          >
+                            <item.icon
+                              className={cn(
+                                "h-4 w-4",
+                                item.color || (item.isActive ? "text-primary" : "text-muted-foreground"),
+                              )}
+                            />
+                          </div>
+                          <span>{item.title}</span>
+                        </Link>
+                      </SidebarMenuButton>
+                    </SidebarMenuItem>
+                  ))}
+                </SidebarMenu>
+              </SidebarGroup>
 
-          {/* Learning Section */}
-          {renderNavigationGroup(learningNavigation, "learning", "Learning")}
+              {/* Learning Section */}
+              {renderNavigationGroup(learningNavigation, "learning", "Learning")}
 
-          {/* Tools Section */}
-          {renderNavigationGroup(toolsNavigation, "tools", "Learning Tools")}
+              {/* Tools Section */}
+              {renderNavigationGroup(toolsNavigation, "tools", "Learning Tools")}
 
-          {/* Materials Section */}
-          {renderNavigationGroup(materialsNavigation, "materials", "Resources")}
+              {/* Materials Section */}
+              {renderNavigationGroup(materialsNavigation, "materials", "Resources")}
 
-          {/* Study Section */}
-          {renderNavigationGroup(studyNavigation, "study", "Study Tools")}
+              {/* Study Section */}
+              {renderNavigationGroup(studyNavigation, "study", "Study Tools")}
 
-          {/* Community Section */}
-          {renderNavigationGroup(communityNavigation, "community", "Community")}
+              {/* Community Section */}
+              {renderNavigationGroup(communityNavigation, "community", "Community")}
 
-          {/* Progress Section */}
-          {renderNavigationGroup(progressNavigation, "progress", "Progress & Stats")}
+              {/* Progress Section */}
+              {renderNavigationGroup(progressNavigation, "progress", "Progress & Stats")}
 
-          {/* Admin Section */}
-          {adminNavigation.length > 0 && renderNavigationGroup(adminNavigation, "admin", "Administration")}
+              {/* Admin Section */}
+              {adminNavigation.length > 0 && renderNavigationGroup(adminNavigation, "admin", "Administration")}
 
-          {/* Support Section */}
-          {renderNavigationGroup(supportNavigation, "support", "Help & Support")}
+              {/* Support Section */}
+              {renderNavigationGroup(supportNavigation, "support", "Help & Support")}
+            </>
+          )}
         </ScrollArea>
       </SidebarContent>
 
@@ -577,14 +663,18 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
             </div>
             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-background"></div>
           </div>
-          <div className="flex-1 min-w-0">
-            <p className="font-medium text-sm truncate">{user?.name || "Student"}</p>
-            <p className="text-xs text-muted-foreground truncate capitalize">{user?.role || "Student"}</p>
-          </div>
-          <div className="flex items-center gap-1">
-            <Sparkles className="h-3 w-3 text-yellow-500" />
-            <span className="text-xs font-medium">Pro</span>
-          </div>
+          {state !== "collapsed" && (
+            <>
+              <div className="flex-1 min-w-0">
+                <p className="font-medium text-sm truncate">{user?.name || "Student"}</p>
+                <p className="text-xs text-muted-foreground truncate capitalize">{user?.role || "Student"}</p>
+              </div>
+              <div className="flex items-center gap-1">
+                <Sparkles className="h-3 w-3 text-yellow-500" />
+                <span className="text-xs font-medium">Pro</span>
+              </div>
+            </>
+          )}
         </div>
       </SidebarFooter>
 

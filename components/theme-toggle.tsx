@@ -9,16 +9,23 @@ import { cn } from "@/lib/utils"
 interface ThemeToggleProps {
   variant?: "default" | "compact"
   className?: string
+  tooltip?: string
 }
 
-export function ThemeToggle({ variant = "default", className }: ThemeToggleProps) {
+export function ThemeToggle({ variant = "default", className, tooltip }: ThemeToggleProps) {
   const { setTheme, theme } = useTheme()
 
   if (variant === "compact") {
     return (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className={cn("h-8 w-8", className)} aria-label="Toggle theme">
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn("h-8 w-8", className)}
+            aria-label="Toggle theme"
+            title={tooltip || "Toggle theme"}
+          >
             <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
             <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
           </Button>
@@ -27,7 +34,7 @@ export function ThemeToggle({ variant = "default", className }: ThemeToggleProps
           <DropdownMenuItem 
             onClick={() => setTheme("light")}
             className={cn(
-              theme === "light" && "bg-primary/10 text-primary"
+              theme === "light" && "bg-muted text-foreground"
             )}
           >
             <Sun className="mr-2 h-4 w-4" />
@@ -36,7 +43,7 @@ export function ThemeToggle({ variant = "default", className }: ThemeToggleProps
           <DropdownMenuItem 
             onClick={() => setTheme("dark")}
             className={cn(
-              theme === "dark" && "bg-primary/10 text-primary"
+              theme === "dark" && "bg-muted text-foreground"
             )}
           >
             <Moon className="mr-2 h-4 w-4" />
@@ -45,7 +52,7 @@ export function ThemeToggle({ variant = "default", className }: ThemeToggleProps
           <DropdownMenuItem 
             onClick={() => setTheme("system")}
             className={cn(
-              theme === "system" && "bg-primary/10 text-primary"
+              theme === "system" && "bg-muted text-foreground"
             )}
           >
             <span className="mr-2">💻</span>
@@ -59,7 +66,13 @@ export function ThemeToggle({ variant = "default", className }: ThemeToggleProps
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className={className} aria-label="Toggle theme">
+        <Button
+          variant="outline"
+          size="icon"
+          className={cn("text-foreground", className)}
+          aria-label="Toggle theme"
+          title={tooltip || "Toggle theme"}
+        >
           <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
         </Button>

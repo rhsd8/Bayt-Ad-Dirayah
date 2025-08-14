@@ -11,6 +11,7 @@ interface LanguageSwitcherProps {
   currentLang: string
   variant?: "default" | "compact"
   className?: string
+  tooltip?: string
 }
 
 const languages = [
@@ -19,7 +20,7 @@ const languages = [
   { code: "fr", name: "French", nativeName: "Français" },
 ]
 
-export function LanguageSwitcher({ currentLang, variant = "default", className }: LanguageSwitcherProps) {
+export function LanguageSwitcher({ currentLang, variant = "default", className, tooltip }: LanguageSwitcherProps) {
   const router = useRouter()
   const pathname = usePathname()
   const [isOpen, setIsOpen] = useState(false)
@@ -38,7 +39,13 @@ export function LanguageSwitcher({ currentLang, variant = "default", className }
     return (
       <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
         <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className={cn("h-8 w-8", className)} aria-label="Switch language">
+          <Button
+            variant="ghost"
+            size="icon"
+            className={cn("h-8 w-8", className)}
+            aria-label="Switch language"
+            title={tooltip || "Switch language"}
+          >
             <Globe className="h-4 w-4" />
           </Button>
         </DropdownMenuTrigger>
@@ -64,7 +71,12 @@ export function LanguageSwitcher({ currentLang, variant = "default", className }
   return (
     <DropdownMenu open={isOpen} onOpenChange={setIsOpen}>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline" className={cn("gap-2", className)} aria-label="Switch language">
+        <Button
+          variant="outline"
+          className={cn("gap-2", className)}
+          aria-label="Switch language"
+          title={tooltip || "Switch language"}
+        >
           <Globe className="h-4 w-4" />
           <span className="hidden sm:inline">{currentLanguage.name}</span>
           <span className="sm:hidden">{currentLanguage.code.toUpperCase()}</span>
