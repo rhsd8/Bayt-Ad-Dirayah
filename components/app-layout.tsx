@@ -91,6 +91,9 @@ export function AppLayout({
   const [unreadCount, setUnreadCount] = useState(0)
   const [isFullscreen, setIsFullscreen] = useState(false)
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const searchRef = useRef<HTMLDivElement | null>(null)
+  const searchFlashTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const [searchFlash, setSearchFlash] = useState(false)
 
   // Load notifications
   useEffect(() => {
@@ -169,6 +172,13 @@ export function AppLayout({
         setIsSearchExpanded(false)
       }, 5000)
     }
+
+    // Flash stronger shadow briefly when opening
+    if (newExpandedState) {
+      if (searchFlashTimeoutRef.current) clearTimeout(searchFlashTimeoutRef.current)
+      setSearchFlash(true)
+      searchFlashTimeoutRef.current = setTimeout(() => setSearchFlash(false), 1000)
+    }
   }
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -183,6 +193,21 @@ export function AppLayout({
       setIsSearchExpanded(false)
     }, 15000)
   }
+
+  // Close search when clicking outside the search area (button + input popover)
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsSearchExpanded(false)
+      }
+    }
+    if (isSearchExpanded) {
+      document.addEventListener("mousedown", handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isSearchExpanded])
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -305,7 +330,7 @@ export function AppLayout({
 
               {/* Enhanced Search */}
               <div className="flex items-center gap-2 pr-3">
-                <div className="relative hidden md:block">
+                <div className="relative hidden md:block" ref={searchRef}>
                   <Button
                     variant="ghost"
                     size="icon"
@@ -325,7 +350,12 @@ export function AppLayout({
                         placeholder={t("search.placeholder", "Search courses, notes, discussions...")}
                         value={searchQuery}
                         onChange={handleSearchInputChange}
-                        className="pl-4 pr-10 w-64 bg-background/80 border shadow-lg focus:ring-2 focus:ring-primary/20 transition-all"
+                        onFocus={() => {
+                          if (searchFlashTimeoutRef.current) clearTimeout(searchFlashTimeoutRef.current)
+                          setSearchFlash(true)
+                          searchFlashTimeoutRef.current = setTimeout(() => setSearchFlash(false), 1000)
+                        }}
+                        className={`pl-4 pr-4 w-72 rounded-full bg-primary text-foreground border-0 appearance-none ring-0 ring-transparent focus:ring-0 focus:ring-transparent focus-visible:ring-0 focus-visible:ring-transparent focus:outline-none focus-visible:outline-none focus:border-transparent focus-visible:border-transparent ring-offset-0 focus:ring-offset-0 ${searchFlash ? "shadow-2xl" : "shadow-lg"} transition-all placeholder:text-muted-foreground`}
                         autoFocus
                       />
                     </form>

@@ -114,7 +114,7 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
       icon: Home,
       href: `/${lang}/dashboard`,
       isActive: pathname === `/${lang}/dashboard`,
-      color: "text-blue-600",
+      color: "text-foreground",
     },
   ]
 
@@ -579,8 +579,8 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
                         >
                           <item.icon
                             className={cn(
-                              "h-16 w-16 shrink-0 transition-colors",
-                              item.isActive ? "text-primary" : "text-foreground hover:text-foreground"
+                              "h-20 w-20 shrink-0 transition-colors",
+                              item.isActive ? "text-foreground" : "text-foreground hover:text-foreground"
                             )}
                           />
                         </Link>

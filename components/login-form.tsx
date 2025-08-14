@@ -63,26 +63,53 @@ export function LoginForm({ lang, dictionary }: LoginFormProps) {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
-          <div className="mx-auto mb-4 h-16 w-16">
-            <Image src="/logo-web-dark.webp" alt="Logo" width={64} height={64} />
+    <div className="min-h-screen flex items-center justify-center bg-background text-foreground p-4">
+      <div className="w-full max-w-md space-y-6">
+        {/* Header with Logo */}
+        <div className="text-center space-y-4">
+          <div className="flex justify-center">
+            <Link href={`/${lang}`} aria-label="Bayt Ad Dirayah Home" title="Home" className="inline-flex items-center">
+              <Image
+                src="/logo-web-light.webp"
+                alt="Bayt Ad Dirayah"
+                width={140}
+                height={32}
+                className="h-10 w-auto dark:hidden"
+                priority
+              />
+              <Image
+                src="/logo-web-dark.webp"
+                alt="Bayt Ad Dirayah"
+                width={140}
+                height={32}
+                className="h-10 w-auto hidden dark:inline"
+                priority
+              />
+            </Link>
           </div>
-          <CardTitle className="text-2xl font-bold">{dictionary.login.title}</CardTitle>
-          <CardDescription>{dictionary.login.description}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+          <div>
+            <h1 className="text-2xl font-bold">{dictionary.auth.welcome}</h1>
+            <p className="text-muted-foreground">Sign in to continue your learning journey</p>
+          </div>
+        </div>
+
+        {/* Login Form */}
+        <Card>
+          <CardHeader>
+            <CardTitle>{dictionary.auth.loginTitle}</CardTitle>
+            <CardDescription>Enter your credentials to access your account</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
               <FormField
                 control={form.control}
                 name="email"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{dictionary.login.emailLabel}</FormLabel>
+                    <FormLabel>{dictionary.auth.email}</FormLabel>
                     <FormControl>
-                      <Input placeholder={dictionary.login.emailPlaceholder} {...field} />
+                      <Input placeholder="Enter your email" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -93,28 +120,37 @@ export function LoginForm({ lang, dictionary }: LoginFormProps) {
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>{dictionary.login.passwordLabel}</FormLabel>
+                    <FormLabel>{dictionary.auth.password}</FormLabel>
                     <FormControl>
-                      <Input type="password" placeholder={dictionary.login.passwordPlaceholder} {...field} />
+                      <Input type="password" placeholder="Enter your password" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              {error && <p className="text-sm font-medium text-destructive">{error}</p>}
-              <Button type="submit" className="w-full" disabled={loading}>
-                {loading ? dictionary.login.loading : dictionary.login.submit}
-              </Button>
-            </form>
-          </Form>
-          <div className="mt-4 text-center text-sm">
-            {dictionary.login.noAccount}{" "}
-            <Link href={`/${lang}/signup`} className="underline">
-              {dictionary.login.signUp}
-            </Link>
-          </div>
-        </CardContent>
-      </Card>
+                {error && <p className="text-sm font-medium text-destructive">{error}</p>}
+                <Button type="submit" className="w-full" disabled={loading}>
+                  {loading ? "Signing in..." : dictionary.auth.loginButton}
+                </Button>
+              </form>
+            </Form>
+            
+            <div className="mt-4 text-center text-sm">
+              Don't have an account?{" "}
+              <Link href={`/${lang}/signup`} className="underline">
+                Sign up
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+        
+        {/* Back to Home */}
+        <div className="text-center">
+          <Link href={`/${lang}`} className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
+            ← {dictionary.auth.backToHome || "Back to Home"}
+          </Link>
+        </div>
+      </div>
     </div>
   )
 }
