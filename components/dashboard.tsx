@@ -12,6 +12,7 @@ import { useLanguage } from "@/components/language-provider"
 import { AppLayout } from "@/components/app-layout"
 import { SkeletonCard } from "@/components/loading-spinner"
 import { ErrorBoundary } from "@/components/error-boundary"
+import { WipNoticeCard } from "@/components/wip-notice"
 import {
   BookOpen,
   Clock,
@@ -382,319 +383,28 @@ export function Dashboard({ lang, dictionary }: DashboardProps) {
   return (
     <ErrorBoundary>
       <AppLayout lang={lang} dictionary={dictionary}>
-        <div className="space-y-8">
-          {/* Welcome Section with enhanced design */}
-          <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/10 via-primary/5 to-transparent p-8 border border-primary/20">
-            <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full -translate-y-16 translate-x-16"></div>
-            <div className="absolute bottom-0 left-0 w-24 h-24 bg-primary/10 rounded-full translate-y-12 -translate-x-12"></div>
-
-            <div className="relative space-y-3">
-              <div className="flex items-center gap-2">
-                <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-sm text-muted-foreground">{getGreeting()}</span>
-              </div>
-              <h1 className="text-3xl font-bold tracking-tight">
-                {t("dashboard.welcome_message", `Welcome back, ${user?.name || "Student"}!`)}
-              </h1>
-              <p className="text-muted-foreground text-lg">
-                {t("dashboard.subtitle", "Continue your Arabic learning journey")}
-              </p>
-
-              {/* Quick stats in welcome section */}
-              <div className="flex items-center gap-6 pt-4">
-                <div className="flex items-center gap-2">
-                  <Flame className="h-5 w-5 text-orange-500" />
-                  <span className="font-semibold">{stats.currentStreak} day streak</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Trophy className="h-5 w-5 text-yellow-500" />
-                  <span className="font-semibold">Rank #{stats.rank}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5 text-blue-500" />
-                  <span className="font-semibold">{formatTime(stats.studyTime)} studied</span>
-                </div>
-              </div>
+        <div className="py-12">
+          <div className="space-y-3 ml-2 md:ml-4">
+            <div className="text-sm text-muted-foreground">
+              {(() => {
+                const byName = user?.name?.trim().split(" ")[0]
+                const byEmail = user?.email ? user.email.split("@")[0] : ""
+                const firstName = byName || (byEmail ? byEmail.charAt(0).toUpperCase() + byEmail.slice(1) : "")
+                return `As-salamu alaykum wa rahmatullahi wa barakatuh${firstName ? ", " + firstName : ""}`
+              })()}
             </div>
+            <h1 className="text-3xl font-bold tracking-tight">Welcome back to your Arabic learning journey!</h1>
           </div>
-
-          {/* Enhanced Stats Overview */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            <Card className="relative overflow-hidden group hover:shadow-lg transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent"></div>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Overall Progress</CardTitle>
-                <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
-                  <TrendingUp className="h-4 w-4 text-blue-600" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{overallProgress}%</div>
-                <p className="text-xs text-muted-foreground mb-3">
-                  {stats.completedLessons} of {stats.totalLessons} lessons
-                </p>
-                <Progress value={overallProgress} className="h-2" />
-              </CardContent>
-            </Card>
-
-            <Card className="relative overflow-hidden group hover:shadow-lg transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent"></div>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Study Time</CardTitle>
-                <div className="p-2 bg-green-100 dark:bg-green-900/20 rounded-lg">
-                  <Clock className="h-4 w-4 text-green-600" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{formatTime(stats.studyTime)}</div>
-                <p className="text-xs text-muted-foreground">Total time invested</p>
-                <div className="mt-2 text-xs text-green-600 font-medium">+2h this week</div>
-              </CardContent>
-            </Card>
-
-            <Card className="relative overflow-hidden group hover:shadow-lg transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-orange-500/5 to-transparent"></div>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Current Streak</CardTitle>
-                <div className="p-2 bg-orange-100 dark:bg-orange-900/20 rounded-lg">
-                  <Flame className="h-4 w-4 text-orange-600" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">{stats.currentStreak}</div>
-                <p className="text-xs text-muted-foreground">Days in a row</p>
-                <div className="mt-2 text-xs text-orange-600 font-medium">Keep it up! 🔥</div>
-              </CardContent>
-            </Card>
-
-            <Card className="relative overflow-hidden group hover:shadow-lg transition-all duration-300">
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-transparent"></div>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Global Rank</CardTitle>
-                <div className="p-2 bg-purple-100 dark:bg-purple-900/20 rounded-lg">
-                  <Trophy className="h-4 w-4 text-purple-600" />
-                </div>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">#{stats.rank}</div>
-                <p className="text-xs text-muted-foreground">Among all learners</p>
-                <div className="mt-2 text-xs text-purple-600 font-medium">↑ 3 positions</div>
-              </CardContent>
-            </Card>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Enhanced Recent Activity */}
-            <div className="lg:col-span-2">
-              <Card className="h-fit">
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <CardTitle className="flex items-center gap-2">
-                        <Activity className="h-5 w-5" />
-                        Recent Activity
-                      </CardTitle>
-                      <CardDescription>Your latest learning activities</CardDescription>
-                    </div>
-                    <Button variant="ghost" size="sm" className="gap-1">
-                      View All
-                      <ArrowRight className="h-3 w-3" />
-                    </Button>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-4">
-                    {recentActivity.map((activity, index) => {
-                      const Icon = activity.icon
-                      return (
-                        <div
-                          key={activity.id}
-                          className="flex items-start gap-4 p-4 rounded-xl bg-gradient-to-r from-muted/30 to-transparent hover:from-muted/50 transition-all duration-200 group cursor-pointer"
-                        >
-                          <div
-                            className={`p-2 rounded-lg bg-background shadow-sm group-hover:shadow-md transition-shadow ${
-                              index === 0 ? "ring-2 ring-primary/20" : ""
-                            }`}
-                          >
-                            <Icon className={`h-4 w-4 ${activity.color}`} />
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center justify-between mb-1">
-                              <h4 className="font-medium truncate group-hover:text-foreground transition-colors">
-                                {activity.title}
-                              </h4>
-                              <span className="text-xs text-muted-foreground whitespace-nowrap ml-2">
-                                {formatTimeAgo(activity.timestamp)}
-                              </span>
-                            </div>
-                            <p className="text-sm text-muted-foreground line-clamp-2">{activity.description}</p>
-                            {activity.progress !== undefined && (
-                              <div className="mt-3">
-                                <div className="flex items-center justify-between text-xs mb-1">
-                                  <span>Progress</span>
-                                  <span className="font-medium">{activity.progress}%</span>
-                                </div>
-                                <Progress value={activity.progress} className="h-1.5" />
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      )
-                    })}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-
-            {/* Enhanced Sidebar */}
-            <div className="space-y-6">
-              {/* Quick Actions */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Zap className="h-5 w-5" />
-                    Quick Actions
-                  </CardTitle>
-                  <CardDescription>Jump back into learning</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  {quickActions.map((action) => {
-                    const Icon = action.icon
-                    return (
-                      <Button
-                        key={action.id}
-                        variant="outline"
-                        className="w-full justify-start gap-3 h-auto p-4 bg-gradient-to-r from-background to-muted/20 hover:from-muted/30 hover:to-muted/40 transition-all duration-200 group"
-                        size="sm"
-                      >
-                        <div className="p-1.5 rounded-md bg-background shadow-sm group-hover:shadow-md transition-shadow">
-                          <Icon className={`h-4 w-4 ${action.color}`} />
-                        </div>
-                        <div className="flex-1 text-left">
-                          <div className="font-medium text-sm">{action.title}</div>
-                          <div className="text-xs text-muted-foreground">{action.description}</div>
-                        </div>
-                        {action.badge && (
-                          <Badge variant="secondary" className="text-xs">
-                            {action.badge}
-                          </Badge>
-                        )}
-                        <ChevronRight className="h-4 w-4 opacity-50 group-hover:opacity-100 transition-opacity" />
-                      </Button>
-                    )
-                  })}
-                </CardContent>
-              </Card>
-
-              {/* Upcoming Lessons */}
-              <Card>
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Calendar className="h-5 w-5" />
-                    Upcoming Lessons
-                  </CardTitle>
-                  <CardDescription>Your scheduled learning sessions</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {upcomingLessons.slice(0, 3).map((lesson, index) => (
-                      <div
-                        key={lesson.id}
-                        className={`p-4 rounded-xl border transition-all duration-200 hover:shadow-md cursor-pointer group ${
-                          index === 0 ? "bg-primary/5 border-primary/20" : "hover:bg-muted/30"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <h4 className="font-medium text-sm group-hover:text-foreground transition-colors">
-                            {lesson.title}
-                          </h4>
-                          <Badge className={getDifficultyColor(lesson.difficulty)} variant="secondary">
-                            {lesson.difficulty}
-                          </Badge>
-                        </div>
-                        <p className="text-xs text-muted-foreground mb-3">{lesson.course}</p>
-                        <div className="flex items-center justify-between text-xs text-muted-foreground">
-                          <div className="flex items-center gap-3">
-                            <span className="flex items-center gap-1">
-                              <Clock className="h-3 w-3" />
-                              {lesson.duration} min
-                            </span>
-                            <span>{new Date(lesson.scheduledFor).toLocaleDateString()}</span>
-                          </div>
-                          {lesson.progress !== undefined && lesson.progress > 0 && (
-                            <span className="text-primary font-medium">{lesson.progress}%</span>
-                          )}
-                        </div>
-                        {lesson.progress !== undefined && lesson.progress > 0 && (
-                          <Progress value={lesson.progress} className="h-1 mt-2" />
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-
-          {/* Enhanced Recent Achievements */}
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <div>
-                  <CardTitle className="flex items-center gap-2">
-                    <Award className="h-5 w-5" />
-                    Recent Achievements
-                  </CardTitle>
-                  <CardDescription>Your latest accomplishments and milestones</CardDescription>
-                </div>
-                <Button variant="ghost" size="sm" className="gap-1">
-                  View All
-                  <ArrowRight className="h-3 w-3" />
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {achievements.map((achievement, index) => {
-                  const Icon = achievement.icon
-                  return (
-                    <div
-                      key={achievement.id}
-                      className="relative p-6 rounded-xl border bg-gradient-to-br from-background to-muted/20 hover:shadow-lg transition-all duration-300 group cursor-pointer overflow-hidden"
-                    >
-                      {/* Decorative elements */}
-                      <div className="absolute top-0 right-0 w-20 h-20 bg-primary/5 rounded-full -translate-y-10 translate-x-10 group-hover:scale-110 transition-transform"></div>
-
-                      <div className="relative">
-                        <div className="flex items-center gap-3 mb-3">
-                          <div className="p-3 bg-primary/10 rounded-xl group-hover:bg-primary/20 transition-colors">
-                            <Icon className="h-6 w-6 text-primary" />
-                          </div>
-                          <Badge className={getRarityColor(achievement.rarity)} variant="secondary">
-                            {achievement.rarity}
-                          </Badge>
-                        </div>
-                        <h4 className="font-semibold mb-2 group-hover:text-foreground transition-colors">
-                          {achievement.title}
-                        </h4>
-                        <p className="text-sm text-muted-foreground mb-3 line-clamp-2">{achievement.description}</p>
-                        <div className="flex items-center justify-between">
-                          <p className="text-xs text-muted-foreground">
-                            Unlocked {formatTimeAgo(achievement.unlockedAt)}
-                          </p>
-                          <div className="flex items-center gap-1 text-xs font-medium text-primary">
-                            <Star className="h-3 w-3" />
-                            {achievement.points} pts
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )
-                })}
-              </div>
-            </CardContent>
-          </Card>
+          <WipNoticeCard />
         </div>
+        {/*
+          SECTION GROUP: Progress & Stats, Learning/Study Tools, Community
+          Temporarily disabled. To restore, uncomment this block.
+
+          <div className="space-y-8">
+            ... (previous dashboard content: welcome stats, progress cards, recent activity, quick actions, upcoming lessons, achievements)
+          </div>
+        */}
       </AppLayout>
     </ErrorBoundary>
   )
