@@ -1,6 +1,5 @@
 # Harf Project
 
-basic
 A multilingual learning platform built with Next.js, featuring a responsive dashboard, mobile-first navigation, and an admin area. It includes a component library (Radix UI + shadcn-inspired components), Tailwind CSS styling, and Supabase integration scaffolding.
 
 ## Features
