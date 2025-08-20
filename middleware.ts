@@ -1,9 +1,6 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-// Force Node.js runtime instead of Edge Runtime
-export const runtime = 'nodejs'
-
 const locales = ["en", "ar", "fr"]
 const defaultLocale = "en"
 
