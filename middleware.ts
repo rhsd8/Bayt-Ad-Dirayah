@@ -1,27 +1,35 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
+// Force Node.js runtime instead of Edge Runtime
+export const runtime = 'nodejs'
+
+const locales = ["en", "ar", "fr"]
+const defaultLocale = "en"
+
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
-  
-  // Check if pathname already has a locale
-  if (pathname.startsWith('/en/') || pathname.startsWith('/ar/') || pathname.startsWith('/fr/') || 
-      pathname === '/en' || pathname === '/ar' || pathname === '/fr') {
-    return NextResponse.next()
-  }
-  
+
   // Skip internal Next.js paths
   if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname === '/favicon.ico') {
     return NextResponse.next()
   }
-  
-  // Default to English locale
-  const locale = 'en'
-  return NextResponse.redirect(new URL(`/${locale}${pathname}`, request.url))
+
+  // Check if pathname already has a locale
+  const pathnameHasLocale = locales.some(
+    (locale) => pathname.startsWith(`/${locale}/`) || pathname === `/${locale}`
+  )
+
+  if (pathnameHasLocale) {
+    return NextResponse.next()
+  }
+
+  // Redirect to default locale
+  return NextResponse.redirect(new URL(`/${defaultLocale}${pathname}`, request.url))
 }
 
 export const config = {
   matcher: [
-    '/((?!_next|api|favicon.ico).*)',
+    '/((?!_next/static|_next/image|favicon.ico).*)',
   ],
 }
