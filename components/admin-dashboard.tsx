@@ -92,6 +92,9 @@ export function AdminDashboard({ lang, dictionary }: AdminDashboardProps) {
   const [uploadProgress, setUploadProgress] = useState<UploadProgress[]>([])
   const [searchQuery, setSearchQuery] = useState("")
   const [filterStatus, setFilterStatus] = useState("all")
+  
+  // Temporary bypass: set NEXT_PUBLIC_ADMIN_BYPASS=true in .env.local to view admin without auth
+  const bypass = typeof process !== "undefined" && process.env.NEXT_PUBLIC_ADMIN_BYPASS === "true"
 
   // Enhanced mock data
   const stats = [
@@ -385,7 +388,7 @@ export function AdminDashboard({ lang, dictionary }: AdminDashboardProps) {
     }
   }
 
-  if (user?.role !== "admin") {
+  if (!bypass && user?.role !== "admin") {
     return (
       <AppLayout lang={lang} dictionary={dictionary}>
         <div className="text-center py-12">

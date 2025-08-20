@@ -39,7 +39,6 @@ import {
   Settings,
   LogOut,
   HelpCircle,
-  Crown,
   Flame,
   Trophy,
   Target,
@@ -47,8 +46,6 @@ import {
   Activity,
   Grid,
   List,
-  Maximize2,
-  Minimize2,
 } from "lucide-react"
 
 interface AppLayoutProps {
@@ -89,8 +86,12 @@ export function AppLayout({
   const [isSearchExpanded, setIsSearchExpanded] = useState(false)
   const [notifications, setNotifications] = useState<Notification[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
-  const [isFullscreen, setIsFullscreen] = useState(false)
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const searchRef = useRef<HTMLDivElement | null>(null)
+  const searchFlashTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const [searchFlash, setSearchFlash] = useState(false)
 
   // Load notifications
   useEffect(() => {
@@ -169,6 +170,13 @@ export function AppLayout({
         setIsSearchExpanded(false)
       }, 5000)
     }
+
+    // Flash stronger shadow briefly when opening
+    if (newExpandedState) {
+      if (searchFlashTimeoutRef.current) clearTimeout(searchFlashTimeoutRef.current)
+      setSearchFlash(true)
+      searchFlashTimeoutRef.current = setTimeout(() => setSearchFlash(false), 1000)
+    }
   }
 
   const handleSearchInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -183,6 +191,21 @@ export function AppLayout({
       setIsSearchExpanded(false)
     }, 15000)
   }
+
+  // Close search when clicking outside the search area (button + input popover)
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsSearchExpanded(false)
+      }
+    }
+    if (isSearchExpanded) {
+      document.addEventListener("mousedown", handleClickOutside)
+    }
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+  }, [isSearchExpanded])
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -231,269 +254,358 @@ export function AppLayout({
     }
   }
 
-  const toggleFullscreen = () => {
-    if (!document.fullscreenElement) {
-      document.documentElement.requestFullscreen()
-      setIsFullscreen(true)
-    } else {
-      document.exitFullscreen()
-      setIsFullscreen(false)
-    }
-  }
-
-  useEffect(() => {
-    const handleFullscreenChange = () => {
-      setIsFullscreen(!!document.fullscreenElement)
-    }
-
-    document.addEventListener("fullscreenchange", handleFullscreenChange)
-    return () => document.removeEventListener("fullscreenchange", handleFullscreenChange)
-  }, [])
+  
 
   return (
     <ErrorBoundary>
       <SidebarProvider>
         <AppSidebar lang={lang} dictionary={dictionary} />
         <SidebarInset>
-          {/* Enhanced Header */}
-          <header className="sticky top-3 z-40 px-10 py-7 bg-transparent">
-            <div className="flex h-20 items-center gap-6 w-full rounded-full border border-border/40 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40 shadow-sm">
-              <div className="flex items-center gap-6 flex-1 px-8">
-                <SidebarTrigger className="-ml-1" title="Toggle sidebar" />
-                <Separator orientation="vertical" className="mr-2 h-6" />
-                <Link href={`/${lang}`} className="flex items-center gap-2" aria-label="Bayt Ad Dirayah Home" title="Home">
-                  <Image
-                    src="/logo-web-light.webp"
-                    alt="Bayt Ad Dirayah"
-                    width={130}
-                    height={30}
-                    className="h-10 w-auto align-middle translate-y-[2px] dark:hidden"
-                    priority
-                  />
-                  <Image
-                    src="/logo-web-dark.webp"
-                    alt="Bayt Ad Dirayah"
-                    width={130}
-                    height={30}
-                    className="h-10 w-auto align-middle translate-y-[2px] hidden dark:inline"
-                    priority
-                  />
-                </Link>
-                <Separator orientation="vertical" className="mx-2 h-6" />
-
-                {/* Enhanced Breadcrumbs */}
-                <Breadcrumb>
-                  <BreadcrumbList>
-                    <BreadcrumbItem className="hidden md:block">
-                      <BreadcrumbLink href={`/${lang}/dashboard`}>{t("nav.dashboard", "Dashboard")}</BreadcrumbLink>
-                    </BreadcrumbItem>
-                    {breadcrumbs.map((crumb, index) => (
-                      <div key={index} className="flex items-center">
-                        <BreadcrumbSeparator className="hidden md:block" />
-                        <BreadcrumbItem>
-                          {crumb.href ? (
-                            <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
-                          ) : (
-                            <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
-                          )}
-                        </BreadcrumbItem>
-                      </div>
-                    ))}
-                  </BreadcrumbList>
-                </Breadcrumb>
+          {/* Header */}
+          <header className="fixed md:sticky top-0 md:top-3 z-40 w-full bg-transparent">
+            {/* Mobile Apple-style bar */}
+          <div className="md:hidden border-b border-border/60 bg-background/80 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+            <div className="h-16 px-4 flex items-center justify-between gap-2 text-foreground">
+              {/* Left: Logo */}
+              <Link href={`/${lang}`} className="flex items-center" aria-label="Home" title="Home">
+                <Image src="/logo-web-light.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto dark:hidden" priority />
+                <Image src="/logo-web-dark.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto hidden dark:inline" priority />
+              </Link>
+              {/* Center: empty */}
+              <div className="flex-1" />
+              {/* Right: Mobile hamburger */}
+              <div className="flex items-center gap-1.5">
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  aria-label="Open menu"
+                  title="Open menu"
+                  onClick={() => setMobileMenuOpen(true)}
+                  className="h-10 w-10"
+                >
+                  {/* Hamburger icon */}
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 6H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M3 12H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    <path d="M3 18H21" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                  </svg>
+                </Button>
               </div>
+            </div>
+          </div>
 
-              {/* Enhanced Search */}
-              <div className="flex items-center gap-2 pr-3">
-                <div className="relative hidden md:block">
+          {/* Mobile full-screen overlay menu */}
+          {mobileMenuOpen && (
+            <div className="md:hidden fixed inset-0 z-50 bg-background text-foreground">
+              <div className="absolute inset-0 overflow-y-auto">
+                {/* Top bar with close */}
+                <div className="h-16 px-4 flex items-center justify-between border-b border-border/60">
+                  <Link href={`/${lang}`} className="flex items-center" aria-label="Home" title="Home" onClick={() => setMobileMenuOpen(false)}>
+                    <Image src="/logo-web-light.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto dark:hidden" priority />
+                    <Image src="/logo-web-dark.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto hidden dark:inline" priority />
+                  </Link>
                   <Button
                     variant="ghost"
                     size="icon"
-                    onClick={handleSearchToggle}
-                    className="h-8 w-8 p-0 transition-all duration-200 hover:bg-muted"
+                    aria-label="Close menu"
+                    title="Close menu"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="h-10 w-10"
                   >
-                    <Search className="h-4 w-4 transition-transform duration-200" />
+                    {/* X icon */}
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M6 6L18 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      <path d="M18 6L6 18" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                    </svg>
                   </Button>
-                  <div className={`absolute right-0 top-0 z-50 transition-all duration-300 ease-in-out ${
-                    isSearchExpanded 
-                      ? "opacity-100 translate-x-0 scale-100" 
-                      : "opacity-0 translate-x-4 scale-95 pointer-events-none"
-                  }`}>
-                    <form onSubmit={handleSearch}>
-                      <Input
-                        type="search"
-                        placeholder={t("search.placeholder", "Search courses, notes, discussions...")}
-                        value={searchQuery}
-                        onChange={handleSearchInputChange}
-                        className="pl-4 pr-10 w-64 bg-background/80 border shadow-lg focus:ring-2 focus:ring-primary/20 transition-all"
-                        autoFocus
-                      />
-                    </form>
-                  </div>
                 </div>
 
-                {/* Fullscreen Toggle */}
-                <Button variant="ghost" size="sm" onClick={toggleFullscreen} className="h-8 w-8 p-0 hidden lg:flex">
-                  {isFullscreen ? <Minimize2 className="h-4 w-4" /> : <Maximize2 className="h-4 w-4" />}
-                </Button>
+                {/* Slide-down panel */}
+                <div className="animate-in slide-in-from-top-4 duration-300 ease-out p-4 space-y-2">
+                  <nav className="flex flex-col gap-2">
+                    <Link href={`/${lang}/dashboard`} className="px-4 py-3 rounded-lg bg-muted/60 hover:bg-muted transition" onClick={() => setMobileMenuOpen(false)}>
+                      {t("nav.dashboard", "Dashboard")}
+                    </Link>
+                    <Link href={`/${lang}/courses`} className="px-4 py-3 rounded-lg bg-muted/60 hover:bg-muted transition" onClick={() => setMobileMenuOpen(false)}>
+                      {t("nav.courses", "Learning")}
+                    </Link>
+                    {/* Progress & Stats intentionally hidden on mobile */}
+                    <Link href={`/${lang}/settings`} className="px-4 py-3 rounded-lg bg-muted/60 hover:bg-muted transition" onClick={() => setMobileMenuOpen(false)}>
+                      {t("nav.settings", "Settings")}
+                    </Link>
+                    <Link href={`/${lang}/help`} className="px-4 py-3 rounded-lg bg-muted/60 hover:bg-muted transition" onClick={() => setMobileMenuOpen(false)}>
+                      {t("nav.support", "Help & Support")}
+                    </Link>
+                  </nav>
 
-                {/* Enhanced Notifications */}
-                <DropdownMenu>
-                  <DropdownMenuTrigger asChild>
-                    <Button variant="ghost" size="sm" className="relative h-8 w-8 p-0">
-                      <Bell className="h-4 w-4" />
-                      {unreadCount > 0 && (
-                        <Badge
-                          variant="destructive"
-                          className="absolute -top-1 -right-1 h-5 w-5 p-0 text-xs flex items-center justify-center animate-pulse"
-                        >
-                          {unreadCount > 9 ? "9+" : unreadCount}
-                        </Badge>
-                      )}
+                  <div className="pt-4">
+                    <Button className="w-full" variant="destructive" onClick={() => { setMobileMenuOpen(false); logout(); }}>
+                      {t("auth.sign_out", "Sign Out")}
                     </Button>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent align="end" className="w-80 p-0">
-                    <div className="flex items-center justify-between p-4 border-b">
-                      <h3 className="font-semibold">Notifications</h3>
-                      {unreadCount > 0 && (
-                        <Button variant="ghost" size="sm" onClick={markAllAsRead} className="text-xs">
-                          Mark all read
-                        </Button>
-                      )}
-                    </div>
-                    <div className="max-h-96 overflow-y-auto">
-                      {notifications.length === 0 ? (
-                        <div className="p-8 text-center text-muted-foreground">
-                          <Bell className="h-8 w-8 mx-auto mb-2 opacity-50" />
-                          <p>No notifications yet</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+
+            {/* Desktop header (existing) */}
+            <div className="hidden md:block px-10 py-7">
+              <div className="flex h-20 items-center gap-6 w-full rounded-full border border-border/40 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40 shadow-sm">
+                <div className="flex items-center gap-6 flex-1 px-8">
+                  <SidebarTrigger className="-ml-1" title="Toggle sidebar" />
+                  <Separator orientation="vertical" className="mr-2 h-6" />
+                  <Link href={`/${lang}`} className="flex items-center gap-2" aria-label="Bayt Ad Dirayah Home" title="Home">
+                    <Image
+                      src="/logo-web-light.webp"
+                      alt="Bayt Ad Dirayah"
+                      width={130}
+                      height={30}
+                      className="h-10 w-auto align-middle translate-y-[2px] dark:hidden"
+                      priority
+                    />
+                    <Image
+                      src="/logo-web-dark.webp"
+                      alt="Bayt Ad Dirayah"
+                      width={130}
+                      height={30}
+                      className="h-10 w-auto align-middle translate-y-[2px] hidden dark:inline"
+                      priority
+                    />
+                  </Link>
+                  <Separator orientation="vertical" className="mx-2 h-6" />
+
+                  {/* Enhanced Breadcrumbs */}
+                  <Breadcrumb>
+                    <BreadcrumbList>
+                      <BreadcrumbItem className="hidden md:block">
+                        <BreadcrumbLink href={`/${lang}/dashboard`}>{t("nav.dashboard", "Dashboard")}</BreadcrumbLink>
+                      </BreadcrumbItem>
+                      {breadcrumbs.map((crumb, index) => (
+                        <div key={index} className="flex items-center">
+                          <BreadcrumbSeparator className="hidden md:block" />
+                          <BreadcrumbItem>
+                            {crumb.href ? (
+                              <BreadcrumbLink href={crumb.href}>{crumb.label}</BreadcrumbLink>
+                            ) : (
+                              <BreadcrumbPage>{crumb.label}</BreadcrumbPage>
+                            )}
+                          </BreadcrumbItem>
                         </div>
-                      ) : (
-                        notifications.map((notification) => (
-                          <div
-                            key={notification.id}
-                            className={`p-4 border-b hover:bg-muted/50 transition-colors cursor-pointer ${
-                              !notification.read ? "bg-primary/5" : ""
-                            }`}
-                            onClick={() => markNotificationAsRead(notification.id)}
+                      ))}
+                    </BreadcrumbList>
+                  </Breadcrumb>
+                </div>
+
+                {/* Enhanced Search */}
+                <div className="flex items-center gap-2 pr-3">
+                  <div className="relative hidden md:block" ref={searchRef}>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      onClick={handleSearchToggle}
+                      className="h-8 w-8 p-0 transition-all duration-200 hover:bg-muted"
+                    >
+                      <Search className="h-4 w-4 transition-transform duration-200" />
+                    </Button>
+                    <div className={`absolute right-0 top-0 z-50 transition-all duration-300 ease-in-out ${
+                      isSearchExpanded 
+                        ? "opacity-100 translate-x-0 scale-100" 
+                        : "opacity-0 translate-x-4 scale-95 pointer-events-none"
+                    }`}>
+                      <form onSubmit={handleSearch}>
+                        <Input
+                          type="search"
+                          placeholder={t("search.placeholder", "Search courses, notes, discussions...")}
+                          value={searchQuery}
+                          onChange={handleSearchInputChange}
+                          onFocus={() => {
+                            if (searchFlashTimeoutRef.current) clearTimeout(searchFlashTimeoutRef.current)
+                            setSearchFlash(true)
+                            searchFlashTimeoutRef.current = setTimeout(() => setSearchFlash(false), 1000)
+                          }}
+                          className={`pl-4 pr-4 w-72 rounded-full bg-primary text-foreground border-0 appearance-none ring-0 ring-transparent focus:ring-0 focus:ring-transparent focus-visible:ring-0 focus-visible:ring-transparent focus:outline-none focus-visible:outline-none focus:border-transparent focus-visible:border-transparent ring-offset-0 focus:ring-offset-0 ${searchFlash ? "shadow-2xl" : "shadow-lg"} transition-all placeholder:text-muted-foreground`}
+                          autoFocus
+                        />
+                      </form>
+                    </div>
+                  </div>
+
+                  {/* Fullscreen Toggle removed */}
+
+                  {/* Enhanced Notifications */}
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm" className="relative h-8 w-8 p-0">
+                        <Bell className="h-4 w-4" />
+                        {unreadCount > 0 && (
+                          <Badge
+                            variant="destructive"
+                            className="absolute -top-1 -right-1 h-5 w-5 p-0 text-xs flex items-center justify-center animate-pulse"
                           >
-                            <div className="flex items-start gap-3">
-                              <div className="mt-0.5">{getNotificationIcon(notification.type)}</div>
-                              <div className="flex-1 min-w-0">
-                                <div className="flex items-center gap-2 mb-1">
-                                  <h4 className="font-medium text-sm truncate">{notification.title}</h4>
-                                  {!notification.read && (
-                                    <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
-                                  )}
-                                </div>
-                                <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{notification.message}</p>
-                                <div className="flex items-center justify-between">
-                                  <span className="text-xs text-muted-foreground">
-                                    {formatTimeAgo(notification.timestamp)}
-                                  </span>
-                                  {notification.action && (
-                                    <Button variant="ghost" size="sm" className="text-xs h-6">
-                                      {notification.action.label}
-                                    </Button>
-                                  )}
+                            {unreadCount > 9 ? "9+" : unreadCount}
+                          </Badge>
+                        )}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end" className="w-80 p-0">
+                      <div className="flex items-center justify-between p-4 border-b">
+                        <h3 className="font-semibold">Notifications</h3>
+                        {unreadCount > 0 && (
+                          <Button variant="ghost" size="sm" onClick={markAllAsRead} className="text-xs">
+                            Mark all read
+                          </Button>
+                        )}
+                      </div>
+                      <div className="max-h-96 overflow-y-auto">
+                        {notifications.length === 0 ? (
+                          <div className="p-8 text-center text-muted-foreground">
+                            <Bell className="h-8 w-8 mx-auto mb-2 opacity-50" />
+                            <p>No notifications yet</p>
+                          </div>
+                        ) : (
+                          notifications.map((notification) => (
+                            <div
+                              key={notification.id}
+                              className={`p-4 border-b hover:bg-muted/50 transition-colors cursor-pointer ${
+                                !notification.read ? "bg-primary/5" : ""
+                              }`}
+                              onClick={() => markNotificationAsRead(notification.id)}
+                            >
+                              <div className="flex items-start gap-3">
+                                <div className="mt-0.5">{getNotificationIcon(notification.type)}</div>
+                                <div className="flex-1 min-w-0">
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <h4 className="font-medium text-sm truncate">{notification.title}</h4>
+                                    {!notification.read && (
+                                      <div className="w-2 h-2 bg-primary rounded-full flex-shrink-0"></div>
+                                    )}
+                                  </div>
+                                  <p className="text-sm text-muted-foreground line-clamp-2 mb-2">{notification.message}</p>
+                                  <div className="flex items-center justify-between">
+                                    <span className="text-xs text-muted-foreground">
+                                      {formatTimeAgo(notification.timestamp)}
+                                    </span>
+                                    {notification.action && (
+                                      <Button variant="ghost" size="sm" className="text-xs h-6">
+                                        {notification.action.label}
+                                      </Button>
+                                    )}
+                                  </div>
                                 </div>
                               </div>
                             </div>
+                          ))
+                        )}
+                      </div>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0">
+                      <div className="relative">
+                        <Image
+                          src={user?.avatar || "/placeholder-user.jpg"}
+                          alt={user?.name || "Profile"}
+                          width={32}
+                          height={32}
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-background"></div>
+                      </div>
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent className="w-64" align="end" forceMount>
+                    <DropdownMenuLabel className="font-normal">
+                      <div className="flex flex-col space-y-2">
+                        <div className="flex items-center gap-3">
+                          <Image
+                            src={user?.avatar || "/placeholder-user.jpg"}
+                            alt={user?.name || "Profile"}
+                            width={40}
+                            height={40}
+                            className="w-10 h-10 rounded-full object-cover"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-medium leading-none truncate">
+                              {(() => {
+                                const byName = user?.name?.trim().split(" ")[0]
+                                const byEmail = user?.email ? user.email.split("@")[0] : ""
+                                const dn = byName || byEmail
+                                return dn ? dn.charAt(0).toUpperCase() + dn.slice(1) : ""
+                              })()}
+                            </p>
+                            {user?.email && (
+                              <p className="text-xs leading-none text-muted-foreground mt-1 truncate">
+                                {user.email}
+                              </p>
+                            )}
                           </div>
-                        ))
-                      )}
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {/* <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                            <Flame className="h-3 w-3 text-orange-500" />7 day streak
+                          </div> */}
+                        </div>
+                      </div>
+                    </DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+
+                    {/* Quick Stats */}
+                    <div className="px-2 py-2">
+                      <div className="grid grid-cols-3 gap-2 text-center">
+                        <div className="p-2 rounded-lg bg-muted/50">
+                          <div className="text-lg font-bold text-primary">47</div>
+                          <div className="text-xs text-muted-foreground">Lessons</div>
+                        </div>
+                        <div className="p-2 rounded-lg bg-muted/50">
+                          <div className="text-lg font-bold text-green-600">15</div>
+                          <div className="text-xs text-muted-foreground">Badges</div>
+                        </div>
+                        <div className="p-2 rounded-lg bg-muted/50">
+                          <div className="text-lg font-bold text-yellow-600">#23</div>
+                          <div className="text-xs text-muted-foreground">Rank</div>
+                        </div>
+                      </div>
                     </div>
+
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem className="gap-2">
+                      <User className="h-4 w-4" />
+                      Profile Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="gap-2">
+                      <Activity className="h-4 w-4" />
+                      Learning Progress
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="gap-2">
+                      <Trophy className="h-4 w-4" />
+                      Achievements
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="gap-2">
+                      <Settings className="h-4 w-4" />
+                      Settings
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className="gap-2">
+                      <HelpCircle className="h-4 w-4" />
+                      Help & Support
+                    </DropdownMenuItem>
+
+                    <DropdownMenuSeparator />
+
+                    <DropdownMenuItem className="gap-2 text-red-600 focus:text-red-600" onClick={logout}>
+                      <LogOut className="h-4 w-4" />
+                      Sign Out
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="relative h-8 w-8 rounded-full p-0">
-                    <div className="relative">
-                      <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-                        <User className="h-4 w-4 text-primary" />
-                      </div>
-                      <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-background"></div>
-                    </div>
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-64" align="end" forceMount>
-                  <DropdownMenuLabel className="font-normal">
-                    <div className="flex flex-col space-y-2">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                          <User className="h-5 w-5 text-primary" />
-                        </div>
-                        <div className="flex-1 min-w-0">
-                          <p className="text-sm font-medium leading-none truncate">{user?.name || "Student"}</p>
-                          <p className="text-xs leading-none text-muted-foreground mt-1 truncate">
-                            {user?.email || "student@example.com"}
-                          </p>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <Badge variant="secondary" className="text-xs">
-                          <Crown className="h-3 w-3 mr-1" />
-                          Pro Member
-                        </Badge>
-                        <div className="flex items-center gap-1 text-xs text-muted-foreground">
-                          <Flame className="h-3 w-3 text-orange-500" />7 day streak
-                        </div>
-                      </div>
-                    </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-
-                  {/* Quick Stats */}
-                  <div className="px-2 py-2">
-                    <div className="grid grid-cols-3 gap-2 text-center">
-                      <div className="p-2 rounded-lg bg-muted/50">
-                        <div className="text-lg font-bold text-primary">47</div>
-                        <div className="text-xs text-muted-foreground">Lessons</div>
-                      </div>
-                      <div className="p-2 rounded-lg bg-muted/50">
-                        <div className="text-lg font-bold text-green-600">15</div>
-                        <div className="text-xs text-muted-foreground">Badges</div>
-                      </div>
-                      <div className="p-2 rounded-lg bg-muted/50">
-                        <div className="text-lg font-bold text-yellow-600">#23</div>
-                        <div className="text-xs text-muted-foreground">Rank</div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <DropdownMenuSeparator />
-
-                  <DropdownMenuItem className="gap-2">
-                    <User className="h-4 w-4" />
-                    Profile Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="gap-2">
-                    <Activity className="h-4 w-4" />
-                    Learning Progress
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="gap-2">
-                    <Trophy className="h-4 w-4" />
-                    Achievements
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="gap-2">
-                    <Settings className="h-4 w-4" />
-                    Settings
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="gap-2">
-                    <HelpCircle className="h-4 w-4" />
-                    Help & Support
-                  </DropdownMenuItem>
-
-                  <DropdownMenuSeparator />
-
-                  <DropdownMenuItem className="gap-2 text-red-600 focus:text-red-600" onClick={logout}>
-                    <LogOut className="h-4 w-4" />
-                    Sign Out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+              </div>
+              </div>
             </div>
           </header>
+
+          {/* Spacer to account for fixed mobile header */}
+          <div className="h-16 md:hidden" />
 
           {/* Enhanced Page Header */}
           {(title || description || actions) && (

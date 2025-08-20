@@ -5,7 +5,6 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
   Sidebar,
@@ -114,7 +113,7 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
       icon: Home,
       href: `/${lang}/dashboard`,
       isActive: pathname === `/${lang}/dashboard`,
-      color: "text-blue-600",
+      color: "text-foreground",
     },
   ]
 
@@ -138,14 +137,14 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
           badge: "75%",
           color: "text-green-600",
         },
-        {
-          title: "Certificates",
-          icon: Award,
-          href: `/${lang}/certificates`,
-          isActive: pathname === `/${lang}/certificates`,
-          badge: 3,
-          color: "text-yellow-600",
-        },
+        // {
+        //   title: "Certificates",
+        //   icon: Award,
+        //   href: `/${lang}/certificates`,
+        //   isActive: pathname === `/${lang}/certificates`,
+        //   badge: 3,
+        //   color: "text-yellow-600",
+        // },
         {
           title: "Bookmarks",
           icon: Bookmark,
@@ -484,15 +483,34 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
                       >
                         {/* Icon + Text (Left side) */}
                         <div className={cn("flex items-center min-w-0", state === "collapsed" ? "gap-0" : "gap-3") }>
-                          <div
+                          {groupId === "support" || groupId === "learning" ? (
+                            <div className="shrink-0 flex items-center justify-center">
+                              <item.icon
+                                className={cn(
+                                  "h-5 w-5",
+                                  item.color ? item.color : (item.isActive ? "text-primary" : "text-muted-foreground")
+                                )}
+                              />
+                            </div>
+                          ) : (
+                            <div
+                              className={cn(
+                                "p-2 rounded-md transition-colors shrink-0 flex items-center justify-center",
+                                item.isActive ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground group-hover:bg-accent"
+                              )}
+                            >
+                              <item.icon className="h-5 w-5" />
+                            </div>
+                          )}
+                          <span
                             className={cn(
-                              "p-2 rounded-md transition-colors shrink-0 flex items-center justify-center",
-                              item.isActive ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground group-hover:bg-accent"
+                              "truncate font-semibold text-base",
+                              (groupId === "support" || groupId === "learning") ? "text-foreground" : "text-primary",
+                              state === "collapsed" && "hidden"
                             )}
                           >
-                            <item.icon className="h-5 w-5" />
-                          </div>
-                          <span className={cn("truncate font-semibold text-base text-primary", state === "collapsed" && "hidden")}>{item.title}</span>
+                            {item.title}
+                          </span>
                         </div>
 
                         {/* New item indicator (Right side) */}
@@ -558,17 +576,18 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
         <ScrollArea className={cn("flex-1", state === "collapsed" && "px-0") }>
           {state === "collapsed" ? (
             <>
-              {/* Quick 7 icons when collapsed */}
+              {/* Quick icons when collapsed (reduced set) */}
               <SidebarGroup className="px-0">
                 <SidebarMenu className="px-0 w-[5rem] mx-auto">
                   {[
                     { title: t("nav.dashboard", "Dashboard"), href: `/${lang}/dashboard`, icon: Home, isActive: pathname === `/${lang}/dashboard` },
                     { title: t("nav.courses", "Learning"), href: `/${lang}/courses`, icon: BookOpen, isActive: pathname.startsWith(`/${lang}/courses`) },
-                    { title: t("nav.learning_tools", "Learning Tools"), href: `/${lang}/quiz`, icon: Brain, isActive: pathname.startsWith(`/${lang}/quiz`) || pathname.startsWith(`/${lang}/flashcards`) },
-                    { title: t("nav.materials", "Resources"), href: `/${lang}/materials`, icon: Library, isActive: pathname.startsWith(`/${lang}/materials`) },
-                    { title: t("nav.study", "Study Tools"), href: `/${lang}/notes`, icon: FileText, isActive: pathname.startsWith(`/${lang}/notes`) || pathname.startsWith(`/${lang}/study`) },
-                    { title: t("nav.community", "Community"), href: `/${lang}/community`, icon: Users, isActive: pathname.startsWith(`/${lang}/community`) },
-                    { title: t("nav.progress", "Progress & Stats"), href: `/${lang}/analytics`, icon: BarChart3, isActive: pathname.startsWith(`/${lang}/analytics`) || pathname.startsWith(`/${lang}/progress`) },
+                    // Hidden for now: Learning Tools, Resources, Study Tools, Community, Progress & Stats
+                    // { title: t("nav.learning_tools", "Learning Tools"), href: `/${lang}/quiz`, icon: Brain, isActive: pathname.startsWith(`/${lang}/quiz`) || pathname.startsWith(`/${lang}/flashcards`) },
+                    // { title: t("nav.materials", "Resources"), href: `/${lang}/materials`, icon: Library, isActive: pathname.startsWith(`/${lang}/materials`) },
+                    // { title: t("nav.study", "Study Tools"), href: `/${lang}/notes`, icon: FileText, isActive: pathname.startsWith(`/${lang}/notes`) || pathname.startsWith(`/${lang}/study`) },
+                    // { title: t("nav.community", "Community"), href: `/${lang}/community`, icon: Users, isActive: pathname.startsWith(`/${lang}/community`) },
+                    // { title: t("nav.progress", "Progress & Stats"), href: `/${lang}/analytics`, icon: BarChart3, isActive: pathname.startsWith(`/${lang}/analytics`) || pathname.startsWith(`/${lang}/progress`) },
                   ].map((item) => (
                     <SidebarMenuItem key={item.title} className={cn(state === "collapsed" && "px-0 w-[5rem] mx-auto") }>
                       <SidebarMenuButton asChild isActive={item.isActive} className={cn(state === "collapsed" && "px-0 w-[5rem] mx-auto") }>
@@ -579,8 +598,8 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
                         >
                           <item.icon
                             className={cn(
-                              "h-16 w-16 shrink-0 transition-colors",
-                              item.isActive ? "text-primary" : "text-foreground hover:text-foreground"
+                              "h-20 w-20 shrink-0 transition-colors",
+                              item.isActive ? "text-foreground" : "text-foreground hover:text-foreground"
                             )}
                           />
                         </Link>
@@ -630,20 +649,20 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
               {/* Learning Section */}
               {renderNavigationGroup(learningNavigation, "learning", "Learning")}
 
-              {/* Tools Section */}
-              {renderNavigationGroup(toolsNavigation, "tools", "Learning Tools")}
+              {/* Tools Section (hidden for now) */}
+              {/** renderNavigationGroup(toolsNavigation, "tools", "Learning Tools") */}
 
-              {/* Materials Section */}
-              {renderNavigationGroup(materialsNavigation, "materials", "Resources")}
+              {/* Materials Section (hidden for now) */}
+              {/** renderNavigationGroup(materialsNavigation, "materials", "Resources") */}
 
-              {/* Study Section */}
-              {renderNavigationGroup(studyNavigation, "study", "Study Tools")}
+              {/* Study Section (hidden for now) */}
+              {/** renderNavigationGroup(studyNavigation, "study", "Study Tools") */}
 
-              {/* Community Section */}
-              {renderNavigationGroup(communityNavigation, "community", "Community")}
+              {/* Community Section (hidden for now) */}
+              {/** renderNavigationGroup(communityNavigation, "community", "Community") */}
 
-              {/* Progress Section */}
-              {renderNavigationGroup(progressNavigation, "progress", "Progress & Stats")}
+              {/* Progress Section (hidden for now) */}
+              {/** renderNavigationGroup(progressNavigation, "progress", "Progress & Stats") */}
 
               {/* Admin Section */}
               {adminNavigation.length > 0 && renderNavigationGroup(adminNavigation, "admin", "Administration")}
@@ -658,21 +677,24 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
       <SidebarFooter className="border-t p-4">
         <div className="flex items-center gap-3">
           <div className="relative">
-            <div className="w-8 h-8 bg-primary/10 rounded-full flex items-center justify-center">
-              <User className="h-4 w-4 text-primary" />
-            </div>
+            <Image
+              src={user?.avatar || "/placeholder-user.jpg"}
+              alt={user?.name || "Profile"}
+              width={32}
+              height={32}
+              className="w-8 h-8 rounded-full object-cover"
+            />
             <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-background"></div>
           </div>
           {state !== "collapsed" && (
             <>
               <div className="flex-1 min-w-0">
-                <p className="font-medium text-sm truncate">{user?.name || "Student"}</p>
-                <p className="text-xs text-muted-foreground truncate capitalize">{user?.role || "Student"}</p>
+                <p className="font-medium text-sm truncate">{user?.name?.trim().split(" ")[0] || ""}</p>
+                {user?.role && (
+                  <p className="text-xs text-muted-foreground truncate capitalize">{user.role}</p>
+                )}
               </div>
-              <div className="flex items-center gap-1">
-                <Sparkles className="h-3 w-3 text-yellow-500" />
-                <span className="text-xs font-medium">Pro</span>
-              </div>
+              {/** Pro label removed temporarily until pricing is available **/}
             </>
           )}
         </div>

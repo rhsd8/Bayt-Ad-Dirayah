@@ -4,6 +4,7 @@ import type React from "react"
 
 import { createContext, useContext, useEffect, useState, useCallback } from "react"
 import { useRouter } from "next/navigation"
+import { supabase } from "@/lib/supabase"
 
 interface User {
   id: string
@@ -33,99 +34,80 @@ interface AuthProviderProps {
   children: React.ReactNode
 }
 
-// Mock users for demo
-const MOCK_USERS = [
-  {
-    id: "1",
-    name: "Admin User",
-    email: "admin@example.com",
-    password: "admin123",
-    role: "admin" as const,
-    avatar: "/placeholder.svg?height=40&width=40",
-    preferences: {
-      language: "en",
-      theme: "system",
-      notifications: true,
-    },
-  },
-  {
-    id: "2",
-    name: "Student User",
-    email: "student@example.com",
-    password: "student123",
-    role: "student" as const,
-    preferences: {
-      language: "en",
-      theme: "light",
-      notifications: true,
-    },
-  },
-  {
-    id: "3",
-    name: "Teacher User",
-    email: "teacher@example.com",
-    password: "teacher123",
-    role: "teacher" as const,
-    preferences: {
-      language: "en",
-      theme: "dark",
-      notifications: false,
-    },
-  },
-]
+// Helper to construct our User from Supabase session user
+function mapSupabaseUser(sessionUser: any): User {
+  const metadata = sessionUser?.user_metadata || {}
+  const email: string = sessionUser?.email || ""
+  const localPart = email ? email.split("@")[0] : ""
+  const fullName: string =
+    metadata.full_name || metadata.fullName || metadata.name || metadata.given_name || metadata.first_name || ""
+  const name = (fullName || localPart || "").toString()
+  const role = (metadata.role as User["role"]) || "student"
+  return {
+    id: sessionUser?.id,
+    name,
+    email,
+    role,
+    avatar: metadata.avatar_url || metadata.avatar || undefined,
+    preferences: metadata.preferences || undefined,
+  }
+}
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<User | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const router = useRouter()
 
-  // Check for existing session on mount
+  // Initialize Supabase session and subscribe to auth changes
   useEffect(() => {
-    const checkAuth = async () => {
+    let mounted = true
+    const init = async () => {
       try {
-        const storedUser = localStorage.getItem("auth_user")
-        if (storedUser) {
-          const userData = JSON.parse(storedUser)
-          setUser(userData)
+        const { data: { session } } = await supabase.auth.getSession()
+        if (!mounted) return
+        if (session?.user) {
+          setUser(mapSupabaseUser(session.user))
+        } else {
+          setUser(null)
         }
       } catch (error) {
-        console.error("Error checking auth:", error)
-        localStorage.removeItem("auth_user")
+        console.error("Supabase getSession error:", error)
+        setUser(null)
       } finally {
-        setIsLoading(false)
+        if (mounted) setIsLoading(false)
       }
     }
+    init()
 
-    checkAuth()
+    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!mounted) return
+      if (session?.user) {
+        setUser(mapSupabaseUser(session.user))
+      } else {
+        setUser(null)
+      }
+    })
+
+    return () => {
+      mounted = false
+      sub.subscription.unsubscribe()
+    }
   }, [])
 
   const login = useCallback(async (email: string, password: string) => {
     setIsLoading(true)
-
     try {
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 1000))
-
-      const mockUser = MOCK_USERS.find((u) => u.email === email && u.password === password)
-
-      if (!mockUser) {
-        return {
-          success: false,
-          error: "Invalid email or password",
-        }
+      const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+      if (error) {
+        return { success: false, error: error.message }
       }
-
-      const { password: _, ...userWithoutPassword } = mockUser
-      setUser(userWithoutPassword)
-      localStorage.setItem("auth_user", JSON.stringify(userWithoutPassword))
-
+      if (data.session?.user) {
+        setUser(mapSupabaseUser(data.session.user))
+      }
       return { success: true }
     } catch (error) {
       console.error("Login error:", error)
-      return {
-        success: false,
-        error: "An unexpected error occurred",
-      }
+      return { success: false, error: "An unexpected error occurred" }
     } finally {
       setIsLoading(false)
     }
@@ -133,13 +115,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   const logout = useCallback(async () => {
     setIsLoading(true)
-
     try {
-      // Simulate API delay
-      await new Promise((resolve) => setTimeout(resolve, 500))
-
+      await supabase.auth.signOut()
       setUser(null)
-      localStorage.removeItem("auth_user")
       router.push("/")
     } catch (error) {
       console.error("Logout error:", error)
@@ -151,9 +129,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const updateUser = useCallback((updates: Partial<User>) => {
     setUser((prevUser) => {
       if (!prevUser) return null
-
       const updatedUser = { ...prevUser, ...updates }
-      localStorage.setItem("auth_user", JSON.stringify(updatedUser))
+      // Persisting custom profile fields to Supabase would be implemented here if needed.
       return updatedUser
     })
   }, [])

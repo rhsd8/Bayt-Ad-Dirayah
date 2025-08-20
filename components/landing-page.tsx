@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import Link from "next/link"
 import Image from "next/image"
 import { Button } from "@/components/ui/button"
@@ -73,6 +73,11 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
   const [email, setEmail] = useState("")
   const [message, setMessage] = useState("")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const [isLogoCardOpen, setIsLogoCardOpen] = useState(false)
+  const [isLogoCardClosing, setIsLogoCardClosing] = useState(false)
+  const logoBtnRef = useRef<HTMLButtonElement | null>(null)
+  const [logoCardPos, setLogoCardPos] = useState<{ top: number; left: number } | null>(null)
+  const [isLogoCardStarting, setIsLogoCardStarting] = useState(false)
 
 
   // Safe dictionary access with fallbacks
@@ -157,38 +162,38 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
     },
   ]
 
-  const stats: Stat[] = [
-    {
-      value: "50K+",
-      label: "Active Learners",
-      icon: Users,
-      color: "text-blue-600",
-    },
-    {
-      value: "1000+",
-      label: "Lessons Available",
-      icon: BookOpen,
-      color: "text-green-600",
-    },
-    {
-      value: "95%",
-      label: "Success Rate",
-      icon: TrendingUp,
-      color: "text-purple-600",
-    },
-    {
-      value: "24/7",
-      label: "Support Available",
-      icon: Shield,
-      color: "text-orange-600",
-    },
-  ]
+  // const stats: Stat[] = [
+  //   {
+  //     value: "50K+",
+  //     label: "Active Learners",
+  //     icon: Users,
+  //     color: "text-blue-600",
+  //   },
+  //   {
+  //     value: "1000+",
+  //     label: "Lessons Available",
+  //     icon: BookOpen,
+  //     color: "text-green-600",
+  //   },
+  //   {
+  //     value: "95%",
+  //     label: "Success Rate",
+  //     icon: TrendingUp,
+  //     color: "text-purple-600",
+  //   },
+  //   {
+  //     value: "24/7",
+  //     label: "Support Available",
+  //     icon: Shield,
+  //     color: "text-orange-600",
+  //   },
+  // ]
 
   const navigation = [
-    { name: safeDict.navigation.home || "Home", href: "#home" },
-    { name: safeDict.navigation.features || "Features", href: "#features" },
-    { name: safeDict.navigation.courses || "Courses", href: "#courses" },
-    { name: safeDict.common.about || "About", href: "#about" },
+    // { name: safeDict.navigation.home || "Home", href: "#home" },
+    // { name: safeDict.navigation.features || "Features", href: "#features" },
+    // { name: safeDict.navigation.courses || "Courses", href: "#courses" },
+    // { name: safeDict.common.about || "About", href: "#about" },
   ]
 
   const handleNewsletterSignup = async (e: React.FormEvent) => {
@@ -203,8 +208,6 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
     setIsLoading(false)
   }
 
-
-
   const handleNavClick = (href: string) => {
     setMobileMenuOpen(false)
     if (href.startsWith("#")) {
@@ -215,92 +218,188 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Enhanced Header */}
-      <header className="sticky top-3 z-50 w-full px-10 py-7 bg-transparent">
-        <div className="container mx-auto">
-          <div className="flex h-20 items-center justify-between gap-6 rounded-full border border-border/40 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40 shadow-sm px-8 text-foreground">
-            <div className="flex items-center gap-6">
-              <Link href={`/${lang}`} className="flex items-center gap-2" aria-label="Bayt Ad Dirayah Home" title="Home">
-                <Image
-                  src="/logo-web-light.webp"
-                  alt="Bayt Ad Dirayah"
-                  width={130}
-                  height={30}
-                  className="h-10 w-auto align-middle translate-y-[2px] dark:hidden"
-                  priority
-                />
-                <Image
-                  src="/logo-web-dark.webp"
-                  alt="Bayt Ad Dirayah"
-                  width={130}
-                  height={30}
-                  className="h-10 w-auto align-middle translate-y-[2px] hidden dark:inline"
-                  priority
-                />
-              </Link>
-            </div>
-
-            <nav className="hidden md:flex items-center gap-6">
-              {navigation.map((item) => (
-                <button
-                  key={item.name}
-                  onClick={() => handleNavClick(item.href)}
-                  className="text-base md:text-lg font-semibold text-foreground/80 hover:text-foreground transition-colors"
-                  title={item.name}
-                >
-                  {item.name}
-                </button>
-              ))}
-            </nav>
-
-            <div className="flex items-center gap-5 text-foreground">
-              <ThemeToggle className="h-10 w-10" tooltip="Toggle theme" />
-              <LanguageSwitcher currentLang={lang} className="text-base md:text-lg font-semibold" tooltip="Switch language" />
-              <Button asChild variant="ghost" size="default" className="hidden sm:inline-flex text-foreground text-base md:text-lg font-semibold" title="Sign In">
-                <Link href={`/${lang}/login`} title="Sign In">
-                  <span className="hidden sm:inline">Sign In</span>
-                </Link>
-              </Button>
-              <Button asChild size="default" className="text-foreground text-base md:text-lg font-semibold" title="Get Started">
-                <Link href={`/${lang}/login`} title="Get Started">
-                  <span className="hidden sm:inline">Get Started</span>
-                </Link>
-              </Button>
-            </div>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+      {/* Header */}
+      <header className="fixed md:sticky top-0 md:top-3 z-50 w-full bg-transparent">
+        {/* Mobile Apple-style bar */}
+        <div className="md:hidden border-b border-border/60 bg-background/90">
+          <div className="h-16 px-4 flex items-center justify-between gap-2 text-foreground">
+            {/* Left: Logo */}
+            <button
+              type="button"
+              ref={logoBtnRef}
+              onClick={() => {
+                const rect = logoBtnRef.current?.getBoundingClientRect()
+                const top = (rect?.bottom || 0) + 8 + window.scrollY
+                const desiredLeft = (rect?.left || 0) + window.scrollX
+                const cardWidth = 288 // w-72
+                const padding = 16
+                const maxLeft = window.scrollX + window.innerWidth - padding - cardWidth
+                const left = Math.max(padding, Math.min(desiredLeft, maxLeft))
+                setLogoCardPos({ top, left })
+                setIsLogoCardOpen(true)
+                setIsLogoCardClosing(false)
+                setIsLogoCardStarting(true)
+                // allow layout to paint then remove starting to trigger morph
+                setTimeout(() => setIsLogoCardStarting(false), 20)
+              }}
+              className="flex items-center"
+              aria-label="Open account options"
+              title="Account"
             >
-              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-            </Button>
+              <Image src="/logo-web-light.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto dark:hidden" priority />
+              <Image src="/logo-web-dark.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto hidden dark:inline" priority />
+            </button>
+            {/* Center: empty for minimalist look */}
+            <div className="flex-1" />
+            {/* Right: Sign In, Bag, Menu */}
+            <div className="flex items-center gap-1.5">
+              <Button asChild variant="ghost" size="sm" className="px-2.5 h-10 text-sm font-semibold">
+                <Link href={`/${lang}/login`} title="Sign In">Sign In</Link>
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-10 w-10"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              >
+                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </Button>
+            </div>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden py-3 border-t border-border bg-background">
-            <div className="container mx-auto px-4 space-y-1.5">
-              {navigation.map((item) => (
-                <button
-                  key={item.name}
-                  onClick={() => handleNavClick(item.href)}
-                  className="block w-full text-left px-3 py-2 text-foreground/80 hover:text-foreground hover:bg-muted rounded-md transition-colors"
+        {/* Desktop header (unchanged) */}
+        <div className="hidden md:block px-10 py-7">
+          <div className="container mx-auto">
+            <div className="flex h-20 items-center justify-between gap-6 rounded-full border border-border/40 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40 shadow-sm px-8 text-foreground">
+              <div className="flex items-center gap-6">
+                <Link
+                  href={`/${lang}`}
+                  className="flex items-center gap-2"
+                  aria-label="Bayt Ad Dirayah Home"
+                  title="Home"
                 >
-                  {item.name}
-                </button>
-              ))}
-              <div className="pt-2 border-t border-border mt-2">
-                <Button asChild className="w-full">
-                  <Link href={`/${lang}/login`}>Start Learning</Link>
+                  <Image
+                    src="/logo-web-light.webp"
+                    alt="Bayt Ad Dirayah"
+                    width={130}
+                    height={30}
+                    className="h-10 w-auto align-middle translate-y-[2px] dark:hidden"
+                    priority
+                  />
+                  <Image
+                    src="/logo-web-dark.webp"
+                    alt="Bayt Ad Dirayah"
+                    width={130}
+                    height={30}
+                    className="h-10 w-auto align-middle translate-y-[2px] hidden dark:inline"
+                    priority
+                  />
+                </Link>
+              </div>
+
+              <nav className="hidden md:flex items-center gap-6">
+                {navigation.map((item) => (
+                  <button
+                    key={item.name}
+                    onClick={() => handleNavClick(item.href)}
+                    className="text-base md:text-lg font-semibold text-foreground/80 hover:text-foreground transition-colors"
+                    title={item.name}
+                  >
+                    {item.name}
+                  </button>
+                ))}
+              </nav>
+
+              <div className="flex items-center gap-5 text-foreground">
+                {/* Moved ThemeToggle and LanguageSwitcher to footer */}
+                <Button asChild variant="ghost" size="default" className="hidden sm:inline-flex text-foreground text-base md:text-lg font-semibold" title="Sign In">
+                  <Link href={`/${lang}/login`} title="Sign In">
+                    <span className="hidden sm:inline">Sign In</span>
+                  </Link>
                 </Button>
               </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="md:hidden"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
+              >
+                {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              </Button>
             </div>
           </div>
-        )}
+
+          {/* Mobile Navigation */}
+          {mobileMenuOpen && (
+            <div className="md:hidden py-3 border-t border-border bg-background">
+              <div className="container mx-auto px-4 space-y-1.5">
+                {navigation.map((item) => (
+                  <button
+                    key={item.name}
+                    onClick={() => handleNavClick(item.href)}
+                    className="block w-full text-left px-3 py-2 text-foreground/80 hover:text-foreground hover:bg-muted rounded-md transition-colors"
+                  >
+                    {item.name}
+                  </button>
+                ))}
+                <div className="pt-2 border-t border-border mt-2">
+                  <Button asChild className="w-full">
+                    <Link href={`/${lang}/login`}>Start Learning</Link>
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </header>
+
+      {/* Mobile: ChatGPT-style logo card overlay */}
+      {(isLogoCardOpen || isLogoCardClosing) && (
+        <div
+          className={`fixed inset-0 z-[60] md:hidden transition-opacity duration-200 ${
+            isLogoCardClosing ? "opacity-0" : "opacity-100"
+          }`}
+          onClick={() => {
+            setIsLogoCardClosing(true)
+            setTimeout(() => {
+              setIsLogoCardOpen(false)
+              setIsLogoCardClosing(false)
+            }, 180)
+          }}
+          aria-modal="true"
+          role="dialog"
+        >
+          <div className="absolute inset-0 bg-black/50" />
+          <div
+            className={`absolute z-[61] w-72 min-h-[14rem] bg-background text-foreground shadow-2xl border border-border/50 p-5 transition-all duration-200 ease-out ${
+              isLogoCardClosing || isLogoCardStarting ? "scale-95 opacity-0" : "scale-100 opacity-100"
+            } ${isLogoCardClosing || isLogoCardStarting ? "rounded-full" : "rounded-2xl"}`}
+            style={{ top: logoCardPos?.top ?? 80, left: logoCardPos?.left ?? 16, transformOrigin: "top left" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="space-y-3">
+              <h3 className="text-base font-semibold">Welcome to Bayt Ad Dirayah</h3>
+              <p className="text-sm text-muted-foreground">
+                Create an account or log in to access all features.
+              </p>
+            </div>
+            <div className="mt-4 flex items-center gap-3">
+              <Button asChild className="rounded-full px-5 h-10">
+                <Link href={`/${lang}/login`}>Log in</Link>
+              </Button>
+              <Button asChild variant="secondary" className="rounded-full px-5 h-10">
+                <Link href={`/${lang}/register`}>Sign up for free</Link>
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Spacer to account for fixed mobile header */}
+      <div className="h-16 md:hidden" />
 
       {/* Hero Section (solid background, tighter spacing) */}
       <section
@@ -339,7 +438,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
               </div>
 
               {/* Quick stats */}
-              <div className="flex items-center gap-8 pt-8">
+              {/* <div className="flex items-center gap-8 pt-8">
                 <div className="text-center">
                   <div className="text-2xl font-bold text-primary">50K+</div>
                   <div className="text-sm text-muted-foreground">Learners</div>
@@ -352,14 +451,14 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                   <div className="text-2xl font-bold text-primary">95%</div>
                   <div className="text-sm text-muted-foreground">Success</div>
                 </div>
-              </div>
+              </div> */}
             </div>
 
             <div className={`${isRTL ? "lg:order-1" : ""}`}>
               <div className="relative">
                 <div className="relative bg-background rounded-3xl p-8 border">
                   <div className="space-y-6">
-                    {/* Mock lesson interface */}
+                    Mock lesson interface
                     <div className="bg-background rounded-2xl p-6 shadow-lg">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
@@ -381,7 +480,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                       </div>
                     </div>
 
-                    {/* Mock achievement */}
+                    Mock achievement
                     <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-950/20 dark:to-orange-950/20 rounded-2xl p-6 border border-yellow-200 dark:border-yellow-800">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
@@ -441,7 +540,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
       </section>
 
       {/* Stats Section (tighter spacing) */}
-      <section className="py-14">
+      {/* <section className="py-14">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {stats.map((stat, index) => {
@@ -460,10 +559,10 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
             })}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Enhanced Testimonials Section */}
-      <section id="testimonials" className="py-20 bg-muted/30">
+      {/* <section id="testimonials" className="py-20 bg-muted/30">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <Badge className="mb-4">Testimonials</Badge>
@@ -504,10 +603,10 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
             ))}
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Enhanced Pricing Section */}
-      <section id="pricing" className="py-20">
+      {/* <section id="pricing" className="py-20">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
             <Badge className="mb-4">Pricing</Badge>
@@ -519,9 +618,9 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto"> */}
             {/* Free Plan */}
-            <Card className="relative group hover:shadow-lg transition-all duration-300">
+            {/* <Card className="relative group hover:shadow-lg transition-all duration-300">
               <CardHeader className="text-center pb-8">
                 <div className="w-12 h-12 bg-gray-100 dark:bg-gray-800 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <BookOpen className="h-6 w-6 text-gray-600" />
@@ -549,10 +648,10 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                   <Link href={`/${lang}/login`}>Get Started Free</Link>
                 </Button>
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Pro Plan */}
-            <Card className="relative group hover:shadow-lg transition-all duration-300 border-primary/50 bg-primary/5">
+            {/* <Card className="relative group hover:shadow-lg transition-all duration-300 border-primary/50 bg-primary/5">
               <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
                 <Badge className="bg-primary text-primary-foreground">
                   <Crown className="h-3 w-3 mr-1" />
@@ -596,10 +695,10 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                   <Link href={`/${lang}/login`}>Start Pro Trial</Link>
                 </Button>
               </CardContent>
-            </Card>
+            </Card> */}
 
             {/* Premium Plan */}
-            <Card className="relative group hover:shadow-lg transition-all duration-300">
+            {/* <Card className="relative group hover:shadow-lg transition-all duration-300">
               <CardHeader className="text-center pb-8">
                 <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/20 rounded-xl flex items-center justify-center mx-auto mb-4">
                   <Crown className="h-6 w-6 text-yellow-600" />
@@ -636,7 +735,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
             </Card>
           </div>
         </div>
-      </section>
+      </section> */}
 
       {/* Enhanced Newsletter Section */}
       <section className="py-20 bg-primary/5">
@@ -696,7 +795,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                 <div className="p-2 bg-primary/10 rounded-lg">
                   <GraduationCap className="h-5 w-5 text-primary" />
                 </div>
-                <span className="font-bold">Arabic Learning</span>
+                <span className="font-bold">Harf Project</span>
               </div>
               <p className="text-sm text-muted-foreground leading-relaxed">
                 Professional Arabic language learning platform designed to help you master Arabic through interactive
@@ -712,6 +811,15 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                 <Button variant="ghost" size="icon" className="h-8 w-8">
                   <Mail className="h-4 w-4" />
                 </Button>
+              </div>
+              {/* Controls moved from header */}
+              <div className="flex items-center gap-3 pt-2">
+                <ThemeToggle className="h-9 w-9" tooltip="Toggle theme" />
+                <LanguageSwitcher
+                  currentLang={lang}
+                  className="text-sm font-medium"
+                  tooltip="Switch language"
+                />
               </div>
             </div>
 
