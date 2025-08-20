@@ -189,7 +189,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
   //   },
   // ]
 
-  const navigation = [
+  const navigation: { name: string; href: string }[] = [
     // { name: safeDict.navigation.home || "Home", href: "#home" },
     // { name: safeDict.navigation.features || "Features", href: "#features" },
     // { name: safeDict.navigation.courses || "Courses", href: "#courses" },

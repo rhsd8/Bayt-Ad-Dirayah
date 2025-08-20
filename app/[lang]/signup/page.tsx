@@ -7,11 +7,25 @@ import { supabase } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { ChevronDown } from "lucide-react"
+import { ChevronDown, ChevronLeft, ChevronRight, Check } from "lucide-react"
+import { cn } from "@/lib/utils"
 
-// Helpers for DOB dropdowns
+// Types for form data
+interface FormData {
+  firstName: string
+  lastName: string
+  email: string
+  password: string
+  confirmPassword: string
+  dobYear: string
+  dobMonth: string
+  dobDay: string
+  country: string
+  referral: string
+}
+
+// Helper functions
 function daysInMonth(year: number, month: number): number {
-  // month: 1-12
   if (!year || !month) return 31
   return new Date(year, month, 0).getDate()
 }
@@ -19,7 +33,6 @@ function daysInMonth(year: number, month: number): number {
 function getYearOptions(): number[] {
   const now = new Date().getFullYear()
   const years: number[] = []
-  // Reasonable range: last 100 years
   for (let y = now; y >= now - 100; y--) {
     years.push(y)
   }
@@ -109,7 +122,6 @@ function getCountryOptions(): { value: string; label: string }[] {
     { value: "IR", label: "Iran" },
     { value: "IQ", label: "Iraq" },
     { value: "IE", label: "Ireland" },
-    { value: "IL", label: "Israel" },
     { value: "IT", label: "Italy" },
     { value: "JM", label: "Jamaica" },
     { value: "JP", label: "Japan" },
@@ -226,57 +238,40 @@ function getCountryOptions(): { value: string; label: string }[] {
   ]
 }
 
-// Custom Dropdown Component with animated list
+// Custom Dropdown Component
 interface DropdownProps {
   value: string
   onChange: (value: string) => void
   options: { value: string; label: string }[]
   placeholder: string
   "aria-label": string
-  searchable?: boolean
 }
 
-function AnimatedDropdown({ value, onChange, options, placeholder, "aria-label": ariaLabel, searchable = false }: DropdownProps) {
+function AnimatedDropdown({ value, onChange, options, placeholder, "aria-label": ariaLabel }: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false)
-  const [searchTerm, setSearchTerm] = useState("")
   const dropdownRef = useRef<HTMLDivElement>(null)
-  const inputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setIsOpen(false)
-        if (searchable) setSearchTerm("")
       }
     }
     if (isOpen) {
       document.addEventListener("mousedown", handleClickOutside)
     }
     return () => document.removeEventListener("mousedown", handleClickOutside)
-  }, [isOpen, searchable])
-
-  // Filter options based on search term (only if searchable)
-  const filteredOptions = searchable 
-    ? options.filter(option => option.label.toLowerCase().includes(searchTerm.toLowerCase()))
-    : options
+  }, [isOpen])
 
   const selectedOption = options.find(opt => opt.value === value)
-
-  const handleOpen = () => {
-    setIsOpen(true)
-    // Focus the input after the dropdown opens (only if searchable)
-    if (searchable) {
-      setTimeout(() => inputRef.current?.focus(), 100)
-    }
-  }
 
   return (
     <div className="relative" ref={dropdownRef}>
       <button
         type="button"
         aria-label={ariaLabel}
-        onClick={handleOpen}
-        className="h-10 w-full rounded-md appearance-none bg-primary text-foreground border px-3 text-sm shadow-sm focus:shadow-md focus:outline-none focus:ring-0 transition-shadow flex items-center justify-between"
+        onClick={() => setIsOpen(!isOpen)}
+        className="h-10 w-full rounded-md appearance-none bg-background text-foreground border border-input px-3 text-sm shadow-sm hover:bg-accent focus:shadow-md focus:outline-none focus:ring-2 focus:ring-ring transition-all flex items-center justify-between"
       >
         <span className={selectedOption ? "text-foreground" : "text-muted-foreground"}>
           {selectedOption ? selectedOption.label : placeholder}
@@ -285,41 +280,67 @@ function AnimatedDropdown({ value, onChange, options, placeholder, "aria-label":
       </button>
       
       {isOpen && (
-        <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-[#EFEDE3] border rounded-md shadow-lg max-h-60 animate-in fade-in-0 zoom-in-95 duration-200">
-          {searchable && (
-            <div className="p-2 border-b">
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="Type to search..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full px-2 py-1 text-sm bg-white border rounded focus:outline-none focus:ring-1 focus:ring-primary/20"
-              />
-            </div>
-          )}
+        <div className="absolute top-full left-0 right-0 z-50 mt-1 bg-popover text-popover-foreground border border-border rounded-md shadow-lg max-h-60 animate-in fade-in-0 zoom-in-95 duration-200">
           <div className="max-h-48 overflow-auto">
-            {filteredOptions.length > 0 ? (
-              filteredOptions.map((option) => (
-                <button
-                  key={option.value}
-                  type="button"
-                  onClick={() => {
-                    onChange(option.value)
-                    setIsOpen(false)
-                    if (searchable) setSearchTerm("")
-                  }}
-                  className="w-full px-3 py-2 text-left text-sm text-primary hover:bg-primary/10 transition-colors"
-                >
-                  {option.label}
-                </button>
-              ))
-            ) : (
-              <div className="px-3 py-2 text-sm text-muted-foreground">{searchable ? "No countries found" : "No options available"}</div>
-            )}
+            {options.map((option) => (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => {
+                  onChange(option.value)
+                  setIsOpen(false)
+                }}
+                className="w-full px-3 py-2 text-left text-sm text-foreground hover:bg-accent hover:text-accent-foreground transition-colors"
+              >
+                {option.label}
+              </button>
+            ))}
           </div>
         </div>
       )}
+    </div>
+  )
+}
+
+// Progress Indicator Component
+function ProgressIndicator({ currentStep, totalSteps }: { currentStep: number; totalSteps: number }) {
+  return (
+    <div className="mb-8">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-sm font-medium text-muted-foreground">
+          Step {currentStep} of {totalSteps}
+        </span>
+        <span className="text-sm text-muted-foreground">
+          {Math.round((currentStep / totalSteps) * 100)}% complete
+        </span>
+      </div>
+      <div className="w-full bg-muted rounded-full h-2">
+        <div 
+          className="bg-primary h-2 rounded-full transition-all duration-500 ease-out"
+          style={{ width: `${(currentStep / totalSteps) * 100}%` }}
+        />
+      </div>
+      <div className="flex justify-between mt-2">
+        {Array.from({ length: totalSteps }, (_, i) => (
+          <div
+            key={i}
+            className={cn(
+              "flex items-center justify-center w-8 h-8 rounded-full border-2 transition-all duration-300",
+              i + 1 < currentStep
+                ? "bg-primary border-primary text-primary-foreground"
+                : i + 1 === currentStep
+                ? "border-primary text-primary bg-primary/10"
+                : "border-muted-foreground/30 text-muted-foreground"
+            )}
+          >
+            {i + 1 < currentStep ? (
+              <Check className="w-4 h-4" />
+            ) : (
+              <span className="text-sm font-medium">{i + 1}</span>
+            )}
+          </div>
+        ))}
+      </div>
     </div>
   )
 }
@@ -328,76 +349,130 @@ export default function SignUpPage() {
   const router = useRouter()
   const params = useParams()
   const lang = (params?.lang as string) || "en"
-  // Use singleton Supabase client
 
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [confirmPassword, setConfirmPassword] = useState("")
-  const [firstName, setFirstName] = useState("")
-  const [lastName, setLastName] = useState("")
-  // Date of birth as separate dropdowns
-  const [dobYear, setDobYear] = useState<string>("")
-  const [dobMonth, setDobMonth] = useState<string>("")
-  const [dobDay, setDobDay] = useState<string>("")
-  const [country, setCountry] = useState("")
-  const [referral, setReferral] = useState("")
+  const [currentStep, setCurrentStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [message, setMessage] = useState<string | null>(null)
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setError(null)
-    setMessage(null)
+  const [formData, setFormData] = useState<FormData>({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    dobYear: "",
+    dobMonth: "",
+    dobDay: "",
+    country: "",
+    referral: ""
+  })
 
-    if (!email || !password) {
-      setError("Please enter email and password")
-      return
+  const updateFormData = (field: keyof FormData, value: string) => {
+    setFormData(prev => ({ ...prev, [field]: value }))
+    setError(null) // Clear error when user types
+  }
+
+  const validateStep = (step: number): boolean => {
+    switch (step) {
+      case 1:
+        if (!formData.firstName.trim()) {
+          setError("First name is required")
+          return false
+        }
+        if (!formData.lastName.trim()) {
+          setError("Last name is required")
+          return false
+        }
+        if (!formData.email.trim()) {
+          setError("Email is required")
+          return false
+        }
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+          setError("Please enter a valid email address")
+          return false
+        }
+        if (!formData.password) {
+          setError("Password is required")
+          return false
+        }
+        if (formData.password.length < 6) {
+          setError("Password must be at least 6 characters")
+          return false
+        }
+        if (formData.password !== formData.confirmPassword) {
+          setError("Passwords do not match")
+          return false
+        }
+        return true
+
+      case 2:
+        if (!formData.dobYear || !formData.dobMonth || !formData.dobDay) {
+          setError("Please select your complete date of birth")
+          return false
+        }
+        if (!formData.country) {
+          setError("Please select your country")
+          return false
+        }
+        return true
+
+      case 3:
+        if (!formData.referral) {
+          setError("Please select how you heard about us")
+          return false
+        }
+        return true
+
+      default:
+        return true
     }
-    if (password !== confirmPassword) {
-      setError("Passwords do not match")
-      return
+  }
+
+  const nextStep = () => {
+    if (validateStep(currentStep)) {
+      setError(null)
+      setCurrentStep(prev => Math.min(prev + 1, 3))
     }
-    
+  }
+
+  const prevStep = () => {
+    setError(null)
+    setCurrentStep(prev => Math.max(prev - 1, 1))
+  }
+
+  const handleSubmit = async () => {
+    if (!validateStep(3)) return
 
     try {
       setLoading(true)
-      // Build ISO date string from parts if all provided
-      let dob: string | null = null
-      if (dobYear && dobMonth && dobDay) {
-        // Pad month/day
-        const mm = String(dobMonth).padStart(2, "0")
-        const dd = String(dobDay).padStart(2, "0")
-        const iso = `${dobYear}-${mm}-${dd}`
-        // Validate date
-        const d = new Date(iso)
-        if (!isNaN(d.getTime()) && d.toISOString().startsWith(`${dobYear}-${mm}-${dd}`)) {
-          dob = iso
-        } else {
-          setError("Please select a valid date of birth")
-          setLoading(false)
-          return
-        }
-      }
+      setError(null)
+
+      // Build ISO date string
+      const mm = String(formData.dobMonth).padStart(2, "0")
+      const dd = String(formData.dobDay).padStart(2, "0")
+      const dob = `${formData.dobYear}-${mm}-${dd}`
+
       const { error } = await supabase.auth.signUp({
-        email,
-        password,
+        email: formData.email,
+        password: formData.password,
         options: {
           emailRedirectTo: typeof window !== "undefined" ? `${window.location.origin}/${lang}/login` : undefined,
           data: {
-            first_name: firstName || null,
-            last_name: lastName || null,
+            first_name: formData.firstName,
+            last_name: formData.lastName,
             dob: dob,
-            country: country || null,
-            referral: referral || null,
+            country: formData.country,
+            referral: formData.referral,
           },
         },
       })
+
       if (error) throw error
 
-      setMessage("Check your email to confirm your account.")
-      // Optionally navigate to login
-      // router.push(`/${lang}/login`)
+      setMessage("Account created! Check your email to verify your account.")
+      // Optionally redirect after a delay
+      // setTimeout(() => router.push(`/${lang}/login`), 3000)
     } catch (err: any) {
       setError(err?.message || "Sign up failed")
     } finally {
@@ -405,108 +480,262 @@ export default function SignUpPage() {
     }
   }
 
+  const referralOptions = [
+    { value: "friend", label: "Friend or family member" },
+    { value: "social", label: "Social Media (Facebook, Instagram, etc.)" },
+    { value: "search", label: "Search Engine (Google, Bing, etc.)" },
+    { value: "ad", label: "Online Advertisement" },
+    { value: "youtube", label: "YouTube" },
+    { value: "blog", label: "Blog or Article" },
+    { value: "other", label: "Other" }
+  ]
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background px-4">
-      <div className="w-full max-w-sm rounded-xl border bg-card p-6 shadow-sm">
-        <h1 className="mb-1 text-2xl font-semibold">Create an account</h1>
-        <p className="mb-6 text-sm text-muted-foreground">
-          Already have an account? <Link className="underline" href={`/${lang}/login`}>Sign in</Link>
-        </p>
-        <form onSubmit={onSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
-              <Input id="firstName" value={firstName} onChange={(e) => setFirstName(e.target.value)} required />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input id="lastName" value={lastName} onChange={(e) => setLastName(e.target.value)} required />
-            </div>
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="confirm">Confirm Password</Label>
-            <Input id="confirm" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-          </div>
+    <div className="min-h-screen flex items-center justify-center bg-background px-4 py-8">
+      <div className="w-full max-w-md">
+        <div className="text-center mb-6">
+          <h1 className="text-3xl font-bold tracking-tight">Create Account</h1>
+          <p className="text-muted-foreground mt-2">
+            Join our Arabic learning community
+          </p>
+        </div>
 
-          <div className="grid grid-cols-1 gap-4">
-            <div className="space-y-2">
-              <Label>Date of Birth</Label>
-              <div className="grid grid-cols-3 gap-2">
-                <AnimatedDropdown
-                  aria-label="Month"
-                  value={dobMonth}
-                  onChange={setDobMonth}
-                  placeholder="Month"
-                  options={[
-                    { value: "1", label: "Jan" },
-                    { value: "2", label: "Feb" },
-                    { value: "3", label: "Mar" },
-                    { value: "4", label: "Apr" },
-                    { value: "5", label: "May" },
-                    { value: "6", label: "Jun" },
-                    { value: "7", label: "Jul" },
-                    { value: "8", label: "Aug" },
-                    { value: "9", label: "Sep" },
-                    { value: "10", label: "Oct" },
-                    { value: "11", label: "Nov" },
-                    { value: "12", label: "Dec" }
-                  ]}
-                />
-                <AnimatedDropdown
-                  aria-label="Day"
-                  value={dobDay}
-                  onChange={setDobDay}
-                  placeholder="Day"
-                  options={Array.from({ length: daysInMonth(Number(dobYear || 2000), Number(dobMonth || 1)) }, (_, i) => ({
-                    value: (i + 1).toString(),
-                    label: (i + 1).toString()
-                  }))}
-                />
-                <AnimatedDropdown
-                  aria-label="Year"
-                  value={dobYear}
-                  onChange={setDobYear}
-                  placeholder="Year"
-                  options={getYearOptions().map(y => ({
-                    value: y.toString(),
-                    label: y.toString()
-                  }))}
-                />
+        <div className="rounded-xl border bg-card p-6 shadow-sm">
+          <ProgressIndicator currentStep={currentStep} totalSteps={3} />
+
+          <form className="space-y-6">
+            {/* Step 1: Basic Information */}
+            {currentStep === 1 && (
+              <div className="space-y-4 animate-in fade-in-0 slide-in-from-right-5 duration-300">
+                <div>
+                  <h2 className="text-xl font-semibold mb-4">Basic Information</h2>
+                </div>
+                
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="firstName">First Name</Label>
+                    <Input
+                      id="firstName"
+                      value={formData.firstName}
+                      onChange={(e) => updateFormData("firstName", e.target.value)}
+                      placeholder="Enter first name"
+                      className="transition-all focus:scale-105"
+                    />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="lastName">Last Name</Label>
+                    <Input
+                      id="lastName"
+                      value={formData.lastName}
+                      onChange={(e) => updateFormData("lastName", e.target.value)}
+                      placeholder="Enter last name"
+                      className="transition-all focus:scale-105"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="email">Email Address</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={(e) => updateFormData("email", e.target.value)}
+                    placeholder="Enter your email"
+                    className="transition-all focus:scale-105"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="password">Password</Label>
+                  <Input
+                    id="password"
+                    type="password"
+                    value={formData.password}
+                    onChange={(e) => updateFormData("password", e.target.value)}
+                    placeholder="Create a password"
+                    className="transition-all focus:scale-105"
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="confirmPassword">Confirm Password</Label>
+                  <Input
+                    id="confirmPassword"
+                    type="password"
+                    value={formData.confirmPassword}
+                    onChange={(e) => updateFormData("confirmPassword", e.target.value)}
+                    placeholder="Confirm your password"
+                    className="transition-all focus:scale-105"
+                  />
+                </div>
               </div>
+            )}
+
+            {/* Step 2: Personal Details */}
+            {currentStep === 2 && (
+              <div className="space-y-4 animate-in fade-in-0 slide-in-from-right-5 duration-300">
+                <div>
+                  <h2 className="text-xl font-semibold mb-4">Personal Details</h2>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Date of Birth</Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    <AnimatedDropdown
+                      aria-label="Month"
+                      value={formData.dobMonth}
+                      onChange={(value) => updateFormData("dobMonth", value)}
+                      placeholder="Month"
+                      options={[
+                        { value: "1", label: "January" },
+                        { value: "2", label: "February" },
+                        { value: "3", label: "March" },
+                        { value: "4", label: "April" },
+                        { value: "5", label: "May" },
+                        { value: "6", label: "June" },
+                        { value: "7", label: "July" },
+                        { value: "8", label: "August" },
+                        { value: "9", label: "September" },
+                        { value: "10", label: "October" },
+                        { value: "11", label: "November" },
+                        { value: "12", label: "December" }
+                      ]}
+                    />
+                    <AnimatedDropdown
+                      aria-label="Day"
+                      value={formData.dobDay}
+                      onChange={(value) => updateFormData("dobDay", value)}
+                      placeholder="Day"
+                      options={Array.from({ length: daysInMonth(Number(formData.dobYear || 2000), Number(formData.dobMonth || 1)) }, (_, i) => ({
+                        value: (i + 1).toString(),
+                        label: (i + 1).toString()
+                      }))}
+                    />
+                    <AnimatedDropdown
+                      aria-label="Year"
+                      value={formData.dobYear}
+                      onChange={(value) => updateFormData("dobYear", value)}
+                      placeholder="Year"
+                      options={getYearOptions().map(y => ({
+                        value: y.toString(),
+                        label: y.toString()
+                      }))}
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Country</Label>
+                  <AnimatedDropdown
+                    aria-label="Country"
+                    value={formData.country}
+                    onChange={(value) => updateFormData("country", value)}
+                    placeholder="Select your country"
+                    options={getCountryOptions()}
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Step 3: How did you hear about us */}
+            {currentStep === 3 && (
+              <div className="space-y-4 animate-in fade-in-0 slide-in-from-right-5 duration-300">
+                <div>
+                  <h2 className="text-xl font-semibold mb-4">Almost Done!</h2>
+                </div>
+
+                <div className="space-y-3">
+                  <Label>How did you hear about us?</Label>
+                  <div className="space-y-3">
+                    {referralOptions.map((option) => (
+                      <label
+                        key={option.value}
+                        className={cn(
+                          "flex items-center space-x-3 p-3 rounded-lg border cursor-pointer transition-all hover:bg-accent",
+                          formData.referral === option.value 
+                            ? "border-primary bg-primary/5" 
+                            : "border-border"
+                        )}
+                      >
+                        <input
+                          type="radio"
+                          name="referral"
+                          value={option.value}
+                          checked={formData.referral === option.value}
+                          onChange={(e) => updateFormData("referral", e.target.value)}
+                          className="w-4 h-4 text-primary"
+                        />
+                        <span className="text-sm font-medium">{option.label}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Error and Success Messages */}
+            {error && (
+              <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-lg animate-in fade-in-0 duration-200">
+                {error}
+              </div>
+            )}
+            {message && (
+              <div className="text-sm text-green-600 bg-green-50 dark:bg-green-950/20 p-3 rounded-lg animate-in fade-in-0 duration-200">
+                {message}
+              </div>
+            )}
+
+            {/* Navigation Buttons */}
+            <div className="flex justify-between pt-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={prevStep}
+                disabled={currentStep === 1}
+                className={cn(
+                  "transition-all",
+                  currentStep === 1 ? "invisible" : "visible"
+                )}
+              >
+                <ChevronLeft className="w-4 h-4 mr-1" />
+                Back
+              </Button>
+
+              {currentStep < 3 ? (
+                <Button
+                  type="button"
+                  onClick={nextStep}
+                  className="transition-all hover:scale-105"
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4 ml-1" />
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  className="transition-all hover:scale-105"
+                >
+                  {loading ? "Creating Account..." : "Create Account"}
+                </Button>
+              )}
             </div>
-            <div className="space-y-2">
-              <Label>Country</Label>
-              <AnimatedDropdown
-                aria-label="Country"
-                value={country}
-                onChange={setCountry}
-                placeholder="Select your country"
-                options={getCountryOptions()}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="referral">How did you hear about us?</Label>
-              <Input id="referral" type="text" placeholder="Friend, Social Media, Google, ..." value={referral} onChange={(e) => setReferral(e.target.value)} />
-            </div>
+          </form>
+
+          <div className="mt-6 text-center text-sm text-muted-foreground">
+            Already have an account?{" "}
+            <Link href={`/${lang}/login`} className="text-primary hover:underline font-medium">
+              Sign in
+            </Link>
           </div>
+        </div>
 
-          {error && <div className="text-sm text-red-600">{error}</div>}
-          {message && <div className="text-sm text-green-600">{message}</div>}
-
-          <Button type="submit" className="w-full" disabled={loading}>
-            {loading ? "Creating..." : "Sign up"}
-          </Button>
-        </form>
         <div className="mt-4 text-center">
-          <Link href={`/${lang}`} className="text-sm text-muted-foreground underline">Back to Home</Link>
+          <Link href={`/${lang}`} className="text-sm text-muted-foreground hover:text-foreground transition-colors">
+            ← Back to Home
+          </Link>
         </div>
       </div>
     </div>
