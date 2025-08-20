@@ -128,7 +128,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
     },
     {
       icon: Trophy,
-      title: safeDict.landing.features?.gamification || "Gamified Experience",
+      title: safeDict.landing.features?.gamification || "Earn Achivements",
       description:
         safeDict.landing.features?.gamification_desc || "Earn badges, maintain streaks, and compete with friends",
       color: "text-yellow-600",
@@ -519,11 +519,18 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                   key={index}
                   className="relative group hover:shadow-lg transition-all duration-300 border bg-background"
                 >
+                  <div className="absolute top-3 right-3 z-10">
+                    <span className="bg-muted/80 text-muted-foreground text-xs font-medium px-3 py-3 rounded-full">
+                      Coming Soon!
+                    </span>
+                  </div>
                   <CardHeader className="relative">
                     <div className="w-12 h-12 bg-primary/10 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                       <Icon className={`h-6 w-6 ${feature.color}`} />
                     </div>
-                    <CardTitle className="group-hover:text-foreground transition-colors">{feature.title}</CardTitle>
+                    <CardTitle className="group-hover:text-foreground transition-colors">
+                      {feature.title}
+                    </CardTitle>
                   </CardHeader>
                   <CardContent className="relative">
                     <CardDescription className="text-base leading-relaxed">{feature.description}</CardDescription>
@@ -734,7 +741,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
       </section> */}
 
       {/* Enhanced Newsletter Section */}
-      <section className="py-20 bg-primary/5">
+      {/* <section className="py-20 bg-primary/5">
         <div className="container mx-auto px-4">
           <div className="max-w-2xl mx-auto text-center">
             <div className="w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
@@ -779,7 +786,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
         </div>
       </section>
 
-
+ */}
 
       {/* Enhanced Footer */}
       <footer className="bg-muted/50 py-12 border-t border-border">
