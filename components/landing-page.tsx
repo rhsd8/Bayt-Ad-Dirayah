@@ -190,10 +190,10 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
   // ]
 
   const navigation = [
-    { name: safeDict.navigation.home || "Home", href: "#home" },
-    { name: safeDict.navigation.features || "Features", href: "#features" },
-    { name: safeDict.navigation.courses || "Courses", href: "#courses" },
-    { name: safeDict.common.about || "About", href: "#about" },
+    // { name: safeDict.navigation.home || "Home", href: "#home" },
+    // { name: safeDict.navigation.features || "Features", href: "#features" },
+    // { name: safeDict.navigation.courses || "Courses", href: "#courses" },
+    // { name: safeDict.common.about || "About", href: "#about" },
   ]
 
   const handleNewsletterSignup = async (e: React.FormEvent) => {
@@ -458,7 +458,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
               <div className="relative">
                 <div className="relative bg-background rounded-3xl p-8 border">
                   <div className="space-y-6">
-                    {/* Mock lesson interface */}
+                    Mock lesson interface
                     <div className="bg-background rounded-2xl p-6 shadow-lg">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
@@ -480,7 +480,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                       </div>
                     </div>
 
-                    {/* Mock achievement */}
+                    Mock achievement
                     <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-950/20 dark:to-orange-950/20 rounded-2xl p-6 border border-yellow-200 dark:border-yellow-800">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
