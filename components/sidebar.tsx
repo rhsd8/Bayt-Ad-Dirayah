@@ -18,6 +18,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
   SidebarRail,
+  SidebarTrigger,
   useSidebar,
 } from "@/components/ui/sidebar"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
@@ -483,25 +484,19 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
                       >
                         {/* Icon + Text (Left side) */}
                         <div className={cn("flex items-center min-w-0", state === "collapsed" ? "gap-0" : "gap-3") }>
-                          {groupId === "support" || groupId === "learning" ? (
-                            <div className="shrink-0 flex items-center justify-center">
-                              <item.icon
-                                className={cn(
-                                  "h-5 w-5",
-                                  item.color ? item.color : (item.isActive ? "text-primary" : "text-muted-foreground")
-                                )}
-                              />
-                            </div>
-                          ) : (
-                            <div
+                          <div
+                            className={cn(
+                              "p-2 rounded-md transition-colors shrink-0 flex items-center justify-center",
+                              item.isActive ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground group-hover:bg-accent"
+                            )}
+                          >
+                            <item.icon 
                               className={cn(
-                                "p-2 rounded-md transition-colors shrink-0 flex items-center justify-center",
-                                item.isActive ? "bg-primary/10 text-primary" : "bg-muted text-muted-foreground group-hover:bg-accent"
-                              )}
-                            >
-                              <item.icon className="h-5 w-5" />
-                            </div>
-                          )}
+                                "h-5 w-5",
+                                item.color && !item.isActive ? item.color : ""
+                              )} 
+                            />
+                          </div>
                           <span
                             className={cn(
                               "truncate font-semibold text-base",
@@ -531,45 +526,8 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
 
   return (
     <Sidebar collapsible="icon" className="border-r">
-      <SidebarHeader className={cn("border-b", state === "collapsed" ? "p-2 overflow-hidden" : "p-4") }>
-        <Link
-          href={`/${lang}`}
-          className={cn(
-            "flex items-center gap-2",
-            state === "collapsed" ? "justify-center w-full gap-0" : undefined
-          )}
-          aria-label="Bayt Ad Dirayah Home"
-        >
-          {state === "collapsed" ? (
-            <Image
-              src={lang === "ar" ? "/logo-web-dark-ar.webp" : "/logo-web-light-en.webp"}
-              alt="Bayt Ad Dirayah"
-              width={140}
-              height={32}
-              className="h-auto w-auto max-h-6 max-w-[28px] object-contain"
-              priority
-            />
-          ) : (
-            <>
-              <Image
-                src="/logo-web-light.webp"
-                alt="Bayt Ad Dirayah"
-                width={140}
-                height={32}
-                className="h-8 w-auto dark:hidden shrink-0"
-                priority
-              />
-              <Image
-                src="/logo-web-dark.webp"
-                alt="Bayt Ad Dirayah"
-                width={140}
-                height={32}
-                className="h-8 w-auto hidden dark:inline shrink-0"
-                priority
-              />
-            </>
-          )}
-        </Link>
+      <SidebarHeader className={cn("border-b flex items-center", state === "collapsed" ? "justify-center p-2" : "justify-start p-4")}>
+        <SidebarTrigger className="h-8 w-8" />
       </SidebarHeader>
 
       <SidebarContent className={cn(state === "collapsed" && "px-0")}>
@@ -577,8 +535,8 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
           {state === "collapsed" ? (
             <>
               {/* Quick icons when collapsed (reduced set) */}
-              <SidebarGroup className="px-0">
-                <SidebarMenu className="px-0 w-[5rem] mx-auto">
+              <SidebarGroup className="px-0 py-4">
+                <SidebarMenu className="px-0 space-y-4">
                   {[
                     { title: t("nav.dashboard", "Dashboard"), href: `/${lang}/dashboard`, icon: Home, isActive: pathname === `/${lang}/dashboard` },
                     { title: t("nav.courses", "Learning"), href: `/${lang}/courses`, icon: BookOpen, isActive: pathname.startsWith(`/${lang}/courses`) },
@@ -589,17 +547,19 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
                     // { title: t("nav.community", "Community"), href: `/${lang}/community`, icon: Users, isActive: pathname.startsWith(`/${lang}/community`) },
                     // { title: t("nav.progress", "Progress & Stats"), href: `/${lang}/analytics`, icon: BarChart3, isActive: pathname.startsWith(`/${lang}/analytics`) || pathname.startsWith(`/${lang}/progress`) },
                   ].map((item) => (
-                    <SidebarMenuItem key={item.title} className={cn(state === "collapsed" && "px-0 w-[5rem] mx-auto") }>
-                      <SidebarMenuButton asChild isActive={item.isActive} className={cn(state === "collapsed" && "px-0 w-[5rem] mx-auto") }>
+                    <SidebarMenuItem key={item.title} className="w-full flex justify-center px-2">
+                      <SidebarMenuButton asChild isActive={item.isActive} className="w-14 h-14 p-0">
                         <Link
                           href={item.href}
-                          className={cn("grid w-[5rem] place-items-center px-0 py-4 mx-auto hover:bg-muted/30 rounded-lg transition-colors")}
+                          className="flex items-center justify-center w-14 h-14 rounded-xl hover:bg-accent transition-colors"
                           title={item.title}
                         >
                           <item.icon
                             className={cn(
-                              "h-20 w-20 shrink-0 transition-colors",
-                              item.isActive ? "text-foreground" : "text-foreground hover:text-foreground"
+                              "h-7 w-7 shrink-0 transition-colors stroke-[1.5]",
+                              item.isActive 
+                                ? "text-primary" 
+                                : "text-foreground/70 hover:text-foreground"
                             )}
                           />
                         </Link>

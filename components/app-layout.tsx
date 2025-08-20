@@ -352,8 +352,6 @@ export function AppLayout({
             <div className="hidden md:block px-10 py-7">
               <div className="flex h-20 items-center gap-6 w-full rounded-full border border-border/40 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40 shadow-sm">
                 <div className="flex items-center gap-6 flex-1 px-8">
-                  <SidebarTrigger className="-ml-1" title="Toggle sidebar" />
-                  <Separator orientation="vertical" className="mr-2 h-6" />
                   <Link href={`/${lang}`} className="flex items-center gap-2" aria-label="Bayt Ad Dirayah Home" title="Home">
                     <Image
                       src="/logo-web-light.webp"
@@ -372,7 +370,6 @@ export function AppLayout({
                       priority
                     />
                   </Link>
-                  <Separator orientation="vertical" className="mx-2 h-6" />
 
                   {/* Enhanced Breadcrumbs */}
                   <Breadcrumb>
