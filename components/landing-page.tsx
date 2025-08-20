@@ -424,16 +424,12 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                 </p>
               </div>
 
-              <div className="flex flex-col sm:flex-row gap-4">
-                <Button asChild size="lg" className="gap-2 text-lg px-30">
+              <div className="flex justify-center sm:justify-start">
+                <Button asChild variant="outline" size="lg" className="gap-2 text-lg px-8 rounded-full border-2" style={{borderRadius: '9999px'}}>
                   <Link href={`/${lang}/login`}>
                     <Play className="h-5 w-5" />
                     Start Learning Free
                   </Link>
-                </Button>
-                <Button variant="outline" size="lg" className="gap-2 text-lg px-8 bg-transparent">
-                  <Volume2 className="h-5 w-5" />
-                  Watch Demo
                 </Button>
               </div>
 
@@ -458,11 +454,11 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
               <div className="relative">
                 <div className="relative bg-background rounded-3xl p-8 border">
                   <div className="space-y-6">
-                    Mock lesson interface
+                    Arabic Learning Course
                     <div className="bg-background rounded-2xl p-6 shadow-lg">
                       <div className="flex items-center gap-3 mb-4">
                         <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
-                          <BookOpen className="h-5 w-5 text-primary" />
+                          <BookOpen className="h-5 w-5 text-secondry" />
                         </div>
                         <div>
                           <h3 className="font-semibold">Arabic Alphabet</h3>
@@ -471,7 +467,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                       </div>
                       <div className="space-y-3">
                         <div className="h-2 bg-muted rounded-full overflow-hidden">
-                          <div className="h-full w-3/4 bg-primary rounded-full"></div>
+                          <div className="h-full w-3/4 bg-white rounded-full"></div>
                         </div>
                         <div className="flex justify-between text-sm">
                           <span className="text-muted-foreground">Progress</span>
@@ -480,7 +476,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                       </div>
                     </div>
 
-                    Mock achievement
+                    {/* Mock achievement */}
                     <div className="bg-gradient-to-r from-yellow-50 to-orange-50 dark:from-yellow-950/20 dark:to-orange-950/20 rounded-2xl p-6 border border-yellow-200 dark:border-yellow-800">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 bg-yellow-100 dark:bg-yellow-900/30 rounded-full flex items-center justify-center">
