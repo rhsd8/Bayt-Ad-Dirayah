@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 770.96 221.69">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: Hagrid-Bold, Hagrid;
+        font-size: 87.71px;
+      }
+
+      .cls-1, .cls-2 {
+        fill: #1e1d19;
+        font-weight: 700;
+      }
+
+      .cls-2 {
+        font-family: Hagrid-Extrabold, Hagrid;
+        font-size: 131.02px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2" data-name="Layer 1">
+    <text class="cls-1" transform="translate(338.27 78.52)"><tspan x="0" y="0">HARF </tspan><tspan x="0" y="82.23">PROJECT</tspan></text>
+    <text class="cls-2" transform="translate(0 137.18)"><tspan x="0" y="0">حرف</tspan></text>
+  </g>
+</svg>

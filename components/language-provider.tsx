@@ -48,13 +48,7 @@ export function LanguageProvider({ children, initialLang = "en", dictionary = {}
     // In a real app, you'd load the dictionary for the new language here
   }
 
-  // Update document direction based on language
-  useEffect(() => {
-    if (typeof document !== "undefined") {
-      document.documentElement.dir = isRTL ? "rtl" : "ltr"
-      document.documentElement.lang = currentLang
-    }
-  }, [currentLang, isRTL])
+  // Note: Document direction and language are handled in the layout
 
   const value = {
     currentLang,
