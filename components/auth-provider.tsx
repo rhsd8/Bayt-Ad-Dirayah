@@ -35,14 +35,30 @@ interface AuthProviderProps {
 }
 
 // Helper to construct our User from Supabase session user
-function mapSupabaseUser(sessionUser: any): User {
+async function mapSupabaseUser(sessionUser: any): Promise<User> {
   const metadata = sessionUser?.user_metadata || {}
   const email: string = sessionUser?.email || ""
   const localPart = email ? email.split("@")[0] : ""
   const fullName: string =
     metadata.full_name || metadata.fullName || metadata.name || metadata.given_name || metadata.first_name || ""
   const name = (fullName || localPart || "").toString()
-  const role = (metadata.role as User["role"]) || "student"
+  
+  // Get role from profiles table
+  let role: User["role"] = "student"
+  try {
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("role")
+      .eq("id", sessionUser?.id)
+      .single()
+    
+    if (profile?.role) {
+      role = profile.role as User["role"]
+    }
+  } catch (error) {
+    console.error("Error fetching user role:", error)
+  }
+  
   return {
     id: sessionUser?.id,
     name,
@@ -66,7 +82,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         const { data: { session } } = await supabase.auth.getSession()
         if (!mounted) return
         if (session?.user) {
-          setUser(mapSupabaseUser(session.user))
+          const user = await mapSupabaseUser(session.user)
+          setUser(user)
         } else {
           setUser(null)
         }
@@ -79,10 +96,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     }
     init()
 
-    const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: sub } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (!mounted) return
       if (session?.user) {
-        setUser(mapSupabaseUser(session.user))
+        const user = await mapSupabaseUser(session.user)
+        setUser(user)
       } else {
         setUser(null)
       }
@@ -102,7 +120,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
         return { success: false, error: error.message }
       }
       if (data.session?.user) {
-        setUser(mapSupabaseUser(data.session.user))
+        const user = await mapSupabaseUser(data.session.user)
+        setUser(user)
       }
       return { success: true }
     } catch (error) {

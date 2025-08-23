@@ -4,14 +4,12 @@
       "command": "cmd",
       "args": [
         "/c",
-        "pnpm",
-        "dlx",
+        "npx",
         "@supabase/mcp-server-supabase@latest",
-        "--read-only",
-        "--project-ref=<rjzaylkbvwfciufjjkte>"
+        "--project-ref=rjzaylkbvwfciufjjkte"
       ],
       "env": {
-        "SUPABASE_ACCESS_TOKEN": "<sbp_426f3290def221bd5172d735efcbad8db6dca5cd>"
+        "SUPABASE_ACCESS_TOKEN": "sbp_426f3290def221bd5172d735efcbad8db6dca5cd"
       }
     }
   }

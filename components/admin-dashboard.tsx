@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useAuth } from "@/components/auth-provider"
+import { useAdminAuth, withAdminAuth } from "@/components/admin-auth-provider"
 import { AppLayout } from "@/components/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -84,6 +85,7 @@ interface UploadProgress {
 
 export function AdminDashboard({ lang, dictionary }: AdminDashboardProps) {
   const { user } = useAuth()
+  const { admin, logout } = useAdminAuth()
   const { toast } = useToast()
   const [activeTab, setActiveTab] = useState("overview")
   const [showCreateCourse, setShowCreateCourse] = useState(false)
@@ -388,7 +390,7 @@ export function AdminDashboard({ lang, dictionary }: AdminDashboardProps) {
     }
   }
 
-  if (!bypass && user?.role !== "admin") {
+  if (!bypass && !admin) {
     return (
       <AppLayout lang={lang} dictionary={dictionary}>
         <div className="text-center py-12">
@@ -403,9 +405,15 @@ export function AdminDashboard({ lang, dictionary }: AdminDashboardProps) {
     <AppLayout lang={lang} dictionary={dictionary}>
       <div className="space-y-8">
         {/* Enhanced Header */}
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">{dictionary.admin.title}</h1>
-          <p className="text-muted-foreground text-lg">Comprehensive platform management and analytics</p>
+        <div className="flex justify-between items-start">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight">{dictionary.admin.title}</h1>
+            <p className="text-muted-foreground text-lg">Comprehensive platform management and analytics</p>
+            {admin && <p className="text-sm text-muted-foreground">Welcome, {admin.name}</p>}
+          </div>
+          <Button variant="outline" onClick={logout}>
+            Logout
+          </Button>
         </div>
 
         {/* Enhanced Stats Grid */}

@@ -20,7 +20,7 @@ interface FormData {
   dobYear: string
   dobMonth: string
   dobDay: string
-  country: string
+  nationality: string
   referral: string
 }
 
@@ -39,7 +39,7 @@ function getYearOptions(): number[] {
   return years
 }
 
-function getCountryOptions(): { value: string; label: string }[] {
+function getNationalityOptions(): { value: string; label: string }[] {
   return [
     { value: "AF", label: "Afghanistan" },
     { value: "AL", label: "Albania" },
@@ -364,7 +364,7 @@ export default function SignUpPage() {
     dobYear: "",
     dobMonth: "",
     dobDay: "",
-    country: "",
+    nationality: "",
     referral: ""
   })
 
@@ -411,8 +411,8 @@ export default function SignUpPage() {
           setError("Please select your complete date of birth")
           return false
         }
-        if (!formData.country) {
-          setError("Please select your country")
+        if (!formData.nationality) {
+          setError("Please select your nationality")
           return false
         }
         return true
@@ -462,7 +462,7 @@ export default function SignUpPage() {
             first_name: formData.firstName,
             last_name: formData.lastName,
             dob: dob,
-            country: formData.country,
+            nationality: formData.nationality,
             referral: formData.referral,
           },
         },
@@ -626,13 +626,13 @@ export default function SignUpPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Country</Label>
+                  <Label>Nationality</Label>
                   <AnimatedDropdown
-                    aria-label="Country"
-                    value={formData.country}
-                    onChange={(value) => updateFormData("country", value)}
-                    placeholder="Select your country"
-                    options={getCountryOptions()}
+                    aria-label="Nationality"
+                    value={formData.nationality}
+                    onChange={(value) => updateFormData("nationality", value)}
+                    placeholder="Select your nationality"
+                    options={getNationalityOptions()}
                   />
                 </div>
               </div>
