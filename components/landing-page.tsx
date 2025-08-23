@@ -271,7 +271,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
 
         {/* Desktop header (unchanged) */}
         <div className="hidden md:block px-10 py-7">
-          <div className="container mx-auto">
+          <div className="container mx-auto px-0 mx-1">
             <div className="flex h-20 items-center justify-between gap-6 rounded-full border border-border/40 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40 shadow-sm px-8 text-foreground">
               <div className="flex items-center gap-6">
                 <Link

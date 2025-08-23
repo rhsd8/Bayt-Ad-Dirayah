@@ -1,13 +1,10 @@
 import type React from "react"
-import { Inter } from "next/font/google"
 import { AuthProvider } from "@/components/auth-provider"
 import { LanguageProvider } from "@/components/language-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { getDictionary } from "./dictionaries"
 import "../globals.css"
-
-const inter = Inter({ subsets: ["latin"] })
 
 export async function generateStaticParams() {
   return [{ lang: "en" }, { lang: "ar" }, { lang: "fr" }]
@@ -40,14 +37,14 @@ export default async function RootLayout({
   }
 
   return (
-    <html lang={currentLang} dir={currentLang === "ar" ? "rtl" : "ltr"}>
-      <body className={inter.className}>
+    <html lang="en" dir="ltr">
+      <body>
         <ErrorBoundary>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            <LanguageProvider initialLang={currentLang} dictionary={dictionary}>
-              <AuthProvider>{children}</AuthProvider>
-            </LanguageProvider>
-          </ThemeProvider>
+          <LanguageProvider initialLang={currentLang} dictionary={dictionary}>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </LanguageProvider>
         </ErrorBoundary>
       </body>
     </html>

@@ -1,5 +1,6 @@
 import { getDictionary } from "../dictionaries"
 import { Dashboard } from "@/components/dashboard"
+import { ProtectedRoute } from "@/components/protected-route"
 
 interface DashboardPageProps {
   params: Promise<{ lang: string }>
@@ -28,5 +29,9 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
     }
   }
 
-  return <Dashboard lang={currentLang} dictionary={dictionary} />
+  return (
+    <ProtectedRoute lang={currentLang}>
+      <Dashboard lang={currentLang} dictionary={dictionary} />
+    </ProtectedRoute>
+  )
 }
