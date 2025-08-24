@@ -98,7 +98,7 @@ interface ForumCategory {
   id: string
   name: string
   description: string
-  icon: any
+  icon: React.ComponentType<{ className?: string }>
   color: string
   postCount: number
   isModerated: boolean
@@ -114,7 +114,7 @@ interface CommunityStats {
 
 interface CommunityForumProps {
   lang: string
-  dictionary: any
+  dictionary: Record<string, unknown>
 }
 
 // Custom hooks
@@ -270,7 +270,7 @@ const useForumData = () => {
 
         setPosts(mockPosts)
         setReplies(mockReplies)
-      } catch (err) {
+      } catch {
         setError("Failed to load forum data")
       } finally {
         setLoading(false)
@@ -761,7 +761,7 @@ export function CommunityForum({ lang, dictionary }: CommunityForumProps) {
   const [selectedPost, setSelectedPost] = useState<ForumPost | null>(null)
   const [showPostDialog, setShowPostDialog] = useState(false)
 
-  const { posts, replies, loading, error, setPosts, setReplies } = useForumData()
+  const { posts, replies, loading, error, setPosts } = useForumData()
   const stats = useMemo(() => calculateStats(posts), [posts])
 
   const filteredAndSortedPosts = useMemo(() => {
@@ -959,7 +959,7 @@ export function CommunityForum({ lang, dictionary }: CommunityForumProps) {
                     </SelectContent>
                   </Select>
 
-                  <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+                  <Select value={sortBy} onValueChange={(value: "created" | "updated" | "likes" | "replies") => setSortBy(value)}>
                     <SelectTrigger className="w-48">
                       <SortAsc className="h-4 w-4 mr-2" />
                       <SelectValue />

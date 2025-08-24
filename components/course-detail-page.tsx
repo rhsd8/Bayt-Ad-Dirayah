@@ -11,10 +11,12 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useToast } from "@/hooks/use-toast"
 import { BookOpen, FileText, Clock, Users, Play, CheckCircle, ArrowLeft, Star, Download, Eye } from "lucide-react"
 
+import { Dictionary } from "@/lib/dictionary";
+
 interface CourseDetailPageProps {
   lang: string
   courseId: string
-  dictionary: any
+  dictionary: Dictionary
 }
 
 interface Material {
@@ -109,7 +111,7 @@ export function CourseDetailPage({ lang, courseId, dictionary }: CourseDetailPag
     setEnrolling(false)
   }
 
-  const handleStartLesson = (lessonId: string) => {
+  const handleStartLesson = () => {
     toast({
       title: "Lesson Started",
       description: "Opening lesson content...",
@@ -253,7 +255,7 @@ export function CourseDetailPage({ lang, courseId, dictionary }: CourseDetailPag
                   <CardContent className="prose prose-sm max-w-none dark:prose-invert">
                     <p>
                       This comprehensive Arabic alphabet course is designed for complete beginners who want to master
-                      the fundamentals of Arabic script and pronunciation. You'll learn each of the 28 letters of the
+                      the fundamentals of Arabic script and pronunciation. You&apos;ll learn each of the 28 letters of the
                       Arabic alphabet, understand their different forms (isolated, initial, medial, and final), and
                       practice proper pronunciation with native speaker audio.
                     </p>
@@ -266,7 +268,7 @@ export function CourseDetailPage({ lang, courseId, dictionary }: CourseDetailPag
 
                 <Card>
                   <CardHeader>
-                    <CardTitle>What You'll Learn</CardTitle>
+                    <CardTitle>What You&apos;ll Learn</CardTitle>
                   </CardHeader>
                   <CardContent>
                     <ul className="space-y-2 text-sm">
@@ -376,13 +378,13 @@ export function CourseDetailPage({ lang, courseId, dictionary }: CourseDetailPag
                     <div className="space-y-3">
                       <div className="border-l-2 border-primary pl-4">
                         <p className="text-sm">
-                          "Excellent course! The step-by-step approach made learning Arabic alphabet so much easier."
+                          &ldquo;Excellent course! The step-by-step approach made learning Arabic alphabet so much easier.&rdquo;
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">- Sarah M., 2 days ago</p>
                       </div>
                       <div className="border-l-2 border-primary pl-4">
                         <p className="text-sm">
-                          "Great pronunciation guides and practice materials. Highly recommended for beginners."
+                          &ldquo;Great pronunciation guides and practice materials. Highly recommended for beginners.&rdquo;
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">- Ahmed K., 1 week ago</p>
                       </div>

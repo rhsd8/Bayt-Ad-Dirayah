@@ -88,7 +88,7 @@ interface QuizStats {
 
 interface QuizSystemProps {
   lang: string
-  dictionary: any
+  dictionary: Record<string, unknown>
 }
 
 // Custom hooks
@@ -217,7 +217,7 @@ const useQuizData = () => {
 
         setQuizzes(mockQuizzes)
         setResults(mockResults)
-      } catch (err) {
+      } catch {
         setError("Failed to load quiz data")
       } finally {
         setLoading(false)
@@ -331,11 +331,10 @@ const calculateStats = (results: QuizResult[]): QuizStats => {
 const QuizCard = ({
   quiz,
   onStartQuiz,
-  dictionary,
 }: {
   quiz: Quiz
   onStartQuiz: (quizId: string) => void
-  dictionary: any
+  dictionary: Record<string, unknown>
 }) => {
   const canTakeQuiz = quiz.attempts < quiz.maxAttempts
   const progressPercentage = (quiz.attempts / quiz.maxAttempts) * 100
@@ -564,12 +563,11 @@ const CreateQuizDialog = ({
   open,
   onOpenChange,
   onCreateQuiz,
-  dictionary,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
   onCreateQuiz: (quiz: Partial<Quiz>) => void
-  dictionary: any
+  dictionary: Record<string, unknown>
 }) => {
   const [formData, setFormData] = useState({
     title: "",
@@ -758,7 +756,7 @@ export function QuizSystem({ lang, dictionary }: QuizSystemProps) {
   const [activeTab, setActiveTab] = useState("available")
   const [showCreateDialog, setShowCreateDialog] = useState(false)
 
-  const { quizzes, results, loading, error, setQuizzes, setResults } = useQuizData()
+  const { quizzes, results, loading, error, setQuizzes } = useQuizData()
   const stats = useMemo(() => calculateStats(results), [results])
 
   const categories = useMemo(() => Array.from(new Set(quizzes.map((quiz) => quiz.category))).sort(), [quizzes])

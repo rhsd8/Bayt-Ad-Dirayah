@@ -1,7 +1,6 @@
 import type React from "react"
 import { AuthProvider } from "@/components/auth-provider"
 import { LanguageProvider } from "@/components/language-provider"
-import { ThemeProvider } from "@/components/theme-provider"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { getDictionary } from "./dictionaries"
 import "../globals.css"
@@ -23,18 +22,7 @@ export default async function RootLayout({
   const validLangs = ["en", "ar", "fr"]
   const currentLang = validLangs.includes(lang) ? lang : "en"
 
-  let dictionary
-  try {
-    dictionary = await getDictionary(currentLang as "en" | "ar" | "fr")
-  } catch (error) {
-    console.error("Failed to load dictionary:", error)
-    // Fallback dictionary to prevent crashes
-    dictionary = {
-      common: { loading: "Loading..." },
-      navigation: {},
-      landing: {},
-    }
-  }
+  const dictionary = await getDictionary(currentLang as "en" | "ar" | "fr")
 
   return (
     <html lang="en" dir="ltr">

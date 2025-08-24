@@ -4,29 +4,19 @@ import { useState, useEffect } from "react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
-import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { AppLayout } from "@/components/app-layout"
-import { useAuth } from "@/components/auth-provider"
-import { useLanguage } from "@/components/language-provider"
 import {
   TrendingUp,
-  Calendar,
   Trophy,
   Clock,
   Target,
-  Award,
-  BookOpen,
-  Star,
   Flame,
-  Users,
-  BarChart3,
-  Activity,
 } from "lucide-react"
 
 interface ProgressPageProps {
   lang: string
-  dictionary: any
+  dictionary: Record<string, unknown>
 }
 
 interface CourseProgress {
@@ -51,8 +41,6 @@ interface Achievement {
 }
 
 export function ProgressPage({ lang, dictionary }: ProgressPageProps) {
-  const { user } = useAuth()
-  const { t } = useLanguage()
   const [isLoading, setIsLoading] = useState(true)
   const [courseProgress, setCourseProgress] = useState<CourseProgress[]>([])
   const [achievements, setAchievements] = useState<Achievement[]>([])

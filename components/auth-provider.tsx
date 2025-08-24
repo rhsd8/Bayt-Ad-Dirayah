@@ -35,12 +35,11 @@ interface AuthProviderProps {
 }
 
 // Helper to construct our User from Supabase session user
-async function mapSupabaseUser(sessionUser: any): Promise<User> {
+async function mapSupabaseUser(sessionUser: { id: string; email?: string; user_metadata?: Record<string, unknown> }): Promise<User> {
   const metadata = sessionUser?.user_metadata || {}
   const email: string = sessionUser?.email || ""
   const localPart = email ? email.split("@")[0] : ""
-  const fullName: string =
-    metadata.full_name || metadata.fullName || metadata.name || metadata.given_name || metadata.first_name || ""
+  const fullName: string = String(metadata.full_name || metadata.fullName || metadata.name || metadata.given_name || metadata.first_name || "")
   const name = (fullName || localPart || "").toString()
   
   // Get role from profiles table
@@ -64,8 +63,8 @@ async function mapSupabaseUser(sessionUser: any): Promise<User> {
     name,
     email,
     role,
-    avatar: metadata.avatar_url || metadata.avatar || undefined,
-    preferences: metadata.preferences || undefined,
+    avatar: String(metadata.avatar_url || metadata.avatar || "") || undefined,
+    preferences: metadata.preferences as { language: string; theme: string; notifications: boolean; } | undefined || undefined,
   }
 }
 

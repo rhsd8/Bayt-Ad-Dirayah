@@ -49,7 +49,7 @@ import { Label } from "@/components/ui/label"
 interface PDFViewerPageProps {
   lang: string
   materialId: string
-  dictionary: any
+  dictionary: Record<string, unknown>
 }
 
 interface Material {
@@ -296,7 +296,7 @@ export function PDFViewerPage({ lang, materialId, dictionary }: PDFViewerPagePro
   }
 
   const currentPageAnnotations = annotations.filter((a) => a.page === currentPage)
-  const currentPageBookmarks = bookmarks.filter((b) => b.page === currentPage)
+  // const currentPageBookmarks = bookmarks.filter((b) => b.page === currentPage)
 
   return (
     <AppLayout lang={lang} dictionary={dictionary}>

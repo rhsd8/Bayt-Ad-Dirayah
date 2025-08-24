@@ -35,7 +35,7 @@ interface Material {
 
 interface MaterialsPageProps {
   lang: string
-  dictionary: any
+  dictionary: Record<string, unknown>
 }
 
 export function MaterialsPage({ lang, dictionary }: MaterialsPageProps) {

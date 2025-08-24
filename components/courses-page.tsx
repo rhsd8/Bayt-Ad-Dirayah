@@ -27,7 +27,7 @@ interface Course {
 
 interface CoursesPageProps {
   lang: string
-  dictionary: any
+  dictionary: Record<string, unknown>
 }
 
 export function CoursesPage({ lang, dictionary }: CoursesPageProps) {

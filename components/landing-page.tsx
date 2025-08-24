@@ -8,33 +8,21 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from "@/components/language-provider"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { LoadingSpinner } from "@/components/loading-spinner"
 import {
   BookOpen,
   Users,
   Trophy,
-  Star,
   Play,
-  CheckCircle,
-  Zap,
   GraduationCap,
-  TrendingUp,
-  Shield,
   Sparkles,
   Brain,
   Volume2,
   PenTool,
-  Crown,
   Mail,
-  User,
-  Phone,
   Globe,
-  Target,
   MessageCircle,
   Menu,
   X,
@@ -42,36 +30,20 @@ import {
 
 interface LandingPageProps {
   lang: string
-  dictionary: any
+  dictionary: Record<string, unknown>
 }
 
 interface Feature {
-  icon: any
+  icon: React.ComponentType<{ className?: string }>
   title: string
   description: string
   color: string
 }
 
-interface Testimonial {
-  name: string
-  role: string
-  content: string
-  avatar: string
-  rating: number
-}
 
-interface Stat {
-  value: string
-  label: string
-  icon: any
-  color: string
-}
 
 export function LandingPage({ lang, dictionary }: LandingPageProps) {
   const { isRTL } = useLanguage()
-  const [isLoading, setIsLoading] = useState(false)
-  const [email, setEmail] = useState("")
-  const [message, setMessage] = useState("")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isLogoCardOpen, setIsLogoCardOpen] = useState(false)
   const [isLogoCardClosing, setIsLogoCardClosing] = useState(false)
@@ -135,32 +107,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
     },
   ]
 
-  const testimonials: Testimonial[] = [
-    {
-      name: "Sarah Johnson",
-      role: "Language Student",
-      content:
-        "This platform transformed my Arabic learning journey. The interactive lessons and community support made all the difference!",
-      avatar: "/placeholder.svg?height=60&width=60",
-      rating: 5,
-    },
-    {
-      name: "Ahmed Hassan",
-      role: "Arabic Teacher",
-      content:
-        "As an Arabic instructor, I'm impressed by the quality of content and the innovative teaching methods used here.",
-      avatar: "/placeholder.svg?height=60&width=60",
-      rating: 5,
-    },
-    {
-      name: "Maria Rodriguez",
-      role: "Business Professional",
-      content:
-        "Learning Arabic for business has never been easier. The practical lessons and cultural insights are invaluable.",
-      avatar: "/placeholder.svg?height=60&width=60",
-      rating: 5,
-    },
-  ]
+  // Testimonials commented out as section is not currently used
 
   // const stats: Stat[] = [
   //   {
@@ -196,17 +143,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
     // { name: safeDict.common.about || "About", href: "#about" },
   ]
 
-  const handleNewsletterSignup = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    setMessage("Thank you for subscribing! Check your email for confirmation.")
-    setEmail("")
-    setIsLoading(false)
-  }
+  // Newsletter signup handler commented out as form is not currently used
 
   const handleNavClick = (href: string) => {
     setMobileMenuOpen(false)

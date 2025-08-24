@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef, useCallback } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -27,14 +27,14 @@ interface Question {
 interface QuizTakerProps {
   lang: string
   quizId: string
-  dictionary: any
+  dictionary: Record<string, unknown>
 }
 
 export function QuizTaker({ lang, quizId, dictionary }: QuizTakerProps) {
   const router = useRouter()
   const { toast } = useToast()
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [answers, setAnswers] = useState<Record<string, any>>({})
+  const [answers, setAnswers] = useState<Record<string, string | string[]>>({})
   const [timeLeft, setTimeLeft] = useState(900) // 15 minutes in seconds
   const [isSubmitted, setIsSubmitted] = useState(false)
   const [showResults, setShowResults] = useState(false)
@@ -110,7 +110,7 @@ export function QuizTaker({ lang, quizId, dictionary }: QuizTakerProps) {
         clearTimeout(timerRef.current)
       }
     }
-  }, [timeLeft, isSubmitted])
+  }, [timeLeft, isSubmitted, handleSubmitQuiz])
 
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60)
@@ -118,7 +118,7 @@ export function QuizTaker({ lang, quizId, dictionary }: QuizTakerProps) {
     return `${mins}:${secs.toString().padStart(2, "0")}`
   }
 
-  const handleAnswerChange = (questionId: string, answer: any) => {
+  const handleAnswerChange = (questionId: string, answer: string | string[]) => {
     setAnswers((prev) => ({
       ...prev,
       [questionId]: answer,
@@ -137,7 +137,7 @@ export function QuizTaker({ lang, quizId, dictionary }: QuizTakerProps) {
     })
   }
 
-  const handleSubmitQuiz = () => {
+  const handleSubmitQuiz = useCallback(() => {
     setIsSubmitted(true)
     setShowResults(true)
 
@@ -171,9 +171,9 @@ export function QuizTaker({ lang, quizId, dictionary }: QuizTakerProps) {
       title: "Quiz Completed!",
       description: `You scored ${percentage}% (${correctAnswers}/${quiz.questions.length} correct)`,
     })
-  }
+  }, [answers, quiz.questions, toast])
 
-  const renderQuestion = (question: Question, index: number) => {
+  const renderQuestion = (question: Question) => {
     const userAnswer = answers[question.id]
 
     switch (question.type) {
@@ -476,7 +476,7 @@ export function QuizTaker({ lang, quizId, dictionary }: QuizTakerProps) {
           </CardHeader>
           <CardContent className="space-y-6">
             <p className="text-lg">{currentQ.question}</p>
-            {renderQuestion(currentQ, currentQuestion)}
+            {renderQuestion(currentQ)}
           </CardContent>
         </Card>
 

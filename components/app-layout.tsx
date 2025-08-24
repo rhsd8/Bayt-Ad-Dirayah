@@ -8,8 +8,6 @@ import Image from "next/image"
 import { useAuth } from "@/components/auth-provider"
 import { useLanguage } from "@/components/language-provider"
 import { AppSidebar } from "@/components/sidebar"
-import { LanguageSwitcher } from "@/components/language-switcher"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -22,7 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -31,7 +29,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
 import {
   Search,
   Bell,
@@ -39,19 +36,18 @@ import {
   Settings,
   LogOut,
   HelpCircle,
-  Flame,
   Trophy,
   Target,
   Calendar,
   Activity,
-  Grid,
-  List,
 } from "lucide-react"
+
+import { Dictionary } from "@/lib/dictionary";
 
 interface AppLayoutProps {
   children: React.ReactNode
   lang: string
-  dictionary: any
+  dictionary: Dictionary
   title?: string
   description?: string
   actions?: React.ReactNode

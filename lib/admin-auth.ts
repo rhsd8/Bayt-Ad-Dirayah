@@ -40,7 +40,9 @@ export async function authenticateAdmin(email: string, password: string): Promis
       .eq('id', adminUser.id)
 
     // Return admin user without password hash
-    const { password_hash, ...adminWithoutPassword } = adminUser
+    const adminWithoutPassword = Object.fromEntries(
+      Object.entries(adminUser).filter(([key]) => key !== 'password_hash')
+    )
     return adminWithoutPassword as AdminUser
   } catch (error) {
     console.error('Admin authentication error:', error)

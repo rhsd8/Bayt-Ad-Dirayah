@@ -37,10 +37,10 @@ interface Note {
 
 interface NotesSystemProps {
   lang: string
-  dictionary: any
+  dictionary: Record<string, unknown>
 }
 
-export function NotesSystem({ lang, dictionary }: NotesSystemProps) {
+export function NotesSystem({}: NotesSystemProps) {
   const { toast } = useToast()
   const [notes, setNotes] = useState<Note[]>([])
   const [searchQuery, setSearchQuery] = useState("")

@@ -1,5 +1,9 @@
 import "server-only"
 
+// Define the Dictionary type based on the structure of your JSON files
+// This is a simplified example, you might need to expand it based on your full dictionary structure
+export type Dictionary = typeof import("./dictionaries/en.json")
+
 const dictionaries = {
   en: () => import("./dictionaries/en.json").then((module) => module.default),
   ar: () => import("./dictionaries/ar.json").then((module) => module.default),
@@ -11,14 +15,14 @@ export const getDictionary = async (locale: keyof typeof dictionaries) => {
     const dict = await dictionaries[locale]?.()
     if (!dict) {
       console.warn(`Dictionary not found for locale: ${locale}, falling back to English`)
-      return await dictionaries.en()
+      return await dictionaries.en() as Dictionary
     }
-    return dict
+    return dict as Dictionary // Cast to Dictionary type
   } catch (error) {
     console.error(`Error loading dictionary for locale: ${locale}`, error)
     // Fallback to English dictionary
     try {
-      return await dictionaries.en()
+      return await dictionaries.en() as Dictionary // Cast to Dictionary type
     } catch (fallbackError) {
       console.error("Error loading fallback English dictionary", fallbackError)
       // Return minimal dictionary structure to prevent crashes
@@ -27,12 +31,41 @@ export const getDictionary = async (locale: keyof typeof dictionaries) => {
           getStarted: "Get Started",
           about: "About",
           contact: "Contact",
+          cancel: "Cancel",
+          save: "Save",
+          upload: "Upload",
+          back: "Back"
         },
         navigation: {
           home: "Home",
           features: "Features",
           courses: "Courses",
           materials: "Materials",
+        },
+        admin: {
+          title: "Admin Dashboard",
+          totalStudents: "Total Students",
+          totalCourses: "Total Courses",
+          totalMaterials: "Total Materials",
+          recentActivity: "Recent Activity",
+          createCourse: "Create Course",
+          courseTitle: "Course Title",
+          courseDescription: "Course Description",
+          courseLevel: "Course Level"
+        },
+        courses: {
+          beginner: "Beginner",
+          intermediate: "Intermediate",
+          advanced: "Advanced",
+          startCourse: "Start Course",
+          lessons: "Lessons",
+          materials: "Materials"
+        },
+        materials: {
+          uploadMaterial: "Upload Material",
+          uploadSuccess: "Material uploaded successfully",
+          viewPDF: "View PDF",
+          downloadPDF: "Download PDF"
         },
         landing: {
           hero: {
@@ -65,7 +98,7 @@ export const getDictionary = async (locale: keyof typeof dictionaries) => {
             copyright: "© 2024 Arabic Learning Platform. All rights reserved.",
           },
         },
-      }
+      } as Dictionary // Cast the fallback to Dictionary type
     }
   }
 }

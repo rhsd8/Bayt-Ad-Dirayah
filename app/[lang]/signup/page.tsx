@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
-import { useRouter, useParams } from "next/navigation"
+import { useParams } from "next/navigation"
 import { supabase } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -346,7 +346,6 @@ function ProgressIndicator({ currentStep, totalSteps }: { currentStep: number; t
 }
 
 export default function SignUpPage() {
-  const router = useRouter()
   const params = useParams()
   const lang = (params?.lang as string) || "en"
 
@@ -473,8 +472,9 @@ export default function SignUpPage() {
       setMessage("Account created! Check your email to verify your account.")
       // Optionally redirect after a delay
       // setTimeout(() => router.push(`/${lang}/login`), 3000)
-    } catch (err: any) {
-      setError(err?.message || "Sign up failed")
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Sign up failed'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }

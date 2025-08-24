@@ -8,7 +8,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { useLanguage } from "@/components/language-provider"
 import type { Note, Folder } from "@/components/notes-app"
 
 interface NoteEditorProps {
@@ -19,7 +18,7 @@ interface NoteEditorProps {
   onSave: (note: Note) => void
   onDelete: () => void
   onCancel: () => void
-  dictionary: any
+  dictionary: Record<string, unknown>
 }
 
 export function NoteEditor({
@@ -32,7 +31,6 @@ export function NoteEditor({
   onCancel,
   dictionary,
 }: NoteEditorProps) {
-  const { isRTL } = useLanguage()
   const [editedNote, setEditedNote] = useState<Note>(note)
   const [newTag, setNewTag] = useState("")
 
