@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { Dictionary } from "@/lib/dictionary"
 import { useRouter } from "next/navigation"
 import { AppLayout } from "@/components/app-layout"
 import { Button } from "@/components/ui/button"
@@ -49,7 +50,7 @@ import { Label } from "@/components/ui/label"
 interface PDFViewerPageProps {
   lang: string
   materialId: string
-  dictionary: Record<string, unknown>
+  dictionary: Dictionary
 }
 
 interface Material {

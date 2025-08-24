@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { Dictionary } from "@/lib/dictionary"
 import { useRouter } from "next/navigation"
 import { AppLayout } from "@/components/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -35,7 +36,7 @@ interface Material {
 
 interface MaterialsPageProps {
   lang: string
-  dictionary: Record<string, unknown>
+  dictionary: Dictionary
 }
 
 export function MaterialsPage({ lang, dictionary }: MaterialsPageProps) {

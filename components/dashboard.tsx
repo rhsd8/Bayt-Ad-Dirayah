@@ -10,6 +10,7 @@ import { AppLayout } from "@/components/app-layout"
 import { SkeletonCard } from "@/components/loading-spinner"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { WipNoticeCard } from "@/components/wip-notice"
+import { Dictionary } from "@/lib/dictionary"
 
 interface DashboardStats {
   totalCourses: number
@@ -28,7 +29,7 @@ interface DashboardStats {
 
 interface DashboardProps {
   lang: string
-  dictionary: Record<string, unknown>
+  dictionary: Dictionary
 }
 
 export function Dashboard({ lang, dictionary }: DashboardProps) {

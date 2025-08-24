@@ -1,48 +1,315 @@
 export interface Dictionary {
-  [key: string]: unknown;
+  navigation: {
+    dashboard: string
+    courses: string
+    materials: string
+    progress: string
+    notes: string
+    quiz: string
+    flashcards: string
+    community: string
+    admin: string
+    profile: string
+    settings: string
+    help: string
+    home: string
+    features: string
+    pricing: string
+    support: string
+  }
+  common: {
+    welcome: string
+    loading: string
+    error: string
+    success: string
+    cancel: string
+    save: string
+    delete: string
+    edit: string
+    create: string
+    search: string
+    filter: string
+    sort: string
+    view: string
+    download: string
+    upload: string
+    share: string
+    copy: string
+    print: string
+    export: string
+    import: string
+    refresh: string
+    back: string
+    next: string
+    previous: string
+    submit: string
+    confirm: string
+    close: string
+    open: string
+    show: string
+    hide: string
+    expand: string
+    collapse: string
+    select: string
+    deselect: string
+    clear: string
+    reset: string
+    apply: string
+    remove: string
+    add: string
+    update: string
+    language: string
+    getStarted: string
+    learnMore: string
+    signUp: string
+    tryFree: string
+    contact: string
+    about: string
+    login: string
+    logout: string
+    profile: string
+    settings: string
+    noResults: string
+  }
+  dashboard: {
+    title: string
+    welcome_message: string
+    recent_activity: string
+    progress_overview: string
+    quick_actions: string
+    upcoming_lessons: string
+    achievements: string
+    study_streak: string
+    total_time: string
+    lessons_completed: string
+    current_level: string
+  }
+  courses: {
+    title: string
+    description: string
+    level: string
+    lessons: string
+    materials: string
+    beginner: string
+    intermediate: string
+    advanced: string
+    viewCourse: string
+    noCourses: string
+    courseDetails: string
+    startCourse: string
+    continueCourse: string
+    completed: string
+    inProgress: string
+    notStarted: string
+  }
+  materials: {
+    title: string
+    uploadMaterial: string
+    fileName: string
+    fileSize: string
+    uploadDate: string
+    actions: string
+    viewPDF: string
+    downloadPDF: string
+    deleteMaterial: string
+    noMaterials: string
+    uploadSuccess: string
+    deleteSuccess: string
+    searchMaterials: string
+    selectFile: string
+    dragDrop: string
+    uploadError: string
+  }
+  progress: {
+    title: string
+    overall_progress: string
+    course_progress: string
+    skill_breakdown: string
+    time_spent: string
+    achievements_earned: string
+    streak_days: string
+    lessons_completed: string
+    quiz_scores: string
+  }
+  quiz: {
+    title: string
+    available_quizzes: string
+    my_results: string
+    leaderboard: string
+    start_quiz: string
+    questions: string
+    minutes: string
+    attempts: string
+    score: string
+    time_taken: string
+    correct_answers: string
+  }
+  flashcards: {
+    title: string
+    study_session: string
+    browse_cards: string
+    statistics: string
+    due_cards: string
+    total_cards: string
+    accuracy: string
+    reviews: string
+    show_answer: string
+    correct: string
+    incorrect: string
+  }
+  community: {
+    title: string
+    all_posts: string
+    pinned: string
+    solved: string
+    unanswered: string
+    new_post: string
+    categories: string
+    recent_activity: string
+    top_contributors: string
+    forum_guidelines: string
+  }
+  notes: {
+    title: string
+    my_notes: string
+    shared_notes: string
+    create_note: string
+    edit_note: string
+    delete_note: string
+    search_notes: string
+    tags: string
+    last_modified: string
+    updatedAt: string
+    folder: string
+    content: string
+  }
+  profile: {
+    title: string
+    personal_info: string
+    learning_preferences: string
+    achievements: string
+    statistics: string
+    edit_profile: string
+    change_password: string
+    notification_settings: string
+  }
+  settings: {
+    title: string
+    general: string
+    appearance: string
+    notifications: string
+    privacy: string
+    language: string
+    theme: string
+    save_changes: string
+  }
+  auth: {
+    welcome: string
+    loginTitle: string
+    email: string
+    password: string
+    loginButton: string
+    adminLogin: string
+    studentLogin: string
+    invalidCredentials: string
+    loginError: string
+    backToHome: string
+  }
   admin: {
     title: string
+    uploadMaterials: string
+    manageCourses: string
+    userManagement: string
+    analytics: string
+    courseTitle: string
+    courseDescription: string
+    courseLevel: string
+    createCourse: string
+    editCourse: string
+    deleteCourse: string
     totalStudents: string
     totalCourses: string
     totalMaterials: string
     recentActivity: string
-    createCourse: string
-    courseTitle: string
-    courseDescription: string
-    courseLevel: string
   }
-  courses: {
-    beginner: string
-    intermediate: string
-    advanced: string
-    startCourse: string
-    lessons: string
-    materials: string
+  pdf: {
+    viewer: string
+    loading: string
+    error: string
+    page: string
+    of: string
+    zoomIn: string
+    zoomOut: string
+    fullscreen: string
+    download: string
+    fitWidth: string
+    fitPage: string
+    actualSize: string
   }
-  materials: {
-    uploadMaterial: string
-    uploadSuccess: string
-    viewPDF: string
-    downloadPDF: string
+  accessibility: {
+    openMenu: string
+    closeMenu: string
+    switchLanguage: string
+    toggleTheme: string
+    searchButton: string
+    uploadButton: string
+    userMenu: string
+    mainContent: string
+    navigation: string
   }
-  common: {
-    back: string
-    cancel: string
-    save: string
-    upload: string
+  errors: {
+    generic: string
+    networkError: string
+    fileNotFound: string
+    accessDenied: string
+    sessionExpired: string
   }
-  navigation?: Record<string, string>
-  dashboard?: Record<string, string>
-  progress?: Record<string, string>
-  quiz?: Record<string, string>
-  flashcards?: Record<string, string>
-  community?: Record<string, string>
-  notes?: Record<string, string>
-  profile?: Record<string, string>
-  settings?: Record<string, string>
-  auth?: Record<string, string>
-  pdf?: Record<string, string>
-  accessibility?: Record<string,string>
-  errors?: Record<string, string>
-  landing?: Record<string, unknown>
+  landing: {
+    hero: {
+      title: string
+      subtitle: string
+      description: string
+      cta: string
+      watchDemo: string
+    }
+    features: {
+      title: string
+      subtitle: string
+      items: Array<{
+        title: string
+        description: string
+      }>
+    }
+    stats: {
+      students: string
+      courses: string
+      materials: string
+      satisfaction: string
+    }
+    testimonials: {
+      title: string
+      subtitle: string
+      items: Array<{
+        name: string
+        role: string
+        content: string
+        rating: number
+      }>
+    }
+    cta: {
+      title: string
+      subtitle: string
+      button: string
+    }
+    footer: {
+      description: string
+      links: {
+        product: string
+        company: string
+        support: string
+        legal: string
+      }
+      copyright: string
+    }
+  }
 }

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef, useCallback } from "react"
+import { Dictionary } from "@/lib/dictionary"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -27,7 +28,7 @@ interface Question {
 interface QuizTakerProps {
   lang: string
   quizId: string
-  dictionary: Record<string, unknown>
+  dictionary: Dictionary
 }
 
 export function QuizTaker({ lang, quizId, dictionary }: QuizTakerProps) {
@@ -95,6 +96,42 @@ export function QuizTaker({ lang, quizId, dictionary }: QuizTakerProps) {
     ],
   }
 
+  const handleSubmitQuiz = useCallback(() => {
+    setIsSubmitted(true)
+    setShowResults(true)
+
+    // Calculate score
+    let correctAnswers = 0
+    let totalPoints = 0
+    let earnedPoints = 0
+
+    quiz.questions.forEach((question) => {
+      totalPoints += question.points
+      const userAnswer = answers[question.id]
+
+      if (question.type === "multiple-select") {
+        const correct = Array.isArray(question.correctAnswer) ? question.correctAnswer : []
+        const user = Array.isArray(userAnswer) ? userAnswer : []
+        if (correct.length === user.length && correct.every((ans) => user.includes(ans))) {
+          correctAnswers++
+          earnedPoints += question.points
+        }
+      } else {
+        if (userAnswer === question.correctAnswer) {
+          correctAnswers++
+          earnedPoints += question.points
+        }
+      }
+    })
+
+    const percentage = Math.round((earnedPoints / totalPoints) * 100)
+
+    toast({
+      title: "Quiz Completed!",
+      description: `You scored ${percentage}% (${correctAnswers}/${quiz.questions.length} correct)`,
+    })
+  }, [answers, quiz.questions, toast])
+
   // Timer effect
   useEffect(() => {
     if (!isSubmitted && timeLeft > 0) {
@@ -137,42 +174,6 @@ export function QuizTaker({ lang, quizId, dictionary }: QuizTakerProps) {
     })
   }
 
-  const handleSubmitQuiz = useCallback(() => {
-    setIsSubmitted(true)
-    setShowResults(true)
-
-    // Calculate score
-    let correctAnswers = 0
-    let totalPoints = 0
-    let earnedPoints = 0
-
-    quiz.questions.forEach((question) => {
-      totalPoints += question.points
-      const userAnswer = answers[question.id]
-
-      if (question.type === "multiple-select") {
-        const correct = Array.isArray(question.correctAnswer) ? question.correctAnswer : []
-        const user = Array.isArray(userAnswer) ? userAnswer : []
-        if (correct.length === user.length && correct.every((ans) => user.includes(ans))) {
-          correctAnswers++
-          earnedPoints += question.points
-        }
-      } else {
-        if (userAnswer === question.correctAnswer) {
-          correctAnswers++
-          earnedPoints += question.points
-        }
-      }
-    })
-
-    const percentage = Math.round((earnedPoints / totalPoints) * 100)
-
-    toast({
-      title: "Quiz Completed!",
-      description: `You scored ${percentage}% (${correctAnswers}/${quiz.questions.length} correct)`,
-    })
-  }, [answers, quiz.questions, toast])
-
   const renderQuestion = (question: Question) => {
     const userAnswer = answers[question.id]
 
@@ -181,7 +182,7 @@ export function QuizTaker({ lang, quizId, dictionary }: QuizTakerProps) {
       case "true-false":
         return (
           <RadioGroup
-            value={userAnswer || ""}
+            value={(Array.isArray(userAnswer) ? "" : userAnswer) || ""}
             onValueChange={(value) => handleAnswerChange(question.id, value)}
             disabled={isSubmitted}
           >

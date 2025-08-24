@@ -11,6 +11,7 @@ import { Badge } from "@/components/ui/badge"
 import { useLanguage } from "@/components/language-provider"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { ThemeToggle } from "@/components/theme-toggle"
+import { Dictionary } from "@/lib/dictionary"
 import {
   BookOpen,
   Users,
@@ -30,7 +31,7 @@ import {
 
 interface LandingPageProps {
   lang: string
-  dictionary: Record<string, unknown>
+  dictionary: Dictionary
 }
 
 interface Feature {
@@ -59,53 +60,45 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
     landing: dictionary?.landing || {},
   }
 
-  const features: Feature[] = [
+  const defaultFeatures = [
     {
-      icon: BookOpen,
-      title: safeDict.landing.features?.interactive_lessons || "Interactive Lessons",
-      description:
-        safeDict.landing.features?.interactive_lessons_desc ||
-        "Learn Arabic through engaging, interactive lessons designed by language experts",
-      color: "text-blue-600",
+      title: "Expert-Designed Courses",
+      description: "Learn from native Arabic speakers and certified instructors with years of teaching experience.",
     },
     {
-      icon: Brain,
-      title: safeDict.landing.features?.ai_powered || "AI-Powered Learning",
-      description:
-        safeDict.landing.features?.ai_powered_desc ||
-        "Personalized learning paths adapted to your pace and learning style",
-      color: "text-purple-600",
+      title: "Interactive Learning",
+      description: "Engage with multimedia content, quizzes, and interactive exercises that make learning Arabic enjoyable.",
     },
     {
-      icon: Volume2,
-      title: safeDict.landing.features?.pronunciation || "Pronunciation Practice",
-      description:
-        safeDict.landing.features?.pronunciation_desc ||
-        "Perfect your Arabic pronunciation with advanced speech recognition",
-      color: "text-green-600",
+      title: "Progress Tracking",
+      description: "Monitor your learning journey with detailed analytics and personalized progress reports.",
     },
     {
-      icon: PenTool,
-      title: safeDict.landing.features?.writing || "Writing Practice",
-      description:
-        safeDict.landing.features?.writing_desc || "Master Arabic script with guided writing exercises and feedback",
-      color: "text-orange-600",
+      title: "Flexible Schedule",
+      description: "Learn at your own pace with 24/7 access to all course materials and resources.",
     },
     {
-      icon: Users,
-      title: safeDict.landing.features?.community || "Learning Community",
-      description:
-        safeDict.landing.features?.community_desc || "Connect with fellow learners and native speakers worldwide",
-      color: "text-indigo-600",
+      title: "Mobile-Friendly",
+      description: "Access your courses anywhere, anytime with our responsive design that works on all devices.",
     },
     {
-      icon: Trophy,
-      title: safeDict.landing.features?.gamification || "Earn Achivements",
-      description:
-        safeDict.landing.features?.gamification_desc || "Earn badges, maintain streaks, and compete with friends",
-      color: "text-yellow-600",
+      title: "Completion Certificate",
+      description: "Earn recognized certificates upon course completion to showcase your Arabic language skills.",
     },
   ]
+
+  const featuresData = safeDict.landing.features?.items || defaultFeatures
+  const features: Feature[] = featuresData.map((item, index) => {
+    const icons = [BookOpen, Brain, Volume2, PenTool, Users, Trophy]
+    const colors = ["text-blue-600", "text-purple-600", "text-green-600", "text-orange-600", "text-indigo-600", "text-yellow-600"]
+    
+    return {
+      icon: icons[index % icons.length],
+      title: item.title,
+      description: item.description,
+      color: colors[index % colors.length],
+    }
+  })
 
   // Testimonials commented out as section is not currently used
 

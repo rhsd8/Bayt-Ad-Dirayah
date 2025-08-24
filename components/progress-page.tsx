@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { Dictionary } from "@/lib/dictionary"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Badge } from "@/components/ui/badge"
@@ -16,7 +17,7 @@ import {
 
 interface ProgressPageProps {
   lang: string
-  dictionary: Record<string, unknown>
+  dictionary: Dictionary
 }
 
 interface CourseProgress {

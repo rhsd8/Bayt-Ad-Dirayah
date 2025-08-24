@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast"
 import { useAuth } from "@/components/auth-provider"
 import { AppLayout } from "@/components/app-layout"
+import { Dictionary } from "@/lib/dictionary"
 import {
   MessageSquare,
   Plus,
@@ -114,7 +115,7 @@ interface CommunityStats {
 
 interface CommunityForumProps {
   lang: string
-  dictionary: Record<string, unknown>
+  dictionary: Dictionary
 }
 
 // Custom hooks

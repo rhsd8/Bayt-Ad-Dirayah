@@ -111,10 +111,10 @@ export function CourseDetailPage({ lang, courseId, dictionary }: CourseDetailPag
     setEnrolling(false)
   }
 
-  const handleStartLesson = () => {
+  const handleStartLesson = (lessonId: string) => {
     toast({
       title: "Lesson Started",
-      description: "Opening lesson content...",
+      description: `Opening lesson ${lessonId}...`,
     })
     // In a real app, this would navigate to the lesson
   }

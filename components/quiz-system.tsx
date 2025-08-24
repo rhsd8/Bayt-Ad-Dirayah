@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
+import { Dictionary } from "@/lib/dictionary"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -88,7 +89,7 @@ interface QuizStats {
 
 interface QuizSystemProps {
   lang: string
-  dictionary: Record<string, unknown>
+  dictionary: Dictionary
 }
 
 // Custom hooks
@@ -334,7 +335,7 @@ const QuizCard = ({
 }: {
   quiz: Quiz
   onStartQuiz: (quizId: string) => void
-  dictionary: Record<string, unknown>
+  dictionary: Dictionary
 }) => {
   const canTakeQuiz = quiz.attempts < quiz.maxAttempts
   const progressPercentage = (quiz.attempts / quiz.maxAttempts) * 100
@@ -567,7 +568,7 @@ const CreateQuizDialog = ({
   open: boolean
   onOpenChange: (open: boolean) => void
   onCreateQuiz: (quiz: Partial<Quiz>) => void
-  dictionary: Record<string, unknown>
+  dictionary: Dictionary
 }) => {
   const [formData, setFormData] = useState({
     title: "",

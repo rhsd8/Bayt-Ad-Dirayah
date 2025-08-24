@@ -68,7 +68,8 @@
     "login": "Login",
     "logout": "Logout",
     "profile": "Profile",
-    "settings": "Settings"
+    "settings": "Settings",
+    "noResults": "No results found"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -177,7 +178,10 @@
     "delete_note": "Delete Note",
     "search_notes": "Search Notes",
     "tags": "Tags",
-    "last_modified": "Last Modified"
+    "last_modified": "Last Modified",
+    "updatedAt": "Updated",
+    "folder": "Folder",
+    "content": "Content"
   },
   "profile": {
     "title": "Profile",

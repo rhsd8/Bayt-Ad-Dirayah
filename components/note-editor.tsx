@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { Dictionary } from "@/lib/dictionary"
 import { Edit, Save, X, Trash2, Calendar, FolderIcon, Hash } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -18,7 +19,7 @@ interface NoteEditorProps {
   onSave: (note: Note) => void
   onDelete: () => void
   onCancel: () => void
-  dictionary: Record<string, unknown>
+  dictionary: Dictionary
 }
 
 export function NoteEditor({

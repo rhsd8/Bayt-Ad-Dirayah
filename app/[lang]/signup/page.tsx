@@ -352,6 +352,7 @@ export default function SignUpPage() {
   const [currentStep, setCurrentStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
 
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
@@ -497,6 +498,8 @@ export default function SignUpPage() {
           <p className="text-muted-foreground mt-2">
             Join our Arabic learning community
           </p>
+          {error && <p className="text-red-500 mt-2">{error}</p>}
+          {message && <p className="text-green-500 mt-2">{message}</p>}
         </div>
 
         <div className="rounded-xl border bg-card p-6 shadow-sm">

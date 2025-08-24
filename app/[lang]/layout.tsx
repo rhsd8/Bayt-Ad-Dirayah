@@ -25,16 +25,12 @@ export default async function RootLayout({
   const dictionary = await getDictionary(currentLang as "en" | "ar" | "fr")
 
   return (
-    <html lang="en" dir="ltr">
-      <body>
-        <ErrorBoundary>
-          <LanguageProvider initialLang={currentLang} dictionary={dictionary}>
-            <AuthProvider>
-              {children}
-            </AuthProvider>
-          </LanguageProvider>
-        </ErrorBoundary>
-      </body>
-    </html>
+    <ErrorBoundary>
+      <LanguageProvider initialLang={currentLang} dictionary={dictionary}>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </LanguageProvider>
+    </ErrorBoundary>
   )
 }

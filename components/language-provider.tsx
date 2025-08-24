@@ -31,12 +31,12 @@ export function LanguageProvider({ children, initialLang = "en", dictionary = de
   // Simple translation function
   const t = (key: string, fallback?: string): string => {
     const keys = key.split(".")
-    let current = currentDictionary as Record<string, any>
+    let current: unknown = currentDictionary
 
     try {
       for (const k of keys) {
         if (current && typeof current === "object" && k in current) {
-          current = current[k]
+          current = (current as Record<string, unknown>)[k]
         } else {
           return fallback || key
         }

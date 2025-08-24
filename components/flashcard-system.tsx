@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
+import { Dictionary } from "@/lib/dictionary"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -77,7 +78,7 @@ interface StudyStats {
 
 interface FlashcardSystemProps {
   lang: string
-  dictionary: Record<string, unknown>
+  dictionary: Dictionary
 }
 
 // Custom hooks
@@ -434,7 +435,7 @@ const StudyModeSelector = ({
 }: {
   flashcards: Flashcard[]
   onStartSession: (cards: Flashcard[]) => void
-  dictionary: Record<string, unknown>
+  dictionary: Dictionary
 }) => {
   const [studyMode, setStudyMode] = useState<"due" | "new" | "all" | "starred">("due")
   const [selectedCategory, setSelectedCategory] = useState("all")

@@ -42,8 +42,8 @@ export async function authenticateAdmin(email: string, password: string): Promis
     // Return admin user without password hash
     const adminWithoutPassword = Object.fromEntries(
       Object.entries(adminUser).filter(([key]) => key !== 'password_hash')
-    )
-    return adminWithoutPassword as AdminUser
+    ) as unknown as AdminUser
+    return adminWithoutPassword
   } catch (error) {
     console.error('Admin authentication error:', error)
     return null

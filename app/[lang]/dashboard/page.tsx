@@ -13,21 +13,7 @@ export default async function DashboardPage({ params }: DashboardPageProps) {
   const validLangs = ["en", "ar", "fr"]
   const currentLang = validLangs.includes(lang) ? lang : "en"
 
-  let dictionary
-  try {
-    dictionary = await getDictionary(currentLang as "en" | "ar" | "fr")
-  } catch (error) {
-    console.error("Failed to load dictionary for dashboard:", error)
-    // Provide minimal fallback
-    dictionary = {
-      common: {},
-      navigation: {},
-      dashboard: {
-        welcome_message: "Welcome back!",
-        subtitle: "Continue your learning journey",
-      },
-    }
-  }
+  const dictionary = await getDictionary(currentLang as "en" | "ar" | "fr")
 
   return (
     <ProtectedRoute lang={currentLang}>
