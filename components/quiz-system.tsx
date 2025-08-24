@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
+import { Dictionary } from "@/lib/dictionary"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -88,7 +89,7 @@ interface QuizStats {
 
 interface QuizSystemProps {
   lang: string
-  dictionary: any
+  dictionary: Dictionary
 }
 
 // Custom hooks
@@ -217,7 +218,7 @@ const useQuizData = () => {
 
         setQuizzes(mockQuizzes)
         setResults(mockResults)
-      } catch (err) {
+      } catch {
         setError("Failed to load quiz data")
       } finally {
         setLoading(false)
@@ -331,11 +332,10 @@ const calculateStats = (results: QuizResult[]): QuizStats => {
 const QuizCard = ({
   quiz,
   onStartQuiz,
-  dictionary,
 }: {
   quiz: Quiz
   onStartQuiz: (quizId: string) => void
-  dictionary: any
+  dictionary: Dictionary
 }) => {
   const canTakeQuiz = quiz.attempts < quiz.maxAttempts
   const progressPercentage = (quiz.attempts / quiz.maxAttempts) * 100
@@ -564,12 +564,11 @@ const CreateQuizDialog = ({
   open,
   onOpenChange,
   onCreateQuiz,
-  dictionary,
 }: {
   open: boolean
   onOpenChange: (open: boolean) => void
   onCreateQuiz: (quiz: Partial<Quiz>) => void
-  dictionary: any
+  dictionary: Dictionary
 }) => {
   const [formData, setFormData] = useState({
     title: "",
@@ -758,7 +757,7 @@ export function QuizSystem({ lang, dictionary }: QuizSystemProps) {
   const [activeTab, setActiveTab] = useState("available")
   const [showCreateDialog, setShowCreateDialog] = useState(false)
 
-  const { quizzes, results, loading, error, setQuizzes, setResults } = useQuizData()
+  const { quizzes, results, loading, error, setQuizzes } = useQuizData()
   const stats = useMemo(() => calculateStats(results), [results])
 
   const categories = useMemo(() => Array.from(new Set(quizzes.map((quiz) => quiz.category))).sort(), [quizzes])

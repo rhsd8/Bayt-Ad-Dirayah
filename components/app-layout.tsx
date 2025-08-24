@@ -8,8 +8,6 @@ import Image from "next/image"
 import { useAuth } from "@/components/auth-provider"
 import { useLanguage } from "@/components/language-provider"
 import { AppSidebar } from "@/components/sidebar"
-import { LanguageSwitcher } from "@/components/language-switcher"
-import { ThemeToggle } from "@/components/theme-toggle"
 import { ErrorBoundary } from "@/components/error-boundary"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -22,7 +20,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -31,7 +29,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
-import { Separator } from "@/components/ui/separator"
 import {
   Search,
   Bell,
@@ -39,19 +36,18 @@ import {
   Settings,
   LogOut,
   HelpCircle,
-  Flame,
   Trophy,
   Target,
   Calendar,
   Activity,
-  Grid,
-  List,
 } from "lucide-react"
+
+import { Dictionary } from "@/lib/dictionary";
 
 interface AppLayoutProps {
   children: React.ReactNode
   lang: string
-  dictionary: any
+  dictionary: Dictionary
   title?: string
   description?: string
   actions?: React.ReactNode
@@ -268,8 +264,8 @@ export function AppLayout({
             <div className="h-16 px-4 flex items-center justify-between gap-2 text-foreground">
               {/* Left: Logo */}
               <Link href={`/${lang}`} className="flex items-center" aria-label="Home" title="Home">
-                <Image src="/logo-web-light.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto dark:hidden" priority />
-                <Image src="/logo-web-dark.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto hidden dark:inline" priority />
+                <Image src="/Harf-logo-light.svg" alt="Harf" width={28} height={28} className="h-7 w-auto dark:hidden" priority />
+                <Image src="/Harf-logo-dark.svg" alt="Harf" width={28} height={28} className="h-7 w-auto hidden dark:inline" priority />
               </Link>
               {/* Center: empty */}
               <div className="flex-1" />
@@ -301,8 +297,8 @@ export function AppLayout({
                 {/* Top bar with close */}
                 <div className="h-16 px-4 flex items-center justify-between border-b border-border/60">
                   <Link href={`/${lang}`} className="flex items-center" aria-label="Home" title="Home" onClick={() => setMobileMenuOpen(false)}>
-                    <Image src="/logo-web-light.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto dark:hidden" priority />
-                    <Image src="/logo-web-dark.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto hidden dark:inline" priority />
+                    <Image src="/Harf-logo-light.svg" alt="Harf" width={28} height={28} className="h-7 w-auto dark:hidden" priority />
+                    <Image src="/Harf-logo-dark.svg" alt="Harf" width={28} height={28} className="h-7 w-auto hidden dark:inline" priority />
                   </Link>
                   <Button
                     variant="ghost"
@@ -352,18 +348,18 @@ export function AppLayout({
             <div className="hidden md:block px-10 py-7">
               <div className="flex h-20 items-center gap-6 w-full rounded-full border border-border/40 bg-background/60 backdrop-blur-xl supports-[backdrop-filter]:bg-background/40 shadow-sm">
                 <div className="flex items-center gap-6 flex-1 px-8">
-                  <Link href={`/${lang}`} className="flex items-center gap-2" aria-label="Bayt Ad Dirayah Home" title="Home">
+                  <Link href={`/${lang}`} className="flex items-center gap-2" aria-label="Harf Home" title="Home">
                     <Image
-                      src="/logo-web-light.webp"
-                      alt="Bayt Ad Dirayah"
+                      src="/Harf-logo-light.svg"
+                      alt="Harf"
                       width={130}
                       height={30}
                       className="h-10 w-auto align-middle translate-y-[2px] dark:hidden"
                       priority
                     />
                     <Image
-                      src="/logo-web-dark.webp"
-                      alt="Bayt Ad Dirayah"
+                      src="/Harf-logo-dark.svg"
+                      alt="Harf"
                       width={130}
                       height={30}
                       className="h-10 w-auto align-middle translate-y-[2px] hidden dark:inline"

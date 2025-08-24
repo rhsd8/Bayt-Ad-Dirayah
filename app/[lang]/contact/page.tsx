@@ -48,7 +48,7 @@ export default function ContactPage() {
             Get in <span className="text-primary">Touch</span>
           </h1>
           <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-            Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+            Have questions? We&apos;d love to hear from you. Send us a message and we&apos;ll respond as soon as possible.
           </p>
         </div>
 
@@ -63,7 +63,7 @@ export default function ContactPage() {
                 <div>
                   <h3 className="font-semibold mb-1">Email Us</h3>
                   <p className="text-muted-foreground">support@arabiclearning.com</p>
-                  <p className="text-sm text-muted-foreground">We'll respond within 24 hours</p>
+                  <p className="text-sm text-muted-foreground">We&apos;ll respond within 24 hours</p>
                 </div>
               </div>
 
@@ -141,7 +141,7 @@ export default function ContactPage() {
           <Card className="bg-background/60 backdrop-blur-sm">
             <CardHeader>
               <CardTitle>Send us a message</CardTitle>
-              <CardDescription>Fill out the form below and we'll get back to you soon.</CardDescription>
+              <CardDescription>Fill out the form below and we&apos;ll get back to you soon.</CardDescription>
             </CardHeader>
             <CardContent>
               <form onSubmit={handleSubmit} className="space-y-4">

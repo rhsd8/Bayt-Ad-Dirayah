@@ -8,33 +8,22 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from "@/components/language-provider"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { ThemeToggle } from "@/components/theme-toggle"
-import { LoadingSpinner } from "@/components/loading-spinner"
+import { Dictionary } from "@/lib/dictionary"
 import {
   BookOpen,
   Users,
   Trophy,
-  Star,
   Play,
-  CheckCircle,
-  Zap,
   GraduationCap,
-  TrendingUp,
-  Shield,
   Sparkles,
   Brain,
   Volume2,
   PenTool,
-  Crown,
   Mail,
-  User,
-  Phone,
   Globe,
-  Target,
   MessageCircle,
   Menu,
   X,
@@ -42,36 +31,20 @@ import {
 
 interface LandingPageProps {
   lang: string
-  dictionary: any
+  dictionary: Dictionary
 }
 
 interface Feature {
-  icon: any
+  icon: React.ComponentType<{ className?: string }>
   title: string
   description: string
   color: string
 }
 
-interface Testimonial {
-  name: string
-  role: string
-  content: string
-  avatar: string
-  rating: number
-}
 
-interface Stat {
-  value: string
-  label: string
-  icon: any
-  color: string
-}
 
 export function LandingPage({ lang, dictionary }: LandingPageProps) {
   const { isRTL } = useLanguage()
-  const [isLoading, setIsLoading] = useState(false)
-  const [email, setEmail] = useState("")
-  const [message, setMessage] = useState("")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [isLogoCardOpen, setIsLogoCardOpen] = useState(false)
   const [isLogoCardClosing, setIsLogoCardClosing] = useState(false)
@@ -87,80 +60,47 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
     landing: dictionary?.landing || {},
   }
 
-  const features: Feature[] = [
+  const defaultFeatures = [
     {
-      icon: BookOpen,
-      title: safeDict.landing.features?.interactive_lessons || "Interactive Lessons",
-      description:
-        safeDict.landing.features?.interactive_lessons_desc ||
-        "Learn Arabic through engaging, interactive lessons designed by language experts",
-      color: "text-blue-600",
+      title: "Expert-Designed Courses",
+      description: "Learn from native Arabic speakers and certified instructors with years of teaching experience.",
     },
     {
-      icon: Brain,
-      title: safeDict.landing.features?.ai_powered || "AI-Powered Learning",
-      description:
-        safeDict.landing.features?.ai_powered_desc ||
-        "Personalized learning paths adapted to your pace and learning style",
-      color: "text-purple-600",
+      title: "Interactive Learning",
+      description: "Engage with multimedia content, quizzes, and interactive exercises that make learning Arabic enjoyable.",
     },
     {
-      icon: Volume2,
-      title: safeDict.landing.features?.pronunciation || "Pronunciation Practice",
-      description:
-        safeDict.landing.features?.pronunciation_desc ||
-        "Perfect your Arabic pronunciation with advanced speech recognition",
-      color: "text-green-600",
+      title: "Progress Tracking",
+      description: "Monitor your learning journey with detailed analytics and personalized progress reports.",
     },
     {
-      icon: PenTool,
-      title: safeDict.landing.features?.writing || "Writing Practice",
-      description:
-        safeDict.landing.features?.writing_desc || "Master Arabic script with guided writing exercises and feedback",
-      color: "text-orange-600",
+      title: "Flexible Schedule",
+      description: "Learn at your own pace with 24/7 access to all course materials and resources.",
     },
     {
-      icon: Users,
-      title: safeDict.landing.features?.community || "Learning Community",
-      description:
-        safeDict.landing.features?.community_desc || "Connect with fellow learners and native speakers worldwide",
-      color: "text-indigo-600",
+      title: "Mobile-Friendly",
+      description: "Access your courses anywhere, anytime with our responsive design that works on all devices.",
     },
     {
-      icon: Trophy,
-      title: safeDict.landing.features?.gamification || "Earn Achivements",
-      description:
-        safeDict.landing.features?.gamification_desc || "Earn badges, maintain streaks, and compete with friends",
-      color: "text-yellow-600",
+      title: "Completion Certificate",
+      description: "Earn recognized certificates upon course completion to showcase your Arabic language skills.",
     },
   ]
 
-  const testimonials: Testimonial[] = [
-    {
-      name: "Sarah Johnson",
-      role: "Language Student",
-      content:
-        "This platform transformed my Arabic learning journey. The interactive lessons and community support made all the difference!",
-      avatar: "/placeholder.svg?height=60&width=60",
-      rating: 5,
-    },
-    {
-      name: "Ahmed Hassan",
-      role: "Arabic Teacher",
-      content:
-        "As an Arabic instructor, I'm impressed by the quality of content and the innovative teaching methods used here.",
-      avatar: "/placeholder.svg?height=60&width=60",
-      rating: 5,
-    },
-    {
-      name: "Maria Rodriguez",
-      role: "Business Professional",
-      content:
-        "Learning Arabic for business has never been easier. The practical lessons and cultural insights are invaluable.",
-      avatar: "/placeholder.svg?height=60&width=60",
-      rating: 5,
-    },
-  ]
+  const featuresData = safeDict.landing.features?.items || defaultFeatures
+  const features: Feature[] = featuresData.map((item, index) => {
+    const icons = [BookOpen, Brain, Volume2, PenTool, Users, Trophy]
+    const colors = ["text-blue-600", "text-purple-600", "text-green-600", "text-orange-600", "text-indigo-600", "text-yellow-600"]
+    
+    return {
+      icon: icons[index % icons.length],
+      title: item.title,
+      description: item.description,
+      color: colors[index % colors.length],
+    }
+  })
+
+  // Testimonials commented out as section is not currently used
 
   // const stats: Stat[] = [
   //   {
@@ -196,17 +136,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
     // { name: safeDict.common.about || "About", href: "#about" },
   ]
 
-  const handleNewsletterSignup = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoading(true)
-
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-
-    setMessage("Thank you for subscribing! Check your email for confirmation.")
-    setEmail("")
-    setIsLoading(false)
-  }
+  // Newsletter signup handler commented out as form is not currently used
 
   const handleNavClick = (href: string) => {
     setMobileMenuOpen(false)
@@ -246,8 +176,8 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
               aria-label="Open account options"
               title="Account"
             >
-              <Image src="/logo-web-light.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto dark:hidden" priority />
-              <Image src="/logo-web-dark.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto hidden dark:inline" priority />
+              <Image src="/Harf-logo-light.svg" alt="Harf" width={28} height={28} className="h-7 w-auto dark:hidden" priority />
+              <Image src="/Harf-logo-dark.svg" alt="Harf" width={28} height={28} className="h-7 w-auto hidden dark:inline" priority />
             </button>
             {/* Center: empty for minimalist look */}
             <div className="flex-1" />
@@ -277,20 +207,20 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                 <Link
                   href={`/${lang}`}
                   className="flex items-center gap-2"
-                  aria-label="Bayt Ad Dirayah Home"
+                  aria-label="Harf Home"
                   title="Home"
                 >
                   <Image
-                    src="/logo-web-light.webp"
-                    alt="Bayt Ad Dirayah"
+                    src="/Harf-logo-light.svg"
+                    alt="Harf"
                     width={130}
                     height={30}
                     className="h-10 w-auto align-middle translate-y-[2px] dark:hidden"
                     priority
                   />
                   <Image
-                    src="/logo-web-dark.webp"
-                    alt="Bayt Ad Dirayah"
+                    src="/Harf-logo-dark.svg"
+                    alt="Harf"
                     width={130}
                     height={30}
                     className="h-10 w-auto align-middle translate-y-[2px] hidden dark:inline"
@@ -381,7 +311,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="space-y-3">
-              <h3 className="text-base font-semibold">Welcome to Bayt Ad Dirayah</h3>
+              <h3 className="text-base font-semibold">Welcome to Harf</h3>
               <p className="text-sm text-muted-foreground">
                 Create an account or log in to access all features.
               </p>

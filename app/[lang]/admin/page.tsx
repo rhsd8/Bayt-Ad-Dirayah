@@ -1,4 +1,5 @@
 import { AdminDashboard } from "@/components/admin-dashboard"
+import { AdminAuthProvider } from "@/components/admin-auth-provider"
 import { getDictionary } from "../dictionaries"
 
 export default async function AdminPage({
@@ -9,5 +10,9 @@ export default async function AdminPage({
   const { lang } = await params
   const dict = await getDictionary(lang as "en" | "ar" | "fr")
 
-  return <AdminDashboard lang={lang} dictionary={dict} />
+  return (
+    <AdminAuthProvider>
+      <AdminDashboard lang={lang} dictionary={dict} />
+    </AdminAuthProvider>
+  )
 }

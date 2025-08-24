@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input"
 import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 import { BookOpen, Search, Clock, Users, FileText, Play, CheckCircle } from "lucide-react"
+import { Dictionary } from "@/lib/dictionary"
 
 interface Course {
   id: string
@@ -27,7 +28,7 @@ interface Course {
 
 interface CoursesPageProps {
   lang: string
-  dictionary: any
+  dictionary: Dictionary
 }
 
 export function CoursesPage({ lang, dictionary }: CoursesPageProps) {

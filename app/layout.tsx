@@ -3,6 +3,8 @@ import './globals.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://harfproject.com'
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://harfproject.com'
+
 export const metadata: Metadata = {
 <<<<<<< HEAD
   metadataBase: new URL(siteUrl),

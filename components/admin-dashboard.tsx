@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { useAuth } from "@/components/auth-provider"
+import { useAdminAuth } from "@/components/admin-auth-provider"
 import { AppLayout } from "@/components/app-layout"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -42,9 +43,11 @@ import {
   Search,
 } from "lucide-react"
 
+import { Dictionary } from "@/lib/dictionary";
+
 interface AdminDashboardProps {
   lang: string
-  dictionary: any
+  dictionary: Dictionary
 }
 
 interface Course {
@@ -83,7 +86,8 @@ interface UploadProgress {
 }
 
 export function AdminDashboard({ lang, dictionary }: AdminDashboardProps) {
-  const { user } = useAuth()
+  const {} = useAuth()
+  const { admin, logout } = useAdminAuth()
   const { toast } = useToast()
   const [activeTab, setActiveTab] = useState("overview")
   const [showCreateCourse, setShowCreateCourse] = useState(false)
@@ -317,14 +321,14 @@ export function AdminDashboard({ lang, dictionary }: AdminDashboardProps) {
     setShowBulkUpload(false)
   }
 
-  const handleDeleteCourse = (courseId: string) => {
+  const handleDeleteCourse = () => {
     toast({
       title: "Course Deleted",
       description: "Course has been permanently deleted.",
     })
   }
 
-  const handleDeleteMaterial = (materialId: string) => {
+  const handleDeleteMaterial = () => {
     toast({
       title: "Material Deleted",
       description: "Material has been removed successfully.",
@@ -388,12 +392,12 @@ export function AdminDashboard({ lang, dictionary }: AdminDashboardProps) {
     }
   }
 
-  if (!bypass && user?.role !== "admin") {
+  if (!bypass && !admin) {
     return (
       <AppLayout lang={lang} dictionary={dictionary}>
         <div className="text-center py-12">
           <h1 className="text-2xl font-bold text-red-600">Access Denied</h1>
-          <p className="text-muted-foreground mt-2">You don't have permission to access this page.</p>
+          <p className="text-muted-foreground mt-2">You don&apos;t have permission to access this page.</p>
         </div>
       </AppLayout>
     )
@@ -403,9 +407,15 @@ export function AdminDashboard({ lang, dictionary }: AdminDashboardProps) {
     <AppLayout lang={lang} dictionary={dictionary}>
       <div className="space-y-8">
         {/* Enhanced Header */}
-        <div className="space-y-2">
-          <h1 className="text-3xl font-bold tracking-tight">{dictionary.admin.title}</h1>
-          <p className="text-muted-foreground text-lg">Comprehensive platform management and analytics</p>
+        <div className="flex justify-between items-start">
+          <div className="space-y-2">
+            <h1 className="text-3xl font-bold tracking-tight">{dictionary.admin.title}</h1>
+            <p className="text-muted-foreground text-lg">Comprehensive platform management and analytics</p>
+            {admin && <p className="text-sm text-muted-foreground">Welcome, {admin.name}</p>}
+          </div>
+          <Button variant="outline" onClick={logout}>
+            Logout
+          </Button>
         </div>
 
         {/* Enhanced Stats Grid */}
@@ -771,7 +781,7 @@ export function AdminDashboard({ lang, dictionary }: AdminDashboardProps) {
                         <Button size="sm" variant="outline">
                           <Eye className="h-4 w-4" />
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => handleDeleteCourse(course.id)}>
+                        <Button size="sm" variant="outline" onClick={() => handleDeleteCourse()}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>
@@ -878,7 +888,7 @@ export function AdminDashboard({ lang, dictionary }: AdminDashboardProps) {
                         <Button size="sm" variant="outline">
                           <Edit className="h-4 w-4" />
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => handleDeleteMaterial(material.id)}>
+                        <Button size="sm" variant="outline" onClick={() => handleDeleteMaterial()}>
                           <Trash2 className="h-4 w-4" />
                         </Button>
                       </div>

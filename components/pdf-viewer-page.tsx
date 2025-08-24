@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useRef } from "react"
+import { Dictionary } from "@/lib/dictionary"
 import { useRouter } from "next/navigation"
 import { AppLayout } from "@/components/app-layout"
 import { Button } from "@/components/ui/button"
@@ -49,7 +50,7 @@ import { Label } from "@/components/ui/label"
 interface PDFViewerPageProps {
   lang: string
   materialId: string
-  dictionary: any
+  dictionary: Dictionary
 }
 
 interface Material {
@@ -296,7 +297,7 @@ export function PDFViewerPage({ lang, materialId, dictionary }: PDFViewerPagePro
   }
 
   const currentPageAnnotations = annotations.filter((a) => a.page === currentPage)
-  const currentPageBookmarks = bookmarks.filter((b) => b.page === currentPage)
+  // const currentPageBookmarks = bookmarks.filter((b) => b.page === currentPage)
 
   return (
     <AppLayout lang={lang} dictionary={dictionary}>

@@ -1,6 +1,17 @@
 {
+  "permissions": {
+    "allow": [
+      "mcp__supabase__list_tables",
+      "mcp__supabase__create_branch",
+      "mcp__supabase__execute_sql",
+      "Bash(npx @supabase/mcp-server-supabase@latest:*)",
+      "mcp__supabase__get_logs",
+      "mcp__supabase__search_docs",
+      "Bash(npm run build:*)"
+    ]
+  },
+  "enableAllProjectMcpServers": true,
   "enabledMcpjsonServers": [
     "supabase"
-  ],
-  "enableAllProjectMcpServers": true
+  ]
 }

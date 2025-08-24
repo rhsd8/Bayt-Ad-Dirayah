@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
-import { useRouter, useParams } from "next/navigation"
+import { useParams } from "next/navigation"
 import { supabase } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -20,7 +20,7 @@ interface FormData {
   dobYear: string
   dobMonth: string
   dobDay: string
-  country: string
+  nationality: string
   referral: string
 }
 
@@ -39,7 +39,7 @@ function getYearOptions(): number[] {
   return years
 }
 
-function getCountryOptions(): { value: string; label: string }[] {
+function getNationalityOptions(): { value: string; label: string }[] {
   return [
     { value: "AF", label: "Afghanistan" },
     { value: "AL", label: "Albania" },
@@ -346,7 +346,6 @@ function ProgressIndicator({ currentStep, totalSteps }: { currentStep: number; t
 }
 
 export default function SignUpPage() {
-  const router = useRouter()
   const params = useParams()
   const lang = (params?.lang as string) || "en"
 
@@ -364,7 +363,7 @@ export default function SignUpPage() {
     dobYear: "",
     dobMonth: "",
     dobDay: "",
-    country: "",
+    nationality: "",
     referral: ""
   })
 
@@ -411,8 +410,8 @@ export default function SignUpPage() {
           setError("Please select your complete date of birth")
           return false
         }
-        if (!formData.country) {
-          setError("Please select your country")
+        if (!formData.nationality) {
+          setError("Please select your nationality")
           return false
         }
         return true
@@ -462,7 +461,7 @@ export default function SignUpPage() {
             first_name: formData.firstName,
             last_name: formData.lastName,
             dob: dob,
-            country: formData.country,
+            nationality: formData.nationality,
             referral: formData.referral,
           },
         },
@@ -473,8 +472,9 @@ export default function SignUpPage() {
       setMessage("Account created! Check your email to verify your account.")
       // Optionally redirect after a delay
       // setTimeout(() => router.push(`/${lang}/login`), 3000)
-    } catch (err: any) {
-      setError(err?.message || "Sign up failed")
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Sign up failed'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -498,6 +498,8 @@ export default function SignUpPage() {
           <p className="text-muted-foreground mt-2">
             Join our Arabic learning community
           </p>
+          {error && <p className="text-red-500 mt-2">{error}</p>}
+          {message && <p className="text-green-500 mt-2">{message}</p>}
         </div>
 
         <div className="rounded-xl border bg-card p-6 shadow-sm">
@@ -626,13 +628,13 @@ export default function SignUpPage() {
                 </div>
 
                 <div className="space-y-2">
-                  <Label>Country</Label>
+                  <Label>Nationality</Label>
                   <AnimatedDropdown
-                    aria-label="Country"
-                    value={formData.country}
-                    onChange={(value) => updateFormData("country", value)}
-                    placeholder="Select your country"
-                    options={getCountryOptions()}
+                    aria-label="Nationality"
+                    value={formData.nationality}
+                    onChange={(value) => updateFormData("nationality", value)}
+                    placeholder="Select your nationality"
+                    options={getNationalityOptions()}
                   />
                 </div>
               </div>
@@ -678,11 +680,6 @@ export default function SignUpPage() {
             {error && (
               <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-lg animate-in fade-in-0 duration-200">
                 {error}
-              </div>
-            )}
-            {message && (
-              <div className="text-sm text-green-600 bg-green-50 dark:bg-green-950/20 p-3 rounded-lg animate-in fade-in-0 duration-200">
-                {message}
               </div>
             )}
 
