@@ -26,5 +26,6 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-#supabase mcp
-.mcp.json
+
+#mcp json
+.mcp.json*
