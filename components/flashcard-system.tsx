@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect, useCallback, useMemo } from "react"
+import { Dictionary } from "@/lib/dictionary"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -77,7 +78,7 @@ interface StudyStats {
 
 interface FlashcardSystemProps {
   lang: string
-  dictionary: any
+  dictionary: Dictionary
 }
 
 // Custom hooks
@@ -212,7 +213,7 @@ const useFlashcardData = () => {
 
         setFlashcards(mockFlashcards)
         setStudySessions(mockSessions)
-      } catch (err) {
+      } catch {
         setError("Failed to load flashcard data")
       } finally {
         setLoading(false)
@@ -225,7 +226,7 @@ const useFlashcardData = () => {
   return { flashcards, studySessions, loading, error, setFlashcards, setStudySessions }
 }
 
-const useStudySession = (flashcards: Flashcard[]) => {
+const useStudySession = () => {
   const [isStudying, setIsStudying] = useState(false)
   const [currentCard, setCurrentCard] = useState(0)
   const [showAnswer, setShowAnswer] = useState(false)
@@ -431,11 +432,10 @@ const FlashcardStats = ({ stats }: { stats: StudyStats }) => (
 const StudyModeSelector = ({
   flashcards,
   onStartSession,
-  dictionary,
 }: {
   flashcards: Flashcard[]
   onStartSession: (cards: Flashcard[]) => void
-  dictionary: any
+  dictionary: Dictionary
 }) => {
   const [studyMode, setStudyMode] = useState<"due" | "new" | "all" | "starred">("due")
   const [selectedCategory, setSelectedCategory] = useState("all")
@@ -495,7 +495,7 @@ const StudyModeSelector = ({
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <Label htmlFor="study-mode">Study Mode</Label>
-            <Select value={studyMode} onValueChange={(value: any) => setStudyMode(value)}>
+            <Select value={studyMode} onValueChange={(value: "due" | "new" | "all" | "starred") => setStudyMode(value)}>
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
@@ -941,7 +941,7 @@ const FlashcardBrowser = ({
                 </SelectContent>
               </Select>
 
-              <Select value={sortBy} onValueChange={(value: any) => setSortBy(value)}>
+              <Select value={sortBy} onValueChange={(value: "created" | "reviewed" | "difficulty" | "accuracy") => setSortBy(value)}>
                 <SelectTrigger className="w-48">
                   <SortAsc className="h-4 w-4 mr-2" />
                   <SelectValue />
@@ -1105,7 +1105,7 @@ export function FlashcardSystem({ lang, dictionary }: FlashcardSystemProps) {
     startSession,
     endSession,
     answerCard,
-  } = useStudySession(flashcards)
+  } = useStudySession()
 
   const handleStartSession = useCallback(
     (cards: Flashcard[]) => {
@@ -1171,7 +1171,7 @@ export function FlashcardSystem({ lang, dictionary }: FlashcardSystemProps) {
   )
 
   const handleEditCard = useCallback(
-    (card: Flashcard) => {
+    () => {
       // This would open an edit dialog - simplified for now
       toast({
         title: "Edit Card",

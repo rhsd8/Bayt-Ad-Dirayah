@@ -1,8 +1,7 @@
 "use client"
 
-import type React from "react"
-
-import { createContext, useContext, useEffect, useState } from "react"
+import { createContext, useContext, useState } from "react"
+import { Dictionary } from "@/app/[lang]/dictionaries"
 
 interface LanguageContextType {
   currentLang: string
@@ -16,31 +15,37 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 interface LanguageProviderProps {
   children: React.ReactNode
   initialLang?: string
-  dictionary?: any
+  dictionary?: Dictionary
 }
 
 const RTL_LANGUAGES = ["ar", "he", "fa", "ur"]
 
-export function LanguageProvider({ children, initialLang = "en", dictionary = {} }: LanguageProviderProps) {
+const defaultDictionary: Partial<Dictionary> = {}
+
+export function LanguageProvider({ children, initialLang = "en", dictionary = defaultDictionary as Dictionary }: LanguageProviderProps) {
   const [currentLang, setCurrentLang] = useState(initialLang)
-  const [currentDictionary, setCurrentDictionary] = useState(dictionary)
+  const [currentDictionary] = useState(dictionary)
 
   const isRTL = RTL_LANGUAGES.includes(currentLang)
 
   // Simple translation function
   const t = (key: string, fallback?: string): string => {
     const keys = key.split(".")
-    let value = currentDictionary
+    let current: unknown = currentDictionary
 
-    for (const k of keys) {
-      if (value && typeof value === "object" && k in value) {
-        value = value[k]
-      } else {
-        return fallback || key
+    try {
+      for (const k of keys) {
+        if (current && typeof current === "object" && k in current) {
+          current = (current as Record<string, unknown>)[k]
+        } else {
+          return fallback || key
+        }
       }
-    }
 
-    return typeof value === "string" ? value : fallback || key
+      return typeof current === "string" ? current : fallback || key
+    } catch {
+      return fallback || key
+    }
   }
 
   const setLanguage = (lang: string) => {

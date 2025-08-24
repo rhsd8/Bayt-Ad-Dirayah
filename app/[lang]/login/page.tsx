@@ -12,23 +12,7 @@ export default async function LoginPage({ params }: LoginPageProps) {
   const validLangs = ["en", "ar", "fr"]
   const currentLang = validLangs.includes(lang) ? lang : "en"
 
-  let dictionary
-  try {
-    dictionary = await getDictionary(currentLang as "en" | "ar" | "fr")
-  } catch (error) {
-    console.error("Failed to load dictionary for login:", error)
-    // Provide minimal fallback
-    dictionary = {
-      auth: {
-        welcome: "Welcome",
-        loginTitle: "Sign In",
-        email: "Email",
-        password: "Password",
-        loginButton: "Sign In",
-        backToHome: "Back to Home",
-      },
-    }
-  }
+  const dictionary = await getDictionary(currentLang as "en" | "ar" | "fr")
 
   return <LoginForm lang={currentLang} dictionary={dictionary} />
 }

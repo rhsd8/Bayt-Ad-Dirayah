@@ -25,55 +25,33 @@ import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/component
 import { useAuth } from "@/components/auth-provider"
 import { useLanguage } from "@/components/language-provider"
 import {
-  Home,
-  BookOpen,
-  FileText,
-  Users,
-  Settings,
-  Brain,
-  MessageSquare,
-  Trophy,
   BarChart3,
-  User,
-  ChevronRight,
-  GraduationCap,
-  Library,
-  Zap,
-  Target,
-  Calendar,
-  HelpCircle,
-  Globe,
-  Volume2,
-  PenTool,
-  Award,
   Bookmark,
-  Clock,
-  TrendingUp,
-  Shield,
-  UserPlus,
+  BookOpen,
+  ChevronRight,
   Database,
-  Bell,
-  Mail,
-  CheckCircle,
+  HelpCircle,
+  Home,
   Info,
+  Library,
   Lightbulb,
-  Headphones,
-  Video,
-  File,
-  Folder,
-  Flame,
-  Activity,
-  Sparkles,
+  Mail,
+  Settings,
+  Shield,
+  TrendingUp,
+  Users,
 } from "lucide-react"
+
+import { Dictionary } from "@/app/[lang]/dictionaries";
 
 interface SidebarProps {
   lang: string
-  dictionary: any
+  dictionary: Dictionary
 }
 
 interface NavigationItem {
   title: string
-  icon: any
+  icon: React.ComponentType<{ className?: string }>
   href?: string
   badge?: string | number
   items?: NavigationItem[]
@@ -83,7 +61,7 @@ interface NavigationItem {
   color?: string
 }
 
-export function AppSidebar({ lang, dictionary }: SidebarProps) {
+export function AppSidebar({ lang }: SidebarProps) {
   const pathname = usePathname()
   const { state } = useSidebar()
   const { user } = useAuth()
@@ -157,214 +135,9 @@ export function AppSidebar({ lang, dictionary }: SidebarProps) {
     },
   ]
 
-  const toolsNavigation: NavigationItem[] = [
-    {
-      title: t("nav.learning_tools", "Learning Tools"),
-      icon: Brain,
-      items: [
-        {
-          title: "Quiz Center",
-          icon: Target,
-          href: `/${lang}/quiz`,
-          isActive: pathname.startsWith(`/${lang}/quiz`),
-          badge: "New",
-          isNew: true,
-          color: "text-purple-600",
-        },
-        {
-          title: "Flashcards",
-          icon: Zap,
-          href: `/${lang}/flashcards`,
-          isActive: pathname === `/${lang}/flashcards`,
-          badge: 45,
-          color: "text-yellow-600",
-        },
-        {
-          title: "Practice Tests",
-          icon: CheckCircle,
-          href: `/${lang}/practice`,
-          isActive: pathname === `/${lang}/practice`,
-          badge: 8,
-          color: "text-green-600",
-        },
-        {
-          title: "Pronunciation",
-          icon: Volume2,
-          href: `/${lang}/pronunciation`,
-          isActive: pathname === `/${lang}/pronunciation`,
-          isNew: true,
-          color: "text-blue-600",
-        },
-        {
-          title: "Writing Practice",
-          icon: PenTool,
-          href: `/${lang}/writing`,
-          isActive: pathname === `/${lang}/writing`,
-          color: "text-indigo-600",
-        },
-      ],
-    },
-  ]
+  // toolsNavigation commented out as it's not currently used
 
-  const materialsNavigation: NavigationItem[] = [
-    {
-      title: t("nav.materials", "Resources"),
-      icon: Library,
-      items: [
-        {
-          title: "Study Materials",
-          icon: File,
-          href: `/${lang}/materials`,
-          isActive: pathname.startsWith(`/${lang}/materials`),
-          badge: 156,
-        },
-        {
-          title: "Video Library",
-          icon: Video,
-          href: `/${lang}/videos`,
-          isActive: pathname === `/${lang}/videos`,
-          badge: 89,
-          color: "text-red-600",
-        },
-        {
-          title: "Audio Lessons",
-          icon: Headphones,
-          href: `/${lang}/audio`,
-          isActive: pathname === `/${lang}/audio`,
-          badge: 67,
-          color: "text-green-600",
-        },
-        {
-          title: "Downloads",
-          icon: Folder,
-          href: `/${lang}/downloads`,
-          isActive: pathname === `/${lang}/downloads`,
-          badge: 23,
-        },
-      ],
-    },
-  ]
-
-  const studyNavigation: NavigationItem[] = [
-    {
-      title: t("nav.study", "Study Tools"),
-      icon: FileText,
-      items: [
-        {
-          title: "My Notes",
-          icon: FileText,
-          href: `/${lang}/notes`,
-          isActive: pathname === `/${lang}/notes`,
-          badge: 34,
-          color: "text-blue-600",
-        },
-        {
-          title: "Study Plans",
-          icon: Calendar,
-          href: `/${lang}/study-plans`,
-          isActive: pathname === `/${lang}/study-plans`,
-          badge: 3,
-          color: "text-purple-600",
-        },
-        {
-          title: "Reminders",
-          icon: Bell,
-          href: `/${lang}/reminders`,
-          isActive: pathname === `/${lang}/reminders`,
-          badge: 5,
-          color: "text-orange-600",
-        },
-        {
-          title: "Study Timer",
-          icon: Clock,
-          href: `/${lang}/timer`,
-          isActive: pathname === `/${lang}/timer`,
-          isNew: true,
-          color: "text-green-600",
-        },
-      ],
-    },
-  ]
-
-  const communityNavigation: NavigationItem[] = [
-    {
-      title: t("nav.community", "Community"),
-      icon: Users,
-      items: [
-        {
-          title: "Discussion Forum",
-          icon: MessageSquare,
-          href: `/${lang}/community`,
-          isActive: pathname.startsWith(`/${lang}/community`),
-          badge: 12,
-          color: "text-green-600",
-        },
-        {
-          title: "Study Groups",
-          icon: UserPlus,
-          href: `/${lang}/groups`,
-          isActive: pathname === `/${lang}/groups`,
-          badge: 5,
-          color: "text-blue-600",
-        },
-        {
-          title: "Language Exchange",
-          icon: Globe,
-          href: `/${lang}/exchange`,
-          isActive: pathname === `/${lang}/exchange`,
-          isNew: true,
-          color: "text-purple-600",
-        },
-        {
-          title: "Leaderboard",
-          icon: Trophy,
-          href: `/${lang}/leaderboard`,
-          isActive: pathname === `/${lang}/leaderboard`,
-          color: "text-yellow-600",
-        },
-      ],
-    },
-  ]
-
-  const progressNavigation: NavigationItem[] = [
-    {
-      title: t("nav.progress", "Progress & Stats"),
-      icon: BarChart3,
-      items: [
-        {
-          title: "Learning Analytics",
-          icon: Activity,
-          href: `/${lang}/analytics`,
-          isActive: pathname === `/${lang}/analytics`,
-          color: "text-blue-600",
-        },
-        {
-          title: "Achievements",
-          icon: Trophy,
-          href: `/${lang}/achievements`,
-          isActive: pathname === `/${lang}/achievements`,
-          badge: 15,
-          color: "text-yellow-600",
-        },
-        {
-          title: "Streak Tracker",
-          icon: Flame,
-          href: `/${lang}/streak`,
-          isActive: pathname === `/${lang}/streak`,
-          badge: "7 days",
-          color: "text-orange-600",
-        },
-        {
-          title: "Goals",
-          icon: Target,
-          href: `/${lang}/goals`,
-          isActive: pathname === `/${lang}/goals`,
-          badge: 3,
-          color: "text-green-600",
-        },
-      ],
-    },
-  ]
+  // Unused navigation arrays commented out (materialsNavigation, studyNavigation, communityNavigation, progressNavigation)
 
   const adminNavigation: NavigationItem[] =
     user?.role === "admin"

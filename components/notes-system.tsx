@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import { Dictionary } from "@/lib/dictionary"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -37,10 +38,10 @@ interface Note {
 
 interface NotesSystemProps {
   lang: string
-  dictionary: any
+  dictionary: Dictionary
 }
 
-export function NotesSystem({ lang, dictionary }: NotesSystemProps) {
+export function NotesSystem({}: NotesSystemProps) {
   const { toast } = useToast()
   const [notes, setNotes] = useState<Note[]>([])
   const [searchQuery, setSearchQuery] = useState("")

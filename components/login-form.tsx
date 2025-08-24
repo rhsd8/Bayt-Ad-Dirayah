@@ -14,7 +14,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useLanguage } from "@/components/language-provider"
+import { Dictionary } from "@/lib/dictionary"
 
 // Define the validation schema using Zod
 const formSchema = z.object({
@@ -24,12 +24,11 @@ const formSchema = z.object({
 
 interface LoginFormProps {
   lang: string
-  dictionary: any
+  dictionary: Dictionary
 }
 
 export function LoginForm({ lang, dictionary }: LoginFormProps) {
   const router = useRouter()
-  const { t } = useLanguage()
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState<string | null>(null)
@@ -241,7 +240,7 @@ export function LoginForm({ lang, dictionary }: LoginFormProps) {
             </div>
             
             <div className="mt-4 text-center text-sm">
-              Don't have an account?{" "}
+              Don&apos;t have an account?{" "}
               <Link href={`/${lang}/signup`} className="underline">
                 Sign up
               </Link>
@@ -256,7 +255,7 @@ export function LoginForm({ lang, dictionary }: LoginFormProps) {
               <CardHeader>
                 <CardTitle>Reset Password</CardTitle>
                 <CardDescription>
-                  Enter your email address and we'll send you a link to reset your password.
+                  Enter your email address and we&apos;ll send you a link to reset your password.
                 </CardDescription>
               </CardHeader>
               <CardContent>

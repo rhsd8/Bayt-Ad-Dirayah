@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef } from "react"
 import Link from "next/link"
-import { useRouter, useParams } from "next/navigation"
+import { useParams } from "next/navigation"
 import { supabase } from "@/lib/supabase"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -346,13 +346,13 @@ function ProgressIndicator({ currentStep, totalSteps }: { currentStep: number; t
 }
 
 export default function SignUpPage() {
-  const router = useRouter()
   const params = useParams()
   const lang = (params?.lang as string) || "en"
 
   const [currentStep, setCurrentStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [message, setMessage] = useState<string | null>(null)
 
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
@@ -469,10 +469,12 @@ export default function SignUpPage() {
 
       if (error) throw error
 
-      // Redirect to student dashboard immediately
-      router.push(`/${lang}/dashboard`)
-    } catch (err: any) {
-      setError(err?.message || "Sign up failed")
+      setMessage("Account created! Check your email to verify your account.")
+      // Optionally redirect after a delay
+      // setTimeout(() => router.push(`/${lang}/login`), 3000)
+    } catch (err: unknown) {
+      const errorMessage = err instanceof Error ? err.message : 'Sign up failed'
+      setError(errorMessage)
     } finally {
       setLoading(false)
     }
@@ -496,6 +498,8 @@ export default function SignUpPage() {
           <p className="text-muted-foreground mt-2">
             Join our Arabic learning community
           </p>
+          {error && <p className="text-red-500 mt-2">{error}</p>}
+          {message && <p className="text-green-500 mt-2">{message}</p>}
         </div>
 
         <div className="rounded-xl border bg-card p-6 shadow-sm">
