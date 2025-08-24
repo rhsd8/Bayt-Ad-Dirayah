@@ -1,7 +1,6 @@
 import { MetadataRoute } from 'next'
 
 const locales = ['en', 'ar', 'fr']
-const defaultLocale = 'en'
 
 // Define your site's pages
 const staticRoutes = [

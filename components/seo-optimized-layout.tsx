@@ -1,20 +1,15 @@
-import { ReactNode } from 'react'
+import React, { ReactNode } from 'react'
+import Image from 'next/image'
 import { WebsiteStructuredData, OrganizationStructuredData } from './structured-data'
 
 interface SEOLayoutProps {
   children: ReactNode
-  title?: string
-  description?: string
-  keywords?: string[]
   schemaType?: 'website' | 'course' | 'article' | 'organization'
   breadcrumbs?: Array<{ name: string; url: string }>
 }
 
 export function SEOOptimizedLayout({
   children,
-  title,
-  description,
-  keywords,
   schemaType = 'website',
   breadcrumbs,
 }: SEOLayoutProps) {
@@ -59,7 +54,7 @@ interface HeadingProps {
 }
 
 export function SEOHeading({ level, children, id, className = '' }: HeadingProps) {
-  const Tag = `h${level}` as keyof JSX.IntrinsicElements
+  const Tag = `h${level}` as React.ElementType
   const defaultClasses = {
     1: 'text-4xl font-bold tracking-tight',
     2: 'text-3xl font-semibold tracking-tight',
@@ -117,11 +112,10 @@ export function SEOLink({
 interface ImageProps {
   src: string
   alt: string
-  width?: number
-  height?: number
+  width: number
+  height: number
   className?: string
   priority?: boolean
-  loading?: 'lazy' | 'eager'
 }
 
 export function SEOImage({
@@ -131,18 +125,15 @@ export function SEOImage({
   height,
   className = '',
   priority = false,
-  loading = 'lazy',
 }: ImageProps) {
   return (
-    <img
+    <Image
       src={src}
       alt={alt}
       width={width}
       height={height}
       className={className}
-      loading={priority ? 'eager' : loading}
-      decoding="async"
-      fetchPriority={priority ? 'high' : 'auto'}
+      priority={priority}
     />
   )
 }

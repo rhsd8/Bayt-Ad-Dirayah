@@ -1,6 +1,6 @@
 import { getDictionary } from "./dictionaries"
 import { LandingPage } from "@/components/landing-page"
-import { generateSEOMetadata, generateWebsiteSchema } from "@/lib/seo"
+import { generateSEOMetadata } from "@/lib/seo"
 import { Metadata } from 'next'
 
 interface PageProps {

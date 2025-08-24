@@ -3,10 +3,7 @@ import './globals.css'
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://harfproject.com'
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://harfproject.com'
-
 export const metadata: Metadata = {
-<<<<<<< HEAD
   metadataBase: new URL(siteUrl),
   title: {
     default: 'Harf Project - Learn Arabic Online | Interactive Arabic Learning Platform',
@@ -85,7 +82,6 @@ export const metadata: Metadata = {
   },
   verification: {
     google: 'your-google-site-verification-code',
-    bing: 'your-bing-verification-code',
     yandex: 'your-yandex-verification-code',
   },
   alternates: {
@@ -111,11 +107,6 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 5,
   userScalable: true,
-=======
-  title: 'Harf',
-  description: 'Created with v0',
-  generator: 'v0.dev',
->>>>>>> 081578314ea9bd9618ee6496353011efaa75e652
 }
 
 export default function RootLayout({
