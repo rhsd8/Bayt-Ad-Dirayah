@@ -67,18 +67,18 @@ export function AdminLoginForm() {
         {/* Header with Logo */}
         <div className="text-center space-y-4">
           <div className="flex justify-center">
-            <Link href="/" aria-label="Bayt Ad Dirayah Home" title="Home" className="inline-flex items-center">
+            <Link href="/" aria-label="Harf Home" title="Home" className="inline-flex items-center">
               <Image
-                src="/logo-web-light.webp"
-                alt="Bayt Ad Dirayah"
+                src="/Harf-logo-light.svg"
+                alt="Harf"
                 width={140}
                 height={32}
                 className="h-10 w-auto dark:hidden"
                 priority
               />
               <Image
-                src="/logo-web-dark.webp"
-                alt="Bayt Ad Dirayah"
+                src="/Harf-logo-dark.svg"
+                alt="Harf"
                 width={140}
                 height={32}
                 className="h-10 w-auto hidden dark:inline"
