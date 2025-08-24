@@ -7,8 +7,11 @@ const defaultLocale = "en"
 export function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
 
-  // Skip internal Next.js paths
-  if (pathname.startsWith('/_next') || pathname.startsWith('/api') || pathname === '/favicon.ico') {
+  // Skip internal Next.js paths and static files
+  if (pathname.startsWith('/_next') || 
+      pathname.startsWith('/api') || 
+      pathname === '/favicon.ico' ||
+      pathname.match(/\.(png|jpg|jpeg|gif|svg|webp|ico|css|js)$/i)) {
     return NextResponse.next()
   }
 
