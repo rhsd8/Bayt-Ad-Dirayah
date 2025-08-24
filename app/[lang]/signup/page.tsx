@@ -352,7 +352,6 @@ export default function SignUpPage() {
   const [currentStep, setCurrentStep] = useState(1)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const [message, setMessage] = useState<string | null>(null)
 
   const [formData, setFormData] = useState<FormData>({
     firstName: "",
@@ -678,11 +677,6 @@ export default function SignUpPage() {
             {error && (
               <div className="text-sm text-destructive bg-destructive/10 p-3 rounded-lg animate-in fade-in-0 duration-200">
                 {error}
-              </div>
-            )}
-            {message && (
-              <div className="text-sm text-green-600 bg-green-50 dark:bg-green-950/20 p-3 rounded-lg animate-in fade-in-0 duration-200">
-                {message}
               </div>
             )}
 

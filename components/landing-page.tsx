@@ -183,8 +183,8 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
               aria-label="Open account options"
               title="Account"
             >
-              <Image src="/logo-web-light.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto dark:hidden" priority />
-              <Image src="/logo-web-dark.webp" alt="Bayt Ad Dirayah" width={28} height={28} className="h-7 w-auto hidden dark:inline" priority />
+              <Image src="/Harf-logo-light.svg" alt="Harf" width={28} height={28} className="h-7 w-auto dark:hidden" priority />
+              <Image src="/Harf-logo-dark.svg" alt="Harf" width={28} height={28} className="h-7 w-auto hidden dark:inline" priority />
             </button>
             {/* Center: empty for minimalist look */}
             <div className="flex-1" />
@@ -214,20 +214,20 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
                 <Link
                   href={`/${lang}`}
                   className="flex items-center gap-2"
-                  aria-label="Bayt Ad Dirayah Home"
+                  aria-label="Harf Home"
                   title="Home"
                 >
                   <Image
-                    src="/logo-web-light.webp"
-                    alt="Bayt Ad Dirayah"
+                    src="/Harf-logo-light.svg"
+                    alt="Harf"
                     width={130}
                     height={30}
                     className="h-10 w-auto align-middle translate-y-[2px] dark:hidden"
                     priority
                   />
                   <Image
-                    src="/logo-web-dark.webp"
-                    alt="Bayt Ad Dirayah"
+                    src="/Harf-logo-dark.svg"
+                    alt="Harf"
                     width={130}
                     height={30}
                     className="h-10 w-auto align-middle translate-y-[2px] hidden dark:inline"
@@ -318,7 +318,7 @@ export function LandingPage({ lang, dictionary }: LandingPageProps) {
             onClick={(e) => e.stopPropagation()}
           >
             <div className="space-y-3">
-              <h3 className="text-base font-semibold">Welcome to Bayt Ad Dirayah</h3>
+              <h3 className="text-base font-semibold">Welcome to Harf</h3>
               <p className="text-sm text-muted-foreground">
                 Create an account or log in to access all features.
               </p>
